@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class CharacterControllerManu : MonoBehaviour
 {
     public LayerMask groundLayer; // Think about adding it into the scene and to create the corresponding layer : groundLayer
     private float horizontal;
