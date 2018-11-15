@@ -32,7 +32,8 @@ public class CharacterController : MonoBehaviour {
         horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
         vertical = Input.GetAxis("Vertical");
         Rotation();
-        Movements();
+        //Movements();
+        MovementsAltrnatives();
         Jump();
 
 
@@ -58,12 +59,12 @@ public class CharacterController : MonoBehaviour {
             {
                 if (horizontal > 0)
                 {
-                    transform.Rotate(Vector3.up * 0.5f, Space.Self);
+                    transform.Rotate(Vector3.up / 6, Space.Self);
                 }
 
                 else if (horizontal < 0)
                 {
-                    transform.Rotate(-Vector3.up * 0.5f, Space.Self);
+                    transform.Rotate(-Vector3.up / 6, Space.Self);
                 }
 
             }
@@ -91,6 +92,7 @@ public class CharacterController : MonoBehaviour {
 
                 if (Input.GetAxis("Fire2") == 0)
                 {
+                    //GetComponent<Rigidbody>().velocity = Vector3.forward;
                     GetComponent<Rigidbody>().velocity = (new Vector3(horizontal, 0, vertical) * speed);
 
                 }
@@ -111,6 +113,29 @@ public class CharacterController : MonoBehaviour {
 
         }
 
+    }
+
+    void MovementsAltrnatives()
+    {
+        if (horizontal != 0 || vertical != 0)
+        {
+            if (Input.GetAxis("Fire2") == 0)
+            {
+
+                
+                    Vector3 vectorPlayer = transform.InverseTransformDirection(0, 0, vertical);
+                  //  Debug.Log(vectorPlayer);
+                    transform.Translate(vertical / 7,0,-horizontal/7);
+                   // GetComponent<Rigidbody>().velocity = (vectorPlayer) * speed;
+                
+            }
+
+            else if (Input.GetAxis("Fire2") > 0)
+            {
+               
+                GetComponent<Rigidbody>().velocity = (new Vector3(velocityX - velocityX, 0, 0));
+            }
+        }
     }
 
     void Jump()

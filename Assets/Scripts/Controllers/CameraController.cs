@@ -13,22 +13,26 @@ public class CameraController : MonoBehaviour {
     private float rotation;
     private float currentRotation;
     private float smoothRotation;
+    public GameObject targetRotationCAM;
+
+    private float rotationX;
     
 
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-
+        
     }
 
     private void Update()
     {
         horizontal2 = Input.GetAxis("Horizontal2");
         vertical2 = Input.GetAxis("Vertical2");
+        rotationX = transform.rotation.x;
 
         RotationCam3();
-        
+        //RotationCam2();
         //CameraChange();
 
     }
@@ -61,17 +65,41 @@ public class CameraController : MonoBehaviour {
 
     void RotationCam3()
     {
+      
+        //transform.Rotate(new Vector3(vertical2, 0, 0) * 10f, Space.World);
+        //transform.Rotate(new Vector3(0,horizontal2,0) * 10f, Space.World);
+
+
         if (horizontal2 > 0)
         {
             transform.Rotate(Vector3.up * 2f, Space.World);
 
         }
 
+
         else if (horizontal2 < 0)
         {
             transform.Rotate(-Vector3.up * 2f, Space.World);
         }
 
+
+
+        //transform.Rotate(new Vector3(vertical2, horizontal2, 0) * 40, Space.World);
+    }
+
+    void RotationCam2()
+    {
+        if (horizontal2 != 0 || vertical2 != 0)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCAM.transform.rotation, smoothRotation);
+            smoothRotation = 15 * Time.deltaTime;
+        }
+
+        else
+        {
+            smoothRotation = 0;
+        }
+            
     }
 
    public void CameraZoomFocus()

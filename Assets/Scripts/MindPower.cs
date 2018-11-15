@@ -30,6 +30,7 @@ public class MindPower : MonoBehaviour {
     [Header("Time")]
     public GameObject timeManager;
 
+    public GameObject targetCam;
 
     void Update()
     {
@@ -39,8 +40,8 @@ public class MindPower : MonoBehaviour {
         ReticleParticles();
 
     }
-    
-
+    // A changer de script 
+   
 
     // Fire 1 : When the player try to Mind Manipulate an ennemy
     void ControlPower()
