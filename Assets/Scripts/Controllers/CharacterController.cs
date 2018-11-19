@@ -21,6 +21,10 @@ public class CharacterController : MonoBehaviour {
     [Header("Move")]
     public float speed;
     private float velocityX;
+    private float smoothPositionMoving;
+    public float speedPositionMoving;
+    private float smoothPositionStoping;
+    public float speedPositionStoping;
 
     [Header("Hold")]
     public bool isHolding = false;
@@ -59,12 +63,12 @@ public class CharacterController : MonoBehaviour {
             {
                 if (horizontal > 0)
                 {
-                    transform.Rotate(Vector3.up / 6, Space.Self);
+                    transform.Rotate(Vector3.up, Space.Self);
                 }
 
                 else if (horizontal < 0)
                 {
-                    transform.Rotate(-Vector3.up / 6, Space.Self);
+                    transform.Rotate(-Vector3.up, Space.Self);
                 }
 
             }
@@ -114,7 +118,8 @@ public class CharacterController : MonoBehaviour {
         }
 
     }
-
+    private float currentVertical;
+    private float currentHorizontal;
     void MovementsAltrnatives()
     {
         if (horizontal != 0 || vertical != 0)
@@ -122,12 +127,17 @@ public class CharacterController : MonoBehaviour {
             if (Input.GetAxis("Fire2") == 0)
             {
 
-                
-                    Vector3 vectorPlayer = transform.InverseTransformDirection(0, 0, vertical);
-                  //  Debug.Log(vectorPlayer);
-                    transform.Translate(vertical / 7,0,-horizontal/7);
-                   // GetComponent<Rigidbody>().velocity = (vectorPlayer) * speed;
-                
+
+                //Vector3 vectorPlayer = transform.InverseTransformPoint(1,0,0);
+
+                smoothPositionStoping = 0;
+                transform.Translate(Vector3.Lerp((Vector3.zero), new Vector3(vertical / speed, 0, -horizontal / speed) , smoothPositionMoving));
+                currentHorizontal = horizontal;
+                currentVertical = vertical;
+                smoothPositionMoving += speedPositionMoving * Time.deltaTime;
+                //GetComponent<Rigidbody>().velocity = new Vector3(1,0,0) * speed;
+                //Debug.Log(GetComponent<Rigidbody>().velocity);
+
             }
 
             else if (Input.GetAxis("Fire2") > 0)
@@ -135,6 +145,19 @@ public class CharacterController : MonoBehaviour {
                
                 GetComponent<Rigidbody>().velocity = (new Vector3(velocityX - velocityX, 0, 0));
             }
+        }
+
+
+
+       if (horizontal == 0 && vertical == 0)
+        {
+            Debug.Log(currentVertical);
+            Debug.Log(currentHorizontal);
+            smoothPositionMoving = 0;
+
+            transform.Translate(Vector3.Lerp( new Vector3(currentVertical / speed, 0, -currentHorizontal / speed), (Vector3.zero),smoothPositionStoping));
+            smoothPositionStoping += speedPositionStoping * Time.deltaTime;
+
         }
     }
 

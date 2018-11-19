@@ -12,10 +12,14 @@ public class CameraController : MonoBehaviour {
     private float vertical2;
     private float rotation;
     private float currentRotation;
-    private float smoothRotation;
-    public GameObject targetRotationCAM;
+    private float smoothRotationPositif;
+    private float smoothRotationNegatif;
+    public float smoothRotationSpeed;
+
+    public GameObject targetRotation;
 
     private float rotationX;
+
     
 
     private void Start()
@@ -31,9 +35,8 @@ public class CameraController : MonoBehaviour {
         vertical2 = Input.GetAxis("Vertical2");
         rotationX = transform.rotation.x;
 
-        RotationCam3();
-        //RotationCam2();
-        //CameraChange();
+        RotationCam();
+
 
     }
 
@@ -63,44 +66,52 @@ public class CameraController : MonoBehaviour {
 
    
 
-    void RotationCam3()
+    void RotationCam()
     {
-      
+
         //transform.Rotate(new Vector3(vertical2, 0, 0) * 10f, Space.World);
         //transform.Rotate(new Vector3(0,horizontal2,0) * 10f, Space.World);
 
 
         if (horizontal2 > 0)
         {
-            transform.Rotate(Vector3.up * 2f, Space.World);
+            //transform.Rotate(Vector3.up * 1f, Space.World);
+            smoothRotationNegatif = 0;
+            transform.Rotate(Vector3.up * Mathf.Lerp(0, 2f, smoothRotationPositif), Space.World);
+            smoothRotationPositif += smoothRotationSpeed * Time.deltaTime;
 
         }
 
 
         else if (horizontal2 < 0)
         {
-            transform.Rotate(-Vector3.up * 2f, Space.World);
+
+            //transform.Rotate(-Vector3.up * 1f, Space.World);
+            smoothRotationPositif = 0;
+            transform.Rotate(-Vector3.up * Mathf.Lerp(0, 2f, smoothRotationNegatif), Space.World);
+            smoothRotationNegatif += smoothRotationSpeed * Time.deltaTime;
         }
 
+        else if (horizontal2 == 0)
+        {
+            smoothRotationNegatif = 0;
+            smoothRotationPositif = 0;
+        }
+        //if (horizontal2 != 0 || vertical2 != 0)
+        //{
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation.transform.rotation, smoothRotation);
+        //    smoothRotation += smoothRotationTimer * Time.deltaTime;
+        //}
+
+        //else if (horizontal2 == 0 && vertical2 == 0)
+        //{
+        //    smoothRotation = 0;
+        //}
 
 
         //transform.Rotate(new Vector3(vertical2, horizontal2, 0) * 40, Space.World);
     }
 
-    void RotationCam2()
-    {
-        if (horizontal2 != 0 || vertical2 != 0)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCAM.transform.rotation, smoothRotation);
-            smoothRotation = 15 * Time.deltaTime;
-        }
-
-        else
-        {
-            smoothRotation = 0;
-        }
-            
-    }
 
    public void CameraZoomFocus()
     {
