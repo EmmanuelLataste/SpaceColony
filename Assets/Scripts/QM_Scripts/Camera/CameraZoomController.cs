@@ -6,13 +6,21 @@ public class CameraZoomController : MonoBehaviour {
 
     private CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
+    private Vector3 offsetCamPlayer;
     private float timer;
+    public GameObject player;
+
 
 
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
+    private void Update()
+    {
+        CameraRay();
     }
 
     public void CameraShake(float amplitude, float frequency)
@@ -31,5 +39,20 @@ public class CameraZoomController : MonoBehaviour {
         camNoise.m_FrequencyGain = 0;
     }
 
+    private void CameraRay()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position, player.transform.position * 100, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
+        if (Physics.Raycast(transform.position, player.transform.position, out hit))
+        {
+         
+        }
+    }
+
+    private void ObjectBetweenPlayerAndCam()
+    {
+
+        offsetCamPlayer = player.transform.position - transform.position;
+    }
 
 }

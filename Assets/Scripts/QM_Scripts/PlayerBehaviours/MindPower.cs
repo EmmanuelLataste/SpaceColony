@@ -18,6 +18,7 @@ public class MindPower : MonoBehaviour {
     public float timerOffset;
     private bool isMindManipulated = false;
     public GameObject rayon;
+    public GameObject playerController;
 
     [Header("Gauge")]
     public Slider gaugePower;
@@ -36,7 +37,7 @@ public class MindPower : MonoBehaviour {
     {
         GainGauge();
         ControlPower();
-        Focus();
+        Aim();
         ReticleParticles();
 
     }
@@ -48,7 +49,7 @@ public class MindPower : MonoBehaviour {
     {
         // We want to control the ennemy
         // If LT and RT are triggered
-        if (isFire1Triggered() == true && isFire2Triggered() == true && isFocused() == true)
+        if (isFire1Triggered() == true && isFire2Triggered() == true && isAiming() == true)
         {
             
             // If the timer = 0...
@@ -66,11 +67,13 @@ public class MindPower : MonoBehaviour {
                     // ... so the bool isMindManipulated = true...
                     isMindManipulated = true;
                     timer = 0;
-                    // ... we desactivate the script CharacterController, our player can't move
-                    GetComponent<CharacterController>().enabled = false;
-                    //... and we activate the script EnnemiController of the ennemi touched, we can control the ennemu
-                    hit.transform.GetComponent<EnnemiController>().enabled = true;
-                    hit.transform.GetComponent<CombatManager>().speed = 0;
+                     // ... we desactivate the script CharacterController, our player can't move
+                    //GetComponent<CharacterController>().enabled = false;
+                      transform.parent = null;
+                //... and we activate the script EnnemiController of the ennemi touched, we can control the ennemu
+                //hit.transform.GetComponent<EnnemiController>().enabled = true;
+                //hit.transform.GetComponent<CombatManager>().speed = 0;
+                hit.transform.parent = playerController.transform;
                     currentHit = hit.transform;
                     // ... our mind gauge loose 10 of units.
                     MindGauge(-10f);
@@ -96,9 +99,11 @@ public class MindPower : MonoBehaviour {
         else if (isFire1Triggered() == true && isMindManipulated == true)
         {
             //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
-            GetComponent<CharacterController>().enabled = true;
-            currentHit.transform.GetComponent<EnnemiController>().enabled = false;
-            currentHit.transform.GetComponent<CombatManager>().speed = 3;
+            transform.parent = playerController.transform;
+            currentHit.transform.parent = null;
+            //GetComponent<CharacterController>().enabled = true;
+            //currentHit.transform.GetComponent<EnnemiController>().enabled = false;
+            //currentHit.transform.GetComponent<CombatManager>().speed = 3;
             normalCam.GetComponent<CameraController>().Follow(transform);
             isMindManipulated = false;
             StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
@@ -111,7 +116,7 @@ public class MindPower : MonoBehaviour {
     }
 
     // Fire 2 : When the player is aiming the ennemy that he tries to Mind Manipulate
-    void Focus()
+    void Aim()
     {
         // If LT is triggered...
         if (isFire2Triggered() == true)
@@ -163,7 +168,7 @@ public class MindPower : MonoBehaviour {
     }
 
     // To Know if an ennemy is touched by the ray which allows the Mind Manipulation
-    bool isFocused()
+    bool isAiming()
     {
         
         Debug.DrawRay(transform.position, transform.right * 100, Color.green);
@@ -224,7 +229,7 @@ public class MindPower : MonoBehaviour {
     // Particles of the ennemy whe is focused
     void ReticleParticles()
     {
-        if (isFocused() == true && Input.GetAxis("Fire2") > 0)
+        if (isAiming() == true && Input.GetAxis("Fire2") > 0)
         {
 
             reticle.gameObject.transform.position = hit.transform.position;

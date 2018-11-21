@@ -15,10 +15,13 @@ public class CameraController : MonoBehaviour {
     private float smoothRotationPositif;
     private float smoothRotationNegatif;
     public float smoothRotationSpeed;
+    public float rotationSpeed;
 
     public GameObject targetRotation;
 
     private float rotationX;
+
+    private float smoothRotationCam;
 
     
 
@@ -34,7 +37,7 @@ public class CameraController : MonoBehaviour {
         horizontal2 = Input.GetAxis("Horizontal2");
         vertical2 = Input.GetAxis("Vertical2");
         rotationX = transform.rotation.x;
-
+        //RotationCam2();
         RotationCam();
 
 
@@ -64,31 +67,41 @@ public class CameraController : MonoBehaviour {
         transform.position = originalPos;
     }
 
-   
+   void RotationCam2()
+    {
+        if (horizontal2 != 0 || vertical2 != 0)
+        {
+            transform.localRotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(45,
+                                                                                            targetRotation.transform.rotation.eulerAngles.y + 90,
+                                                                                            targetRotation.transform.rotation.eulerAngles.z)
+                                                                                            , smoothRotationCam);
+            smoothRotationCam += .1f * Time.deltaTime;
+        }
+
+        else if ( horizontal2 == 0 && vertical2 == 0)
+        {
+            smoothRotationCam = 0;
+        }
+    }
 
     void RotationCam()
     {
 
-        //transform.Rotate(new Vector3(vertical2, 0, 0) * 10f, Space.World);
-        //transform.Rotate(new Vector3(0,horizontal2,0) * 10f, Space.World);
 
 
-        if (horizontal2 > 0)
+        if (horizontal2 < 0)
         {
-            //transform.Rotate(Vector3.up * 1f, Space.World);
             smoothRotationNegatif = 0;
-            transform.Rotate(Vector3.up * Mathf.Lerp(0, 2f, smoothRotationPositif), Space.World);
+            transform.Rotate(Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationPositif), Space.World);
             smoothRotationPositif += smoothRotationSpeed * Time.deltaTime;
 
         }
 
 
-        else if (horizontal2 < 0)
+        else if (horizontal2 > 0)
         {
-
-            //transform.Rotate(-Vector3.up * 1f, Space.World);
             smoothRotationPositif = 0;
-            transform.Rotate(-Vector3.up * Mathf.Lerp(0, 2f, smoothRotationNegatif), Space.World);
+            transform.Rotate(-Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationNegatif), Space.World);
             smoothRotationNegatif += smoothRotationSpeed * Time.deltaTime;
         }
 
@@ -97,19 +110,24 @@ public class CameraController : MonoBehaviour {
             smoothRotationNegatif = 0;
             smoothRotationPositif = 0;
         }
-        //if (horizontal2 != 0 || vertical2 != 0)
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation.transform.rotation, smoothRotation);
-        //    smoothRotation += smoothRotationTimer * Time.deltaTime;
-        //}
+    
+        if (vertical2 > 0)
+        {
+            if (transform.eulerAngles.x < 45)
+            {
+                transform.Rotate(new Vector3(.4f, 0, 0));
+            }
+        }
 
-        //else if (horizontal2 == 0 && vertical2 == 0)
-        //{
-        //    smoothRotation = 0;
-        //}
+        else if (vertical2 < 0)
+        {
+            if (transform.eulerAngles.x > 15)
+            {
+                transform.Rotate(new Vector3(-.4f, 0, 0));
+            }
+           
+        }
 
-
-        //transform.Rotate(new Vector3(vertical2, horizontal2, 0) * 40, Space.World);
     }
 
 

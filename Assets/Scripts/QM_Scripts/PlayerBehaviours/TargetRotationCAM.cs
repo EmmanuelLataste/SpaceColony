@@ -14,9 +14,6 @@ public class TargetRotationCAM : MonoBehaviour {
 
             transform.localRotation = Quaternion.Euler(new Vector3(0, rotation + 90, 0));
         }
-
-      
-
-
+        
     }
 }
