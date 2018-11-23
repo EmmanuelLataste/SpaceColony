@@ -9,15 +9,22 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
+<<<<<<< HEAD
   m_RootGameObject: {fileID: 1845100114402084}
   m_IsPrefabAsset: 1
 --- !u!1 &1845100114402084
+=======
+  m_RootGameObject: {fileID: 1552503951134876}
+  m_IsPrefabAsset: 1
+--- !u!1 &1552503951134876
+>>>>>>> Develop
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 4822731779914528}
   - component: {fileID: 33349254941349836}
   - component: {fileID: 23811608648706742}
@@ -26,18 +33,36 @@ GameObject:
   - component: {fileID: 65077904283918140}
   - component: {fileID: 114919774184689016}
   m_Layer: 13
+=======
+  - component: {fileID: 4868380808408982}
+  - component: {fileID: 33898476914401598}
+  - component: {fileID: 23339838663700824}
+  - component: {fileID: 135598844850222124}
+  - component: {fileID: 54618925206263026}
+  - component: {fileID: 65888602229773612}
+  - component: {fileID: 114822587593736480}
+  m_Layer: 0
+>>>>>>> Develop
   m_Name: Lighter
   m_TagString: Lighter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+<<<<<<< HEAD
 --- !u!4 &4822731779914528
+=======
+--- !u!4 &4868380808408982
+>>>>>>> Develop
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
+=======
+  m_GameObject: {fileID: 1552503951134876}
+>>>>>>> Develop
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.17, y: 1.18, z: 1.0663137}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
@@ -45,12 +70,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!23 &23811608648706742
+=======
+--- !u!23 &23339838663700824
+>>>>>>> Develop
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
+=======
+  m_GameObject: {fileID: 1552503951134876}
+>>>>>>> Develop
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -80,45 +113,77 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+<<<<<<< HEAD
 --- !u!33 &33349254941349836
+=======
+--- !u!33 &33898476914401598
+>>>>>>> Develop
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &54612348962915676
+=======
+  m_GameObject: {fileID: 1552503951134876}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54618925206263026
+>>>>>>> Develop
 Rigidbody:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
   serializedVersion: 2
   m_Mass: 0.5
   m_Drag: 0.1
+=======
+  m_GameObject: {fileID: 1552503951134876}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 5
+>>>>>>> Develop
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+<<<<<<< HEAD
 --- !u!65 &65077904283918140
+=======
+--- !u!65 &65888602229773612
+>>>>>>> Develop
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
+=======
+  m_GameObject: {fileID: 1552503951134876}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+>>>>>>> Develop
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!114 &114919774184689016
+=======
+--- !u!114 &114822587593736480
+>>>>>>> Develop
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -126,11 +191,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!135 &135452902614695664
+=======
+  m_GameObject: {fileID: 1552503951134876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c885c2a2343e24b9b60e793b7186a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHolding: 0
+--- !u!135 &135598844850222124
+>>>>>>> Develop
 SphereCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
+<<<<<<< HEAD
   m_GameObject: {fileID: 1845100114402084}
+=======
+  m_GameObject: {fileID: 1552503951134876}
+>>>>>>> Develop
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

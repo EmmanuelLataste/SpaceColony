@@ -1446,7 +1446,7 @@ CanvasRenderer:
   m_CullTransparentMesh: 0
 --- !u!135 &785577487 stripped
 SphereCollider:
-  m_CorrespondingSourceObject: {fileID: 135452902614695664, guid: 430a0b6c940380b4bbfa788cce2b77ba,
+  m_CorrespondingSourceObject: {fileID: 135727975368096828, guid: 3c378738e9312e34e8d340f25d598cc0,
     type: 2}
   m_PrefabInternal: {fileID: 1210074421}
 --- !u!1 &788797837 stripped
@@ -1643,40 +1643,44 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalPosition.x
       value: -5.17
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalPosition.y
       value: 1.18
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalPosition.z
       value: 1.0663137
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4822731779914528, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+    - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_RootOrder
       value: 17
       objectReference: {fileID: 0}
+    - target: {fileID: 1163584133440338, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
+      propertyPath: m_Name
+      value: Lighter
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 430a0b6c940380b4bbfa788cce2b77ba, type: 2}
+  m_SourcePrefab: {fileID: 100100000, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
   m_IsPrefabAsset: 0
 --- !u!198 &1224205644 stripped
 ParticleSystem:
