@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - WayPoint
+  - Ennemy
+  - Wood
+  - Lighter
   layers:
   - Default
   - TransparentFX
@@ -16,10 +19,10 @@ TagManager:
   - 
   - PostProcessing
   - Player
-  - groundLayer
+  - Ground
   - Entity
   - Obstacles
-  - 
+  - Pickable
   - 
   - 
   - 

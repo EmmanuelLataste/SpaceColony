@@ -16,7 +16,7 @@ MonoBehaviour:
     m_To: Cam_Zoom
     m_Blend:
       m_Style: 1
-      m_Time: 0.2
+      m_Time: 0.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve:
@@ -45,7 +45,7 @@ MonoBehaviour:
     m_To: Cam_Normal
     m_Blend:
       m_Style: 1
-      m_Time: 0.2
+      m_Time: 0.5
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

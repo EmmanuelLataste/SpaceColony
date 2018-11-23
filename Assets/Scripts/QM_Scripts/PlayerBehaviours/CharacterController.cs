@@ -9,16 +9,18 @@ public class CharacterController : MonoBehaviour {
     private float vertical;
     public float rotationAiming;
     public float speedRotationPlayer;
-    private float smoothRotationPlayer;
+    public float smoothRotationPlayer;
     public GameObject targetCam;
 
     private float currentRotationY;
     private bool isAimingRotating = false;
 
     [Header("Jump")]
-    public float jump;
+    [Range(0,20), SerializeField]
+    private float jump;
     public LayerMask groundLayer;
     public float groundDistance;
+
 
     [Header("Move")]
     public float speed;
@@ -47,13 +49,16 @@ public class CharacterController : MonoBehaviour {
 
     void Rotation()
     {
+
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             if (Input.GetAxis("Fire2") == 0)
             {
+                
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetCam.transform.rotation, smoothRotationPlayer);
                 smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
+
             }
             else if (Input.GetAxis("Fire2") > 0)
             {
@@ -77,7 +82,6 @@ public class CharacterController : MonoBehaviour {
                     transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
                 }
 
-
             }
 
         }
@@ -86,6 +90,8 @@ public class CharacterController : MonoBehaviour {
         {
             smoothRotationPlayer = 0;
         }
+
+       
     }
 
     void Movements()
@@ -121,7 +127,7 @@ public class CharacterController : MonoBehaviour {
             if (Input.GetButtonDown("Jump")) // Si on appuit sur Jump
             {
                 
-                GetComponent<Rigidbody>().velocity = new Vector3(horizontal, jump, vertical);
+                GetComponent<Rigidbody>().AddForce(new Vector3(0, jump * 1000, 0));
                 //GetComponent<Rigidbody>().AddForce(new Vector3(horizontal, jump, vertical), ForceMode.Impulse);
                 // Alors on ajout une force sur Y pour sauter.
             }
@@ -132,18 +138,16 @@ public class CharacterController : MonoBehaviour {
     
     bool isGrounded() // Une méthode renvoyant un booléan.
     {
-        
+
         RaycastHit hit;
-        Debug.DrawRay(transform.position, -transform.up, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
-        if (Physics.Raycast(transform.position, - transform.up, out hit, groundDistance, groundLayer))
-            // Si un rayon de 2f partant la position du player, allant vers le sol( groundDistance) touche un objet ayant le calque " ground "...
+        Debug.DrawRay(transform.position, -transform.up * groundDistance, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
+        if (Physics.Raycast(transform.position, -transform.up, out hit, groundDistance, groundLayer))
+        // Si un rayon de 2f partant la position du player, allant vers le sol( groundDistance) touche un objet ayant le calque " ground "...
         {
-            
             return true; //Alors on renvoit Vrai
-            
         }
         return false;
-       
+
     }
 
     

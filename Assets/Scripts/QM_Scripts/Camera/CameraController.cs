@@ -7,6 +7,7 @@ using UnityEngine.Playables;
 public class CameraController : MonoBehaviour {
     private CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
+    public Camera camNonVirtual;
     
     private float horizontal2;
     private float vertical2;
@@ -89,7 +90,7 @@ public class CameraController : MonoBehaviour {
 
 
 
-        if (horizontal2 < 0)
+        if (horizontal2 > 0)
         {
             smoothRotationNegatif = 0;
             transform.Rotate(Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationPositif), Space.World);
@@ -98,7 +99,7 @@ public class CameraController : MonoBehaviour {
         }
 
 
-        else if (horizontal2 > 0)
+        else if (horizontal2 < 0)
         {
             smoothRotationPositif = 0;
             transform.Rotate(-Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationNegatif), Space.World);
@@ -135,6 +136,8 @@ public class CameraController : MonoBehaviour {
     {
         
             cam.enabled = false;
+            
+       
         
     }
 

@@ -36,14 +36,14 @@ public class TargetRotation : MonoBehaviour {
     void Rotation()
     {
         
-        if (horizontal2 < 0)
+        if (horizontal2 > 0)
         {
             smoothRotationNegatif = 0;
             transform.Rotate(Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationPositif), Space.World);
             smoothRotationPositif += smoothRotationSpeed * Time.deltaTime;
         }
 
-        else if (horizontal2 > 0)
+        else if (horizontal2 < 0)
         {
             smoothRotationPositif = 0;
             transform.Rotate(-Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationNegatif), Space.World);

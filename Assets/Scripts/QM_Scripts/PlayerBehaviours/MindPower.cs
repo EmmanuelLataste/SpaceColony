@@ -16,7 +16,7 @@ public class MindPower : MonoBehaviour {
     [Header("MindControlPeriod = Fire1")]
     private float timer;
     public float timerOffset;
-    private bool isMindManipulated = false;
+    public bool isMindManipulated = false;
     public GameObject rayon;
     public GameObject playerController;
 
@@ -30,7 +30,6 @@ public class MindPower : MonoBehaviour {
 
     [Header("Time")]
     public GameObject timeManager;
-
     public GameObject targetCam;
 
     void Update()
@@ -57,7 +56,7 @@ public class MindPower : MonoBehaviour {
                 {
                 
                     //... so timer = time ( since the beginning of the game ) + (the time we want to wait * the slowdown factor in "Time Manager " because it's during a bullet time)
-                    timer = (Time.time + (timerOffset * timeManager.GetComponent<TimeManager>().slowDownFactor));
+                    timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
                     zoomCam.GetComponent<CameraZoomController>().CameraShake(1, 1);
                     
                 }
@@ -69,11 +68,11 @@ public class MindPower : MonoBehaviour {
                     timer = 0;
                      // ... we desactivate the script CharacterController, our player can't move
                     //GetComponent<CharacterController>().enabled = false;
-                      transform.parent = null;
                 //... and we activate the script EnnemiController of the ennemi touched, we can control the ennemu
                 //hit.transform.GetComponent<EnnemiController>().enabled = true;
-                //hit.transform.GetComponent<CombatManager>().speed = 0;
-                hit.transform.parent = playerController.transform;
+                    hit.transform.GetComponent<CombatManager>().enabled = false;
+                    hit.transform.GetComponent<EnnemiController>().enabled = true;
+                    GetComponent<CharacterController>().enabled = false;
                     currentHit = hit.transform;
                     // ... our mind gauge loose 10 of units.
                     MindGauge(-10f);
@@ -83,11 +82,11 @@ public class MindPower : MonoBehaviour {
                     StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
 
 
-            }
+                }
 
         }
         // Else if RT is not triggered
-        else if (isFire1Triggered() == false)
+        else if (isFire1Triggered() == false ||isAiming() == false)
         {
             timer = 0;
             zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
@@ -99,11 +98,13 @@ public class MindPower : MonoBehaviour {
         else if (isFire1Triggered() == true && isMindManipulated == true)
         {
             //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
-            transform.parent = playerController.transform;
-            currentHit.transform.parent = null;
             //GetComponent<CharacterController>().enabled = true;
             //currentHit.transform.GetComponent<EnnemiController>().enabled = false;
             //currentHit.transform.GetComponent<CombatManager>().speed = 3;
+
+            currentHit.transform.GetComponent<CombatManager>().enabled = true;
+            currentHit.transform.GetComponent<EnnemiController>().enabled = false;
+            GetComponent<CharacterController>().enabled = true;
             normalCam.GetComponent<CameraController>().Follow(transform);
             isMindManipulated = false;
             StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
@@ -111,8 +112,7 @@ public class MindPower : MonoBehaviour {
 
         }
 
-
-
+        
     }
 
     // Fire 2 : When the player is aiming the ennemy that he tries to Mind Manipulate
@@ -127,7 +127,7 @@ public class MindPower : MonoBehaviour {
                 rayon.GetComponent<MeshRenderer>().enabled = true;
                 // ... our mind gauge loose -0.1 unit by frame.
                 MindGauge(-.1f);
-                timeManager.GetComponent<TimeManager>().SlowMotion();
+                //timeManager.GetComponent<TimeManager>().SlowMotion();
                 if (isZoom == false)
                 {
                     normalCam.GetComponent<CameraController>().CameraZoomFocus();
@@ -147,8 +147,6 @@ public class MindPower : MonoBehaviour {
                     isZoom = false;
                 }
                
-
-
             }
             
         }
@@ -178,7 +176,6 @@ public class MindPower : MonoBehaviour {
                 // If the object stocked in " hit " has the tag " Ennemy "...
                 if (hit.transform.CompareTag("Ennemy"))
                 {
-                Debug.Log(hit.transform);
                 // ... the function is true...
                 return true;
                 }
