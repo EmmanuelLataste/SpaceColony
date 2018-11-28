@@ -10,7 +10,7 @@ public class CharacterController : MonoBehaviour {
     public float rotationAiming;
     public float speedRotationPlayer;
     public float smoothRotationPlayer;
-    public GameObject targetCam;
+    public GameObject targetRotationCam;
 
     private float currentRotationY;
     private bool isAimingRotating = false;
@@ -74,7 +74,7 @@ public class CharacterController : MonoBehaviour {
             if (Input.GetAxis("Fire2") == 0)
             {
                 
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetCam.transform.rotation, smoothRotationPlayer);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
                 smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
 

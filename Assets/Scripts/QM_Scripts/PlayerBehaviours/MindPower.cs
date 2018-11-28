@@ -9,7 +9,7 @@ using UnityEngine.Playables;
 public class MindPower : MonoBehaviour {
 
     [Header("FocusPeriod = Fire2")]
-    public ParticleSystem reticle;
+    public ParticleSystem possessionParticles;
     RaycastHit hit;
     public Transform currentHit;
 
@@ -18,18 +18,15 @@ public class MindPower : MonoBehaviour {
     public float timerOffset;
     public bool isMindManipulated = false;
     public LineRenderer rayon;
-    public GameObject playerController;
 
     [Header("Camera")]
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera zoomCam;
     private bool isZoom = false;
 
-    [Header("Time")]
-    public GameObject timeManager;
-    public GameObject targetCam;
-
     private float currentVertical2;
+    private float smoothRay;
+    public float speedRay;
     private void Start()
     {
         currentHit = null;
@@ -49,11 +46,13 @@ public class MindPower : MonoBehaviour {
         else if (Input.GetAxis("Vertical2") <= currentVertical2 && Input.GetAxis("Vertical2") < 0)
         {
             currentVertical2 = Input.GetAxis("Vertical2");
-            rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+            rayon.SetPosition(1, Vector3.Lerp(new Vector3(0, currentVertical2 * 13, 1), new Vector3(0, Input.GetAxis("Vertical2") * 13,0), smoothRay));
+            smoothRay += speedRay * Time.deltaTime;
         }
 
         else if (isFire2Triggered() == false )
         {
+            smoothRay = 0;
             currentVertical2 = 0;
             rayon.SetPosition(1, new Vector3(0, currentVertical2, 1));
         }
@@ -125,7 +124,7 @@ public class MindPower : MonoBehaviour {
 
         // We are controlling the ennemy and we want to go back in our player
         // Else if RT is triggered and bool isMindManipulated is true...
-        else if (isFire1Triggered() == true && isMindManipulated == true )
+        else if (isFire1Triggered() == true && isMindManipulated == true && currentHit.transform != null )
         {
             Debug.Log("3");
             //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
@@ -154,7 +153,7 @@ public class MindPower : MonoBehaviour {
 
         if (isFire2Triggered() == true && isAiming() == false)
         {
-            reticle.gameObject.SetActive(false);
+            possessionParticles.gameObject.SetActive(false);
         }
 
 
@@ -217,7 +216,7 @@ public class MindPower : MonoBehaviour {
         
         Debug.DrawRay(transform.position, transform.right * 100 + rayon.GetPosition(1) , Color.green);
         // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
-        if (Physics.Raycast(transform.position, /*transform.right * 100 + transform.up * Input.GetAxis("Vertical2") * 30*/ rayon.GetPosition(1), out hit ))
+        if (Physics.Raycast(transform.position, /*transform.right * 100 + transform.up * Input.GetAxis("Vertical2") * 30*/transform.right * 100 + rayon.GetPosition(1), out hit ))
             {
                 // If the object stocked in " hit " has the tag " Ennemy "...
                 if (hit.transform.gameObject.layer == 11)
@@ -262,19 +261,19 @@ public class MindPower : MonoBehaviour {
         if (isAiming() == true && Input.GetAxis("Fire2") > 0)
         {
 
-            reticle.gameObject.transform.position = hit.transform.position;
-            reticle.gameObject.SetActive(true);
+            possessionParticles.gameObject.transform.position = hit.transform.position;
+            possessionParticles.gameObject.SetActive(true);
         }
 
-        else if (isMindManipulated == true)
+        else if (isMindManipulated == true && currentHit.transform != null)
         {
-            reticle.transform.parent = currentHit.transform;
+            possessionParticles.transform.parent = currentHit.transform;
         }
 
         else
         {
 
-            reticle.gameObject.SetActive(false);
+            possessionParticles.gameObject.SetActive(false);
         }
     }
 
