@@ -27,6 +27,8 @@ public class MindPower : MonoBehaviour {
     private float currentVertical2;
     private float smoothRay;
     public float speedRay;
+    public Vector3 ray = new Vector3(0, 0, 1);
+
     private void Start()
     {
         currentHit = null;
@@ -40,14 +42,17 @@ public class MindPower : MonoBehaviour {
         if (Input.GetAxis("Vertical2") >= currentVertical2 && Input.GetAxis("Vertical2") > 0)
         {
             currentVertical2 = Input.GetAxis("Vertical2");
-            rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+            ray += new Vector3(0, .1f, 0);
+            rayon.SetPosition(1, ray);
         }
 
         else if (Input.GetAxis("Vertical2") <= currentVertical2 && Input.GetAxis("Vertical2") < 0)
         {
             currentVertical2 = Input.GetAxis("Vertical2");
-            rayon.SetPosition(1, Vector3.Lerp(new Vector3(0, currentVertical2 * 13, 1), new Vector3(0, Input.GetAxis("Vertical2") * 13,0), smoothRay));
-            smoothRay += speedRay * Time.deltaTime;
+            //rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+            ray += new Vector3(0, -.1f, 0);
+            rayon.SetPosition(1, ray);
+
         }
 
         else if (isFire2Triggered() == false )
