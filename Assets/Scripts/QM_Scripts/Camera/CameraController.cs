@@ -24,6 +24,10 @@ public class CameraController : MonoBehaviour {
 
     private float smoothRotationCam;
 
+    public GameObject returnToRotationCam;
+    private float smoothReturn;
+    public float speedReturn;
+
     
 
     private void Start()
@@ -40,6 +44,7 @@ public class CameraController : MonoBehaviour {
         rotationX = transform.rotation.x;
         //RotationCam2();
         RotationCam();
+        StartCoroutine( ReturnBehindPlayer());
 
 
     }
@@ -129,6 +134,23 @@ public class CameraController : MonoBehaviour {
            
         }
 
+
+    }
+
+    private IEnumerator ReturnBehindPlayer()
+    {
+
+        if (vertical2 == 0 && horizontal2 == 0 && Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+        {
+            yield return new WaitForEndOfFrame();
+            transform.rotation = Quaternion.Slerp(transform.rotation, returnToRotationCam.transform.rotation, smoothReturn);
+            smoothReturn += speedReturn * Time.deltaTime;
+        }
+
+        else
+        {
+            smoothReturn = 0;
+        }
     }
 
 

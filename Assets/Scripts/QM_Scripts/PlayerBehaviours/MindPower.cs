@@ -11,17 +11,14 @@ public class MindPower : MonoBehaviour {
     [Header("FocusPeriod = Fire2")]
     public ParticleSystem reticle;
     RaycastHit hit;
-    Transform currentHit;
+    public Transform currentHit;
 
     [Header("MindControlPeriod = Fire1")]
     private float timer;
     public float timerOffset;
     public bool isMindManipulated = false;
-    public GameObject rayon;
+    public LineRenderer rayon;
     public GameObject playerController;
-
-    [Header("Gauge")]
-    public Slider gaugePower;
 
     [Header("Camera")]
     public CinemachineVirtualCamera normalCam;
@@ -32,12 +29,35 @@ public class MindPower : MonoBehaviour {
     public GameObject timeManager;
     public GameObject targetCam;
 
+    private float currentVertical2;
+    private void Start()
+    {
+        currentHit = null;
+    }
+
     void Update()
     {
-        GainGauge();
         ControlPower();
         Aim();
         ReticleParticles();
+        if (Input.GetAxis("Vertical2") >= currentVertical2 && Input.GetAxis("Vertical2") > 0)
+        {
+            currentVertical2 = Input.GetAxis("Vertical2");
+            rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+        }
+
+        else if (Input.GetAxis("Vertical2") <= currentVertical2 && Input.GetAxis("Vertical2") < 0)
+        {
+            currentVertical2 = Input.GetAxis("Vertical2");
+            rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+        }
+
+        else if (isFire2Triggered() == false )
+        {
+            currentVertical2 = 0;
+            rayon.SetPosition(1, new Vector3(0, currentVertical2, 1));
+        }
+        
 
     }
     // A changer de script 
@@ -54,65 +74,90 @@ public class MindPower : MonoBehaviour {
             // If the timer = 0...
                 if (timer == 0 )
                 {
-                
-                    //... so timer = time ( since the beginning of the game ) + (the time we want to wait * the slowdown factor in "Time Manager " because it's during a bullet time)
-                    timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
+                Debug.Log("1.1");
+
+                //... so timer = time ( since the beginning of the game ) + (the time we want to wait * the slowdown factor in "Time Manager " because it's during a bullet time)
+                timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
                     zoomCam.GetComponent<CameraZoomController>().CameraShake(1, 1);
                     
                 }
+
+                
+
+
                 // If time > timer...
-                if (Time.time > timer)
+                 if (Time.time > timer )
                 {
-                    // ... so the bool isMindManipulated = true...
-                    isMindManipulated = true;
+                    Debug.Log("1.2");
+                // ... so the bool isMindManipulated = true...
+                    
                     timer = 0;
                      // ... we desactivate the script CharacterController, our player can't move
                     //GetComponent<CharacterController>().enabled = false;
                 //... and we activate the script EnnemiController of the ennemi touched, we can control the ennemu
                 //hit.transform.GetComponent<EnnemiController>().enabled = true;
-                    hit.transform.GetComponent<CombatManager>().enabled = false;
+                    //hit.transform.GetComponent<CombatManager>().enabled = false;
                     hit.transform.GetComponent<EnnemiController>().enabled = true;
                     GetComponent<CharacterController>().enabled = false;
                     currentHit = hit.transform;
                     // ... our mind gauge loose 10 of units.
-                    MindGauge(-10f);
 
                     normalCam.GetComponent<CameraController>().Follow(currentHit);
                     zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
                     StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+                isMindManipulated = true;
 
-
-                }
+            }
 
         }
         // Else if RT is not triggered
-        else if (isFire1Triggered() == false ||isAiming() == false)
+        else if (isAiming() == false && isMindManipulated == false)
         {
-            timer = 0;
-            zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
+            if (timer != 0)
+            {
+                timer = 0;
+                zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
+
+            }
+
 
         }
 
         // We are controlling the ennemy and we want to go back in our player
         // Else if RT is triggered and bool isMindManipulated is true...
-        else if (isFire1Triggered() == true && isMindManipulated == true)
+        else if (isFire1Triggered() == true && isMindManipulated == true )
         {
+            Debug.Log("3");
             //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
             //GetComponent<CharacterController>().enabled = true;
             //currentHit.transform.GetComponent<EnnemiController>().enabled = false;
             //currentHit.transform.GetComponent<CombatManager>().speed = 3;
 
-            currentHit.transform.GetComponent<CombatManager>().enabled = true;
+            //currentHit.transform.GetComponent<CombatManager>().enabled = true;
             currentHit.transform.GetComponent<EnnemiController>().enabled = false;
             GetComponent<CharacterController>().enabled = true;
             normalCam.GetComponent<CameraController>().Follow(transform);
             isMindManipulated = false;
             StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
-            
+            currentHit = null;
 
         }
 
-        
+        else if (isMindManipulated == true && currentHit == null)
+        {
+            GetComponent<CharacterController>().enabled = true;
+            normalCam.GetComponent<CameraController>().Follow(transform);
+            StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+            currentHit = null;
+
+        }
+
+        if (isFire2Triggered() == true && isAiming() == false)
+        {
+            reticle.gameObject.SetActive(false);
+        }
+
+
     }
 
     // Fire 2 : When the player is aiming the ennemy that he tries to Mind Manipulate
@@ -124,9 +169,8 @@ public class MindPower : MonoBehaviour {
             if (isMindManipulated == false)
             {
                 // ... so we activate the GO " Rayon ", and we can see a crosshair orange pointing in front of us
-                rayon.GetComponent<MeshRenderer>().enabled = true;
+                rayon.GetComponent<LineRenderer>().enabled = true;
                 // ... our mind gauge loose -0.1 unit by frame.
-                MindGauge(-.1f);
                 //timeManager.GetComponent<TimeManager>().SlowMotion();
                 if (isZoom == false)
                 {
@@ -140,7 +184,7 @@ public class MindPower : MonoBehaviour {
             else
             {
                 // ... so we activate the GO " Rayon "
-                rayon.GetComponent<MeshRenderer>().enabled = false;
+                rayon.GetComponent<LineRenderer>().enabled = false;
                 if (isZoom == true)
                 {
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
@@ -154,7 +198,7 @@ public class MindPower : MonoBehaviour {
         else if (isFire2Triggered() == false)
         {
             // ... so we activate the GO " Rayon "
-            rayon.GetComponent<MeshRenderer>().enabled = false;
+            rayon.GetComponent<LineRenderer>().enabled = false;
             if (isZoom == true)
             {
                 normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
@@ -165,16 +209,18 @@ public class MindPower : MonoBehaviour {
 
     }
 
+
+
     // To Know if an ennemy is touched by the ray which allows the Mind Manipulation
     bool isAiming()
     {
         
-        Debug.DrawRay(transform.position, transform.right * 100, Color.green);
+        Debug.DrawRay(transform.position, transform.right * 100 + rayon.GetPosition(1) , Color.green);
         // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
-        if (Physics.Raycast(transform.position, transform.right * 100, out hit ))
+        if (Physics.Raycast(transform.position, /*transform.right * 100 + transform.up * Input.GetAxis("Vertical2") * 30*/ rayon.GetPosition(1), out hit ))
             {
                 // If the object stocked in " hit " has the tag " Ennemy "...
-                if (hit.transform.CompareTag("Ennemy"))
+                if (hit.transform.gameObject.layer == 11)
                 {
                 // ... the function is true...
                 return true;
@@ -200,28 +246,15 @@ public class MindPower : MonoBehaviour {
     {
         if (Input.GetAxis("Fire2") > 0)
         {
+            
             return true;
            
         }
 
+
         return false;
     }
 
-
-    // Values of the gauge
-    public void MindGauge(float gaugeValue)
-    {
-        gaugePower.value += gaugeValue;
-    }
-
-    // Allows the gauge to ride up when the player dont use his power
-    void GainGauge()
-    {
-        if (isMindManipulated == false)
-        {
-            MindGauge(0.05f);
-        }
-    }
 
     // Particles of the ennemy whe is focused
     void ReticleParticles()

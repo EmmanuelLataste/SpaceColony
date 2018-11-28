@@ -21,6 +21,7 @@ public class CameraZoomController : MonoBehaviour {
     private void Update()
     {
         CameraRay();
+        Rotation();
     }
 
     public void CameraShake(float amplitude, float frequency)
@@ -53,6 +54,29 @@ public class CameraZoomController : MonoBehaviour {
     {
 
         offsetCamPlayer = player.transform.position - transform.position;
+    }
+
+    private void Rotation()
+    {
+        if (Input.GetAxis("Vertical") > 0 )
+        {
+
+            if (transform.localRotation.eulerAngles.x >= 340 || transform.localRotation.eulerAngles.x <= 21)
+            {
+                transform.Rotate(new Vector3(-.8f, 0, 0));
+            }
+
+        }
+
+        else if (Input.GetAxis("Vertical") < 0  )
+        {
+
+            if (transform.localRotation.eulerAngles.x >= 339 || transform.localRotation.eulerAngles.x < 19)
+            {
+                transform.Rotate(new Vector3(.8f, 0, 0));
+            }
+
+        }
     }
 
 }

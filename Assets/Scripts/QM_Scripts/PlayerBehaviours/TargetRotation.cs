@@ -13,13 +13,18 @@ public class TargetRotation : MonoBehaviour {
     private float smoothRotationPositif;
     public float smoothRotationSpeed;
     public float rotationSpeed;
-    
+
+    public GameObject returnToRotationTarget;
+    private float smoothReturn;
+    public float speedReturn;
+
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
         horizontal2 = Input.GetAxis("Horizontal2");
         Rotation();
-       //Rotation2();
-	}
+        StartCoroutine(ReturnBehindPlayer());
+        //Rotation2();
+    }
 
 
    void Rotation2()
@@ -57,5 +62,21 @@ public class TargetRotation : MonoBehaviour {
         }
         
     }
-    
+
+    private IEnumerator ReturnBehindPlayer()
+    {
+
+        if (vertical2 == 0 && horizontal2 == 0 && Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+        {
+            yield return new WaitForEndOfFrame();
+            transform.rotation = Quaternion.Slerp(transform.rotation, returnToRotationTarget.transform.rotation, smoothReturn);
+            smoothReturn += speedReturn * Time.deltaTime;
+        }
+
+        else
+        {
+            smoothReturn = 0;
+        }
+    }
+
 }

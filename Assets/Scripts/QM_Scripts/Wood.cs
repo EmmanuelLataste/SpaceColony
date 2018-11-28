@@ -1,0 +1,55 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Wood : Flammable {
+    public GameObject player;
+    private bool isOtherBurning;
+    private GameObject particleFires;
+
+    private void Update()
+    {
+        Ignite();
+
+    }
+
+    void Ignite()
+    {
+        if (transform.parent != null && isBurning == false)
+        {
+            if (Input.GetButtonDown("B"))
+            {
+                isBurning = true;
+                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), transform.position, Quaternion.identity) as GameObject;
+                particleFires.transform.parent = this.transform;
+                particleFires.transform.localScale = Vector3.one;
+                gameObject.AddComponent<Ignitable>();
+
+            }
+        }
+    }
+
+
+
+    private IEnumerator OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Wood")
+        {
+            yield return new WaitForSeconds(1.25f);
+            GetComponent<Rigidbody>().isKinematic = true;
+        }
+
+        if (other.gameObject.layer == 11)
+        {
+            if (isBurning == true && other.gameObject.GetComponent<Ignitable>() == false)
+            {
+                isOtherBurning = true;
+                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), other.collider.transform.position, Quaternion.identity) as GameObject;
+                particleFires.transform.parent = other.transform;
+                particleFires.transform.localScale = Vector3.one;
+                particleFires.transform.rotation = Quaternion.Euler(new Vector3(270, 0, 0));
+                other.gameObject.AddComponent<Ignitable>();
+            }
+        }
+    }
+}

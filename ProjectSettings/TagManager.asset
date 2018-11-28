@@ -8,6 +8,8 @@ TagManager:
   - Ennemy
   - Wood
   - Lighter
+  - Little Brainless
+  - Big Brainless
   layers:
   - Default
   - TransparentFX

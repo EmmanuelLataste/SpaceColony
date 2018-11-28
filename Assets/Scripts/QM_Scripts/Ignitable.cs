@@ -11,6 +11,8 @@ public class Ignitable : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        
 	}
+
+
 }
