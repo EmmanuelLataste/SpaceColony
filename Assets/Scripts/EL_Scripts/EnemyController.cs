@@ -7,6 +7,8 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour {
 
+    public bool typePatrol = false;
+
     public bool isReversed = false;
     public Transform[] waypoints;
 
@@ -16,12 +18,20 @@ public class EnemyController : MonoBehaviour {
 
 
     void OnInspectorGUI() {
-        //UI of the inspector for the checkbox for Reversion Path
+        //UI of the inspector for the checkbox for typePatrol
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Reversion Path", GUILayout.Width(70));
-        isReversed = EditorGUILayout.Toggle(isReversed);
+        GUILayout.Label("Patrolling Type", GUILayout.Width(70));
+        typePatrol = EditorGUILayout.Toggle(typePatrol);
         GUILayout.EndHorizontal();
- 
+
+        //See how to implement scrolling menu to choose the type of entity
+        //UI of the inspector for the checkbox for Reversion Path
+        if (typePatrol) { 
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Reversion Path", GUILayout.Width(70));
+            isReversed = EditorGUILayout.Toggle(isReversed);
+            GUILayout.EndHorizontal();
+        }
     }
 
 

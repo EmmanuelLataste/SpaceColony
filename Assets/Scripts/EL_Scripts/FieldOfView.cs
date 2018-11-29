@@ -13,6 +13,9 @@ public class FieldOfView : MonoBehaviour {
 
     public LayerMask targetMask;
     public LayerMask obstacleMask;
+    public GameObject targetObject;
+
+    public bool targetOnSight = false;
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
@@ -27,6 +30,8 @@ public class FieldOfView : MonoBehaviour {
 
 
     void Start() {
+        targetObject.SetActive(false);
+
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -56,11 +61,21 @@ public class FieldOfView : MonoBehaviour {
         for (int i = 0; i < targetsInViewRadius.Length; i++) {
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
+
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
                 float dstToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
                     visibleTargets.Add(target);
+
+                    if (!targetOnSight) {
+                        targetObject.SetActive(true);
+                        targetOnSight = true;
+                    } else if (targetOnSight) {
+                        //Add IEnumerator so that he wait a bit after the player hide behind a wall, so that he just don't stop
+                        targetObject.SetActive(false);
+                        targetOnSight = false;
+                    }
                 }
             }
         }
