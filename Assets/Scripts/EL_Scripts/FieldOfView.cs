@@ -15,7 +15,8 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask obstacleMask;
     public GameObject targetObject;
 
-    public bool targetOnSight = false;
+    //public bool targetOnSight = false;
+    public float dstToTarget = 0;
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
@@ -35,7 +36,6 @@ public class FieldOfView : MonoBehaviour {
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
-
 
         StartCoroutine("FindTargetsWithDelay", .2f);
     }
@@ -68,6 +68,8 @@ public class FieldOfView : MonoBehaviour {
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
                     visibleTargets.Add(target);
 
+                    //Test with targetOnSight
+                    /*
                     if (!targetOnSight) {
                         targetObject.SetActive(true);
                         targetOnSight = true;
@@ -76,6 +78,7 @@ public class FieldOfView : MonoBehaviour {
                         targetObject.SetActive(false);
                         targetOnSight = false;
                     }
+                    */
                 }
             }
         }
