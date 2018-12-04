@@ -7,33 +7,74 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour {
 
-    public bool isReversed = false;
-    public Transform[] waypoints;
-
-    private NavMeshAgent entityAgent;
+    public NavMeshAgent entityAgent;
     private int destPoint = 0;
     private int side = 0;
 
+    private GameObject target;
+    private Animator anim;
+    private Ray rayToTarget;
+    private RaycastHit hitTarget;
+    private Vector3 checkDirection;
 
+    private Transform[] targets;
+    private int priorityTarget;
+
+    private bool targetOnSight = false;
+
+
+    //See EditorGUI 
+    public bool typePatrol = false;
+
+    public bool isReversed = false;
+    public Transform[] waypoints;
+
+    
+
+    //See how to implement scrolling menu to choose the type of entity, check these instructions: https://docs.unity3d.com/ScriptReference/EditorGUILayout.Toggle.html
     void OnInspectorGUI() {
+        //UI of the inspector for the checkbox for typePatrol
+        /*
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Patrolling Type", GUILayout.Width(70));
+        typePatrol = EditorGUILayout.Toggle(typePatrol);
+        GUILayout.EndHorizontal();
+        */    
+    
         //UI of the inspector for the checkbox for Reversion Path
         GUILayout.BeginHorizontal();
         GUILayout.Label("Reversion Path", GUILayout.Width(70));
         isReversed = EditorGUILayout.Toggle(isReversed);
         GUILayout.EndHorizontal();
- 
+        
     }
 
 
     void Start() {
-        entityAgent = GetComponent < NavMeshAgent>();
+        target = GameObject.FindWithTag("Player");
+        anim = gameObject.GetComponent<Animator>();
+        entityAgent = GetComponent<NavMeshAgent>();
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
 
-        ToNextWaypoint();
+        destPoint = 0;
     }
 
+
+    void Update() {
+        targetOnSight = FieldOfView.targetOnSight;
+
+        if (!targetOnSight) {
+            ToNextWaypoint();
+            //define the next destination point
+            if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
+                ToNextWaypoint();
+            }
+        } else if (targetOnSight) {            
+            ToTarget();
+        }
+    }
 
     void ToNextWaypoint() {
         //In case of no attribuated waypoint : return
@@ -68,19 +109,14 @@ public class EnemyController : MonoBehaviour {
             }
             
         }
-        
 
     }
 
-
-    void Update() {
-       
-        //define the next destination point
-        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
-            ToNextWaypoint();
-        }
-
+    void ToTarget() {
+        //entityAgent.destination = targets[priorityTarget].position;
     }
+
+
 
 
 
