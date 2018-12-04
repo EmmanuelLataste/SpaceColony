@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour {
 
-    private NavMeshAgent entityAgent;
+    public NavMeshAgent entityAgent;
     private int destPoint = 0;
     private int side = 0;
 
@@ -20,6 +20,8 @@ public class EnemyController : MonoBehaviour {
     private Transform[] targets;
     private int priorityTarget;
 
+    private bool targetOnSight = false;
+
 
     //See EditorGUI 
     public bool typePatrol = false;
@@ -27,11 +29,7 @@ public class EnemyController : MonoBehaviour {
     public bool isReversed = false;
     public Transform[] waypoints;
 
-    //Chase var
-    public bool targetOnSight;
-
-
-
+    
 
     //See how to implement scrolling menu to choose the type of entity, check these instructions: https://docs.unity3d.com/ScriptReference/EditorGUILayout.Toggle.html
     void OnInspectorGUI() {
@@ -65,6 +63,7 @@ public class EnemyController : MonoBehaviour {
 
 
     void Update() {
+        targetOnSight = FieldOfView.targetOnSight;
 
         if (!targetOnSight) {
             ToNextWaypoint();
@@ -72,9 +71,7 @@ public class EnemyController : MonoBehaviour {
             if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
                 ToNextWaypoint();
             }
-        } else if (targetOnSight) {
-            //NEED add targets to the list the first one in the list being the priority
-            
+        } else if (targetOnSight) {            
             ToTarget();
         }
     }
@@ -116,7 +113,7 @@ public class EnemyController : MonoBehaviour {
     }
 
     void ToTarget() {
-        entityAgent.destination = targets[priorityTarget].position;
+        //entityAgent.destination = targets[priorityTarget].position;
     }
 
 
