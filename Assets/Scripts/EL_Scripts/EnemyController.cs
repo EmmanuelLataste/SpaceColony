@@ -17,6 +17,9 @@ public class EnemyController : MonoBehaviour {
     private RaycastHit hitTarget;
     private Vector3 checkDirection;
 
+    private Transform[] targets;
+    private int priorityTarget;
+
 
     //See EditorGUI 
     public bool typePatrol = false;
@@ -58,9 +61,23 @@ public class EnemyController : MonoBehaviour {
         entityAgent.autoBraking = false;
 
         destPoint = 0;
-        ToNextWaypoint();
     }
 
+
+    void Update() {
+
+        if (!targetOnSight) {
+            ToNextWaypoint();
+            //define the next destination point
+            if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
+                ToNextWaypoint();
+            }
+        } else if (targetOnSight) {
+            //NEED add targets to the list the first one in the list being the priority
+            
+            ToTarget();
+        }
+    }
 
     void ToNextWaypoint() {
         //In case of no attribuated waypoint : return
@@ -95,19 +112,14 @@ public class EnemyController : MonoBehaviour {
             }
             
         }
-        
 
     }
 
-
-    void Update() {
-       
-        //define the next destination point
-        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
-            ToNextWaypoint();
-        }
-
+    void ToTarget() {
+        entityAgent.destination = targets[priorityTarget].position;
     }
+
+
 
 
 
