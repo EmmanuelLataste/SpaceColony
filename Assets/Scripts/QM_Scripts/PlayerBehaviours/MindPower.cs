@@ -25,9 +25,9 @@ public class MindPower : MonoBehaviour {
     private bool isZoom = false;
 
     private float currentVertical2;
-    private float smoothRay;
-    public float speedRay;
-    public Vector3 ray = new Vector3(0, 0, 1);
+    public Vector3 ray = new Vector3(0, 0, 0);
+    public Vector3 ray2 = new Vector3(0, 0, 1);
+
 
     private void Start()
     {
@@ -39,34 +39,37 @@ public class MindPower : MonoBehaviour {
         ControlPower();
         Aim();
         ReticleParticles();
-        if (Input.GetAxis("Vertical2") >= currentVertical2 && Input.GetAxis("Vertical2") > 0)
-        {
-            currentVertical2 = Input.GetAxis("Vertical2");
-            ray += new Vector3(0, .1f, 0);
-            rayon.SetPosition(1, ray);
-        }
-
-        else if (Input.GetAxis("Vertical2") <= currentVertical2 && Input.GetAxis("Vertical2") < 0)
-        {
-            currentVertical2 = Input.GetAxis("Vertical2");
-            //rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
-            ray += new Vector3(0, -.1f, 0);
-            rayon.SetPosition(1, ray);
-
-        }
-
-        else if (isFire2Triggered() == false )
-        {
-            smoothRay = 0;
-            currentVertical2 = 0;
-            rayon.SetPosition(1, new Vector3(0, currentVertical2, 1));
-        }
+        RayonController();
         
 
     }
     // A changer de script 
    
+    void RayonController()
+    {
+        if (Input.GetAxis("Vertical2") < 0 && rayon.GetPosition(1).y < 20)
+        {
+            ray += new Vector3(0, .4f, 0);
+            ray2 += new Vector3(0, 0.92f, 0);
+            rayon.SetPosition(1, ray);
+        }
 
+        else if (Input.GetAxis("Vertical2") > 0 && rayon.GetPosition(1).y > -7)
+        {
+            //rayon.SetPosition(1, new Vector3(0, currentVertical2 * 13, 1));
+            ray += new Vector3(0, -.4f, 0);
+            ray2 += new Vector3(0, -0.92f, 0);
+            rayon.SetPosition(1, ray);
+
+        }
+
+        else if (isFire2Triggered() == false)
+        {
+            ray = new Vector3(0, 0, 1);
+            ray2 = new Vector3(0, 0, 1);
+            rayon.SetPosition(1, ray);
+        }
+    }
     // Fire 1 : When the player try to Mind Manipulate an ennemy
     void ControlPower()
     {
@@ -78,7 +81,7 @@ public class MindPower : MonoBehaviour {
             // If the timer = 0...
                 if (timer == 0 )
                 {
-                Debug.Log("1.1");
+
 
                 //... so timer = time ( since the beginning of the game ) + (the time we want to wait * the slowdown factor in "Time Manager " because it's during a bullet time)
                 timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
@@ -92,7 +95,7 @@ public class MindPower : MonoBehaviour {
                 // If time > timer...
                  if (Time.time > timer )
                 {
-                    Debug.Log("1.2");
+
                 // ... so the bool isMindManipulated = true...
                     
                     timer = 0;
@@ -107,11 +110,16 @@ public class MindPower : MonoBehaviour {
                     // ... our mind gauge loose 10 of units.
 
                     normalCam.GetComponent<CameraController>().Follow(currentHit);
-                    zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
-                    StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
-                isMindManipulated = true;
 
-            }
+                     StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+
+                zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
+
+
+                     isMindManipulated = true;
+
+                 }
+
 
         }
         // Else if RT is not triggered
@@ -131,7 +139,6 @@ public class MindPower : MonoBehaviour {
         // Else if RT is triggered and bool isMindManipulated is true...
         else if (isFire1Triggered() == true && isMindManipulated == true && currentHit.transform != null )
         {
-            Debug.Log("3");
             //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
             //GetComponent<CharacterController>().enabled = true;
             //currentHit.transform.GetComponent<EnnemiController>().enabled = false;
@@ -219,9 +226,10 @@ public class MindPower : MonoBehaviour {
     bool isAiming()
     {
         
-        Debug.DrawRay(transform.position, transform.right * 100 + rayon.GetPosition(1) , Color.green);
+        Debug.DrawRay(transform.position, (ray2 + (transform.right * 100)), Color.green);
+        
         // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
-        if (Physics.Raycast(transform.position, /*transform.right * 100 + transform.up * Input.GetAxis("Vertical2") * 30*/transform.right * 100 + rayon.GetPosition(1), out hit ))
+        if (Physics.Raycast(transform.position, (ray2 + (transform.right * 100)), out hit ))
             {
                 // If the object stocked in " hit " has the tag " Ennemy "...
                 if (hit.transform.gameObject.layer == 11)

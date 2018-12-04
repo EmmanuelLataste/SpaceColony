@@ -35,7 +35,7 @@ public class Wood : Flammable {
     {
         if (other.gameObject.tag == "Wood")
         {
-            yield return new WaitForSeconds(1.25f);
+            yield return new WaitForSeconds(0.25f);
             GetComponent<Rigidbody>().isKinematic = true;
         }
 

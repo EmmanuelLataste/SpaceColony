@@ -9,10 +9,31 @@ public class Rock : MonoBehaviour {
     private float currentSpeedRot;
     private float smoothWeight;
     public float massPushed;
+    private float smoothSpeed;
+    public float speedSlowBB;
+    private float trueSpeed = 4;
+
+    private void Start()
+    {
+       
+    }
 
     private void Update()
     {
-        Debug.Log(GetComponent<Rigidbody>().velocity);
+
+        if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == true)
+        {
+            player.GetComponent<CharacterController>().speed = 0;
+        }
+
+        else if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == false)
+        {
+            player.GetComponent<CharacterController>().speed = 8;
+            //player.GetComponent<CharacterController>().speed = Mathf.Lerp(0, 8, smoothSpeed);
+            //smoothSpeed += player.GetComponent<CharacterController>().smoothSpeedPlayerMove * Time.deltaTime;
+        }
+
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,18 +41,21 @@ public class Rock : MonoBehaviour {
         if (other.gameObject.tag == "Big Brainless")
         {
             GetComponent<Rigidbody>().mass = massPushed;
+
+            other.GetComponent<EnnemiController>().speed = speedSlowBB;
+
         }
 
-        
+       
 
-        
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Big Brainless")
         {
-            GetComponent<Rigidbody>().mass = 200000;
+            other.GetComponent<EnnemiController>().speed = trueSpeed;
+            GetComponent<Rigidbody>().mass = 1000000000;
         }
 
         
@@ -39,10 +63,7 @@ public class Rock : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if ( collision.gameObject.tag == "Player")
-        {
-            GetComponent<Rigidbody>().isKinematic = true;
-        }
+   
 
         if (collision.gameObject.layer == 11 && Crush() == true)
         {
@@ -50,19 +71,13 @@ public class Rock : MonoBehaviour {
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            GetComponent<Rigidbody>().isKinematic = false;
-        }
-    }
+   
 
     bool Crush()
     {
-        if (GetComponent<Rigidbody>().velocity.y < -.1f)
+        if (GetComponent<Rigidbody>().velocity.y < -.3f)
         {
-            Debug.Log(GetComponent<Rigidbody>().velocity.y);
+
             return true;
         }
 

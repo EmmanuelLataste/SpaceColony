@@ -5,16 +5,18 @@ using Cinemachine;
 public class CameraZoomController : MonoBehaviour {
 
     private CinemachineVirtualCamera cam;
+    private CinemachineFramingTransposer camTransposer;
     private CinemachineBasicMultiChannelPerlin camNoise;
-    private Vector3 offsetCamPlayer;
-    private float timer;
     public GameObject player;
+    private RaycastHit hit;
+    public float rayLength;
 
 
 
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
+        camTransposer = cam.GetCinemachineComponent<CinemachineFramingTransposer>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
@@ -42,28 +44,41 @@ public class CameraZoomController : MonoBehaviour {
 
     private void CameraRay()
     {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, player.transform.position * 100, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
-        if (Physics.Raycast(transform.position, player.transform.position, out hit))
+        Debug.DrawRay(player.transform.position, transform.position - player.transform.position, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
+
+        if (Physics.Raycast(player.transform.position, /*transform.forward * 5.2f - transform.up * 1.4f*/ transform.position - player.transform.position, out hit, rayLength ))
         {
-         
+
+            if (hit.collider != null && camTransposer.m_CameraDistance > 1.5f && Input.GetAxis("Fire2") > 0)
+            {
+                camTransposer.m_CameraDistance -= .1f;
+               
+            }
+
+           
+            //hit.transform.GetComponent<MeshRenderer>().enabled = false;
+            //Instantiate(random, hit.point, Quaternion.identity);
+
         }
+
+        if (hit.collider == null && camTransposer.m_CameraDistance < 3 )
+        {
+            camTransposer.m_CameraDistance += .1f;
+
+        }
+
+
     }
 
-    private void ObjectBetweenPlayerAndCam()
-    {
-
-        offsetCamPlayer = player.transform.position - transform.position;
-    }
 
     private void Rotation()
     {
         if (Input.GetAxis("Vertical") > 0 )
         {
 
-            if (transform.localRotation.eulerAngles.x >= 340 || transform.localRotation.eulerAngles.x <= 21)
+            if (transform.localRotation.eulerAngles.x >= 345 || transform.localRotation.eulerAngles.x <= 6)
             {
-                transform.Rotate(new Vector3(-.8f, 0, 0));
+                transform.Rotate(new Vector3(-.6f, 0, 0));
             }
 
         }
@@ -71,11 +86,16 @@ public class CameraZoomController : MonoBehaviour {
         else if (Input.GetAxis("Vertical") < 0  )
         {
 
-            if (transform.localRotation.eulerAngles.x >= 339 || transform.localRotation.eulerAngles.x < 19)
+            if (transform.localRotation.eulerAngles.x >= 344 || transform.localRotation.eulerAngles.x < 5)
             {
-                transform.Rotate(new Vector3(.8f, 0, 0));
+                transform.Rotate(new Vector3(.6f, 0, 0));
             }
 
+        }
+
+        else if (Input.GetAxis("Fire2") == 0)
+        {
+            transform.localRotation = Quaternion.Euler(new Vector3(5, 90, 0));
         }
     }
 

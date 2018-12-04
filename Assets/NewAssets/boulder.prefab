@@ -21,6 +21,10 @@ GameObject:
   - component: {fileID: 4351465093947494}
   - component: {fileID: 33763149877389662}
   - component: {fileID: 23502794027084742}
+  - component: {fileID: 54390095732716722}
+  - component: {fileID: 135234996790009578}
+  - component: {fileID: 135365638304500028}
+  - component: {fileID: 114859973093128266}
   m_Layer: 0
   m_Name: boulder
   m_TagString: Untagged
@@ -34,9 +38,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334005769046316}
-  m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.91, y: -1.3618, z: 0.52}
-  m_LocalScale: {x: 63.757004, y: 63.757004, z: 63.757004}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4, y: 9.61, z: 14}
+  m_LocalScale: {x: 200, y: 200, z: 200}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -83,3 +87,56 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334005769046316}
   m_Mesh: {fileID: 4300000, guid: c8d99bef9629d5d43a05a45ecc55a135, type: 3}
+--- !u!54 &54390095732716722
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  serializedVersion: 2
+  m_Mass: 1e+9
+  m_Drag: 0.4
+  m_AngularDrag: 0.1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!114 &114859973093128266
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15552e329c1ddf42b6e6a09d41c0a31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  massPushed: 100
+  speedSlowBB: 2
+--- !u!135 &135234996790009578
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.010214064
+  m_Center: {x: -0.000038065013, y: -0.00005086511, z: 0.000016495118}
+--- !u!135 &135365638304500028
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.012
+  m_Center: {x: -0.000038065016, y: -0.000050865114, z: 0.00001649512}

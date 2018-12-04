@@ -10,19 +10,20 @@ public class CharacterController : MonoBehaviour {
     public float rotationAiming;
     public float speedRotationPlayer;
     public float smoothRotationPlayer;
+    [SerializeField]
     public GameObject targetRotationCam;
 
     private float currentRotationY;
     private bool isAimingRotating = false;
 
     [Header("Jump")]
-    [Range(0,20), SerializeField]
+    [ SerializeField]
     private float jump;
-    public LayerMask groundLayer;
     public float groundDistance;
 
 
     [Header("Move")]
+
     public float speed;
     private float smoothPlayerMove;
     public float smoothSpeedPlayerMove;
@@ -35,18 +36,22 @@ public class CharacterController : MonoBehaviour {
     [Header("PickObjects")]
     public bool isPickable = false;
     public bool isPicked = false;
+    
+    [SerializeField]
     public GameObject hangingObjectPosition;
     [SerializeField]
-    private GameObject otherGameObject;
     public GameObject cam;
+    private GameObject otherGameObject;
     private float throwStrengthX;
     public float throwStrengh;
     private float throwStrengthY;
     public float throwHigh;
+    private GameObject player;
 
     private void Start()
     {
         otherGameObject = null;
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
@@ -57,6 +62,7 @@ public class CharacterController : MonoBehaviour {
         Rotation();
         StartCoroutine(PickUp(otherGameObject));
         StartCoroutine(Throw(otherGameObject));
+        Debug.DrawRay(transform.position, transform.right, Color.yellow);
 
     }
 
@@ -71,7 +77,7 @@ public class CharacterController : MonoBehaviour {
 
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            if (Input.GetAxis("Fire2") == 0)
+            if (Input.GetAxis("Fire2") == 0 || player.GetComponent<MindPower>().isMindManipulated == true)
             {
                 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
@@ -79,7 +85,7 @@ public class CharacterController : MonoBehaviour {
                 isAimingRotating = false;
 
             }
-            else if (Input.GetAxis("Fire2") > 0)
+            else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
             {
               
                  if (Input.GetAxis("Horizontal") > 0)
@@ -116,7 +122,7 @@ public class CharacterController : MonoBehaviour {
     void Movements()
     {
 
-        if (Input.GetAxis("Fire2") == 0)
+        if (Input.GetAxis("Fire2") == 0 || player.GetComponent<MindPower>().isMindManipulated == true)
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
@@ -131,8 +137,9 @@ public class CharacterController : MonoBehaviour {
             }
         }
 
-        else if (Input.GetAxis("Fire2") > 0)
+        else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
         {
+
             positionToMove = transform.position;
         }
             
@@ -154,6 +161,7 @@ public class CharacterController : MonoBehaviour {
         }
 
     }
+
 
     private IEnumerator PickUp(GameObject other)
     {
@@ -234,12 +242,21 @@ public class CharacterController : MonoBehaviour {
         }
     }
 
+    public bool DetectCollisions(float maxDistance)
+    {
+        if (Physics.Raycast(transform.position, transform.right, maxDistance)) 
+        {
+            return true;
+        }
+        return false;
+    }
+
     bool isGrounded() // Une méthode renvoyant un booléan.
     {
 
         RaycastHit hit;
         Debug.DrawRay(transform.position, -transform.up * groundDistance, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
-        if (Physics.Raycast(transform.position, -transform.up, out hit, groundDistance, groundLayer))
+        if (Physics.Raycast(transform.position, -transform.up, out hit, groundDistance))
         // Si un rayon de 2f partant la position du player, allant vers le sol( groundDistance) touche un objet ayant le calque " ground "...
         {
             return true; //Alors on renvoit Vrai

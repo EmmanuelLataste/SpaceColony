@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 136068825300932098}
   - component: {fileID: 54610634625693080}
   - component: {fileID: 65545959655681980}
-  - component: {fileID: 114321689052878222}
+  - component: {fileID: 114282509224285766}
   m_Layer: 13
   m_Name: Wood (1)
   m_TagString: Wood
@@ -38,9 +38,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1129009727214644}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 8.27, y: 1.2, z: 5.95}
-  m_LocalScale: {x: 0.2, y: 0.65, z: 0.2}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -31.62, y: 1.2, z: 3}
+  m_LocalScale: {x: 0.2, y: 0.65000093, z: 0.20000048}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,7 +94,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1129009727214644}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 0.2
   m_Drag: 0.1
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -114,7 +114,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.9869227, y: 2.681176, z: 1.3405882}
   m_Center: {x: -0.024742931, y: 1.9546928e-22, z: -0.0000001490116}
---- !u!114 &114321689052878222
+--- !u!114 &114282509224285766
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,9 +122,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1129009727214644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 325d7cae5cadd7242a159a6bed634ace, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f4b384bbe0d2b04d8c435f4e59b53d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!136 &136068825300932098
 CapsuleCollider:
   m_ObjectHideFlags: 1

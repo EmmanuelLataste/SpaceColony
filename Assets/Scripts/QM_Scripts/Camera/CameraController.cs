@@ -117,22 +117,22 @@ public class CameraController : MonoBehaviour {
             smoothRotationPositif = 0;
         }
     
-        if (vertical2 > 0)
-        {
-            if (transform.eulerAngles.x < 45)
-            {
-                transform.Rotate(new Vector3(.4f, 0, 0));
-            }
-        }
+        //if (vertical2 > 0)
+        //{
+        //    if (transform.eulerAngles.x < 45)
+        //    {
+        //        transform.Rotate(new Vector3(.4f, 0, 0));
+        //    }
+        //}
 
-        else if (vertical2 < 0)
-        {
-            if (transform.eulerAngles.x > 15)
-            {
-                transform.Rotate(new Vector3(-.4f, 0, 0));
-            }
+        //else if (vertical2 < 0)
+        //{
+        //    if (transform.eulerAngles.x > 15)
+        //    {
+        //        transform.Rotate(new Vector3(-.4f, 0, 0));
+        //    }
            
-        }
+        //}
 
 
     }
