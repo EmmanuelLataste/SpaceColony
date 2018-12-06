@@ -26,13 +26,14 @@ public class FieldOfView : MonoBehaviour {
     public MeshFilter viewMeshFilter;
     Mesh viewMesh;
 
-    //StateMachine Var
+    //Patrol State
     public Animator anim;
-    public static bool targetOnSight = false;
+    public static bool targetOnSight;
+  
 
 
     void Start() {
-        targetObject.SetActive(false);
+        anim = GetComponent<Animator>();
 
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";

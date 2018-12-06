@@ -18,7 +18,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 0}
   - m_Name: targetVisible
     m_Type: 4
@@ -78,6 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a512d7733bb4ff143a239e2fdcf3f2bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entity: {fileID: 1544667058510588, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
+  entityAgent: {fileID: 0}
+  waypoints: []
 --- !u!1101 &1101110840755742758
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -127,7 +130,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -157,7 +160,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
