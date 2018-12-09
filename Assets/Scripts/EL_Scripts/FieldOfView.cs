@@ -70,10 +70,9 @@ public class FieldOfView : MonoBehaviour {
 
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
                     visibleTargets.Add(target);
-                    targetOnSight = true;
                     anim.SetBool("targetVisible", true);
+                    
                 } else {
-                    targetOnSight = false;
                     anim.SetBool("targetVisible", false);
                 }
             } else {

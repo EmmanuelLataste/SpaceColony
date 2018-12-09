@@ -22,6 +22,9 @@ public class EntityAI : MonoBehaviour {
     public bool isReversed = false;
     public Transform[] waypoints;
 
+    //Investigate behaviour
+    private IEnumerator coroutine;
+
     //See EditorGUI 
     public static bool typePatrol = true;
 
@@ -52,8 +55,9 @@ public class EntityAI : MonoBehaviour {
     void Start() {
         target = GameObject.FindWithTag("Player");
         anim = gameObject.GetComponent<Animator>();
+
+        coroutine = _Investigate(3.0f, anim);
         
-                
         if (typePatrol) { 
             anim.SetBool("typePatrol", true);
         } else if (!typePatrol) {
@@ -68,7 +72,20 @@ public class EntityAI : MonoBehaviour {
     void Update() {
                 
     }
-  
+
+    public void Investigate() {
+        StartCoroutine(_Investigate(3.0f, anim));
+    }
+
+    IEnumerator _Investigate(float InvestigateTime, Animator animator) {
+        while (true) {
+            Debug.Log("Investigate enter");
+            yield return new WaitForSeconds(InvestigateTime);
+            animator.SetBool("isChasing", true);
+            Debug.Log("Investigate exit");
+        }
+    }
+
 
 }
  

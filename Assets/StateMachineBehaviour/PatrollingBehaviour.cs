@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PatrolBehaviour : StateMachineBehaviour {
+public class PatrollingBehaviour : StateMachineBehaviour {
 
     GameObject entity;
     Transform[] waypoints;
@@ -36,7 +36,6 @@ public class PatrolBehaviour : StateMachineBehaviour {
             ToNextWaypoint();
         }
         
-        Debug.Log(destPoint);
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
