@@ -49,7 +49,7 @@ public class CameraZoomController : MonoBehaviour {
         if (Physics.Raycast(player.transform.position, /*transform.forward * 5.2f - transform.up * 1.4f*/ transform.position - player.transform.position, out hit, rayLength ))
         {
 
-            if (hit.collider != null && camTransposer.m_CameraDistance > 1.5f && Input.GetAxis("Fire2") > 0)
+            if (hit.collider != null && camTransposer.m_CameraDistance > 1.2f && Input.GetAxis("Fire2") > 0)
             {
                 camTransposer.m_CameraDistance -= .1f;
                

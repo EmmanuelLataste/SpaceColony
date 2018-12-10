@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Wood : Flammable {
-    public GameObject player;
     private bool isOtherBurning;
     private GameObject particleFires;
 
@@ -31,12 +30,13 @@ public class Wood : Flammable {
 
 
 
-    private IEnumerator OnCollisionEnter(Collision other)
+    private IEnumerator OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag == "Wood")
         {
             yield return new WaitForSeconds(0.25f);
-            GetComponent<Rigidbody>().isKinematic = true;
+            //GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
         if (other.gameObject.layer == 11)
@@ -52,4 +52,5 @@ public class Wood : Flammable {
             }
         }
     }
+
 }

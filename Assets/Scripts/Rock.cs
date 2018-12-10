@@ -67,6 +67,7 @@ public class Rock : MonoBehaviour {
 
         if (collision.gameObject.layer == 11 && Crush() == true)
         {
+            player.GetComponent<MindPower>().isMindManipulated = false;
             Destroy(collision.gameObject);
         }
     }

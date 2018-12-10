@@ -105,7 +105,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1544667058510588}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+<<<<<<< Updated upstream
   m_LocalPosition: {x: -4.7, y: 1.7, z: 11.22}
+=======
+  m_LocalPosition: {x: -4.1499996, y: 1.1, z: 11.22}
+>>>>>>> Stashed changes
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_Children:
   - {fileID: 4950209739200136}
@@ -338,9 +342,9 @@ MonoBehaviour:
   speedRotationPlayer: 0.7
   smoothRotationPlayer: 0
   targetRotationCam: {fileID: 0}
-  jump: 10
+  jump: 25
   groundDistance: 1
-  speed: 4
+  speed: 9
   smoothSpeedPlayerMove: 0.8
   isHolding: 0
   isPickable: 0
@@ -349,6 +353,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   throwStrengh: 3
   throwHigh: 1.1
+<<<<<<< Updated upstream
 --- !u!114 &114487032177565404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -415,3 +420,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+=======
+  anim: {fileID: 0}
+>>>>>>> Stashed changes

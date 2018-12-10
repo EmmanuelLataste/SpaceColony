@@ -56,6 +56,7 @@ public class PickObjects : MonoBehaviour {
         {
             if (Input.GetButtonUp("X"))
             {
+                Debug.Log("Salut");
                 other.transform.parent = this.transform;
                 other.transform.position = hangingObjectPosition.transform.position;
                 other.GetComponent<Rigidbody>().isKinematic = true;

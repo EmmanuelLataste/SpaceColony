@@ -48,6 +48,8 @@ public class CharacterController : MonoBehaviour {
     public float throwHigh;
     private GameObject player;
 
+    public Animator anim;
+
     private void Start()
     {
         otherGameObject = null;
@@ -62,6 +64,7 @@ public class CharacterController : MonoBehaviour {
         Rotation();
         StartCoroutine(PickUp(otherGameObject));
         StartCoroutine(Throw(otherGameObject));
+        Hit();
         Debug.DrawRay(transform.position, transform.right, Color.yellow);
 
     }
@@ -162,6 +165,13 @@ public class CharacterController : MonoBehaviour {
 
     }
 
+    private void Hit()
+    {
+        if (Input.GetButtonDown("Y"))
+        {
+            anim.SetTrigger("Hit");
+        }
+    }
 
     private IEnumerator PickUp(GameObject other)
     {
@@ -169,13 +179,14 @@ public class CharacterController : MonoBehaviour {
         {
             if (Input.GetButtonUp("X"))
             {
-                other.transform.parent = this.transform;
+
                 other.transform.position = hangingObjectPosition.transform.position;
                 other.GetComponent<Rigidbody>().isKinematic = true;
                 other.GetComponent<Rigidbody>().detectCollisions = false;
                 other.transform.rotation = this.transform.rotation;
                 isPickable = false;
                 yield return new WaitForEndOfFrame();
+                other.transform.parent = hangingObjectPosition.transform;
                 isPicked = true;
             }
         }
@@ -187,6 +198,7 @@ public class CharacterController : MonoBehaviour {
         {
             if (Input.GetButtonUp("X") || throwStrengthX >= 500)
             {
+                Debug.Log("X3");
                 other.transform.parent = null;
                 other.GetComponent<Rigidbody>().isKinematic = false;
                 isPicked = false;
@@ -197,26 +209,24 @@ public class CharacterController : MonoBehaviour {
                 //this.transform.GetComponent<CharacterController>().speed *= 3;
 
                 yield return new WaitForSeconds(.01f);
-                GetComponent<CharacterController>().speed *= 1.5f;
                 other.GetComponent<Rigidbody>().detectCollisions = true;
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
 
-            if (Input.GetButton("X"))
+            else if (Input.GetButton("X"))
 
             {
+                Debug.Log("X2");
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
+              
+
             }
 
             if (Input.GetButtonDown("X"))
             {
-                GetComponent<CharacterController>().speed /= 1.5f;
-                //cam.GetComponent<CameraController>().CameraZoomFocus(1);
-                //this.transform.GetComponent<CharacterController>().speed /= 3;
-                //this.transform.GetComponent<CharacterController>().speedRotationPlayer /= 3;
-
-
+               
+                
             }
 
 
