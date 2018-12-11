@@ -1,0 +1,203 @@
+fileFormatVersion: 2
+guid: 3b98be94f1560f54eb183ed1e44619f3
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Cylinder001
+    100002: //RootNode
+    100004: low poly017
+    100006: low poly018
+    100008: low poly019
+    100010: low poly020
+    100012: low poly021
+    100014: low poly022
+    100016: low poly023
+    100018: low poly024
+    100020: low poly025
+    100022: low poly026
+    100024: low poly027
+    100026: low poly028
+    100028: low poly029
+    100030: low poly030
+    100032: low poly031
+    100034: low poly032
+    100036: low poly033
+    100038: low poly034
+    100040: low poly035
+    100042: low poly036
+    100044: low poly037
+    400000: Cylinder001
+    400002: //RootNode
+    400004: low poly017
+    400006: low poly018
+    400008: low poly019
+    400010: low poly020
+    400012: low poly021
+    400014: low poly022
+    400016: low poly023
+    400018: low poly024
+    400020: low poly025
+    400022: low poly026
+    400024: low poly027
+    400026: low poly028
+    400028: low poly029
+    400030: low poly030
+    400032: low poly031
+    400034: low poly032
+    400036: low poly033
+    400038: low poly034
+    400040: low poly035
+    400042: low poly036
+    400044: low poly037
+    2100000: 'Material #29'
+    2100002: 'Material #26'
+    2100004: 'Material #28'
+    2300000: Cylinder001
+    2300002: low poly017
+    2300004: low poly018
+    2300006: low poly019
+    2300008: low poly020
+    2300010: low poly021
+    2300012: low poly022
+    2300014: low poly023
+    2300016: low poly024
+    2300018: low poly025
+    2300020: low poly026
+    2300022: low poly027
+    2300024: low poly028
+    2300026: low poly029
+    2300028: low poly030
+    2300030: low poly031
+    2300032: low poly032
+    2300034: low poly033
+    2300036: low poly034
+    2300038: low poly035
+    2300040: low poly036
+    2300042: low poly037
+    3300000: Cylinder001
+    3300002: low poly017
+    3300004: low poly018
+    3300006: low poly019
+    3300008: low poly020
+    3300010: low poly021
+    3300012: low poly022
+    3300014: low poly023
+    3300016: low poly024
+    3300018: low poly025
+    3300020: low poly026
+    3300022: low poly027
+    3300024: low poly028
+    3300026: low poly029
+    3300028: low poly030
+    3300030: low poly031
+    3300032: low poly032
+    3300034: low poly033
+    3300036: low poly034
+    3300038: low poly035
+    3300040: low poly036
+    3300042: low poly037
+    4300000: Cylinder001
+    4300002: low poly017
+    4300004: low poly018
+    4300006: low poly019
+    4300008: low poly020
+    4300010: low poly021
+    4300012: low poly022
+    4300014: low poly023
+    4300016: low poly024
+    4300018: low poly025
+    4300020: low poly026
+    4300022: low poly027
+    4300024: low poly028
+    4300026: low poly029
+    4300028: low poly030
+    4300030: low poly031
+    4300032: low poly032
+    4300034: low poly033
+    4300036: low poly034
+    4300038: low poly035
+    4300040: low poly036
+    4300042: low poly037
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

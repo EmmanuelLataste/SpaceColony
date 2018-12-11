@@ -4,11 +4,12 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Playables;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
     private CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
     public Camera camNonVirtual;
-    
+
     private float horizontal2;
     private float vertical2;
     private float rotation;
@@ -28,13 +29,15 @@ public class CameraController : MonoBehaviour {
     private float smoothReturn;
     public float speedReturn;
 
-    
+    public GameObject player;
+    private RaycastHit hit;
+    public float rayLength;
 
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        
+
     }
 
     private void Update()
@@ -44,8 +47,8 @@ public class CameraController : MonoBehaviour {
         rotationX = transform.rotation.x;
         //RotationCam2();
         RotationCam();
-        StartCoroutine( ReturnBehindPlayer());
-
+        StartCoroutine(ReturnBehindPlayer());
+        CameraRay();
 
     }
 
@@ -57,10 +60,10 @@ public class CameraController : MonoBehaviour {
 
         while (elapsed < duration)
         {
-            float x = Random.Range(-1 ,1) * magnitude;
-            float z = Random.Range(-1,1) * magnitude;
+            float x = Random.Range(-1, 1) * magnitude;
+            float z = Random.Range(-1, 1) * magnitude;
 
-            
+
 
             transform.position = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
 
@@ -73,7 +76,7 @@ public class CameraController : MonoBehaviour {
         transform.position = originalPos;
     }
 
-   void RotationCam2()
+    void RotationCam2()
     {
         if (horizontal2 != 0 || vertical2 != 0)
         {
@@ -84,7 +87,7 @@ public class CameraController : MonoBehaviour {
             smoothRotationCam += .1f * Time.deltaTime;
         }
 
-        else if ( horizontal2 == 0 && vertical2 == 0)
+        else if (horizontal2 == 0 && vertical2 == 0)
         {
             smoothRotationCam = 0;
         }
@@ -116,23 +119,24 @@ public class CameraController : MonoBehaviour {
             smoothRotationNegatif = 0;
             smoothRotationPositif = 0;
         }
-    
-        //if (vertical2 > 0)
-        //{
-        //    if (transform.eulerAngles.x < 45)
-        //    {
-        //        transform.Rotate(new Vector3(.4f, 0, 0));
-        //    }
-        //}
 
-        //else if (vertical2 < 0)
-        //{
-        //    if (transform.eulerAngles.x > 15)
-        //    {
-        //        transform.Rotate(new Vector3(-.4f, 0, 0));
-        //    }
-           
-        //}
+        if (vertical2 > 0)
+        {
+
+            if (transform.eulerAngles.x < 10 && transform.eulerAngles.x > 0)
+            {
+                transform.Rotate(new Vector3(.2f, 0, 0));
+            }
+        }
+
+        else if (vertical2 < 0)
+        {
+            if (transform.eulerAngles.x < 11 && transform.eulerAngles.x > 1)
+            {
+                transform.Rotate(new Vector3(-.2f, 0, 0));
+            }
+
+        }
 
 
     }
@@ -154,19 +158,19 @@ public class CameraController : MonoBehaviour {
     }
 
 
-   public void CameraZoomFocus()
+    public void CameraZoomFocus()
     {
-        
-            cam.enabled = false;
-            
-       
-        
+
+        cam.enabled = false;
+
+
+
     }
 
     public void CameraDeZoomFocus()
     {
-            cam.enabled = true;
-       
+        cam.enabled = true;
+
     }
 
     public void Follow(Transform follow)
@@ -189,6 +193,28 @@ public class CameraController : MonoBehaviour {
         camNoise.m_AmplitudeGain = 0;
         camNoise.m_FrequencyGain = 0;
     }
+    Collider currentHit;
+    private void CameraRay()
+    {
+        Debug.DrawRay(player.transform.position, transform.position - player.transform.position, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
 
+        if (Physics.Raycast(player.transform.position, transform.position - player.transform.position, out hit, rayLength))
+        {
+            Debug.Log(hit.collider.name);
+            currentHit = hit.collider;
+            
+            Color32 col = hit.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+            col.a = 100;
+            hit.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+        }
+
+        if (currentHit != hit.collider)
+        {
+            Color32 col = currentHit.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+            col.a = 255;
+            currentHit.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+        }
+
+    }
 
 }

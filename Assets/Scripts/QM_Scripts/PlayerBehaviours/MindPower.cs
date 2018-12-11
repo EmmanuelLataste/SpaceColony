@@ -28,6 +28,9 @@ public class MindPower : MonoBehaviour {
     public Vector3 ray = new Vector3(0, 0, 0);
     public Vector3 ray2 = new Vector3(0, 0, 1);
 
+    public Vector3 offset;
+    public float maxRange;
+
 
     private void Start()
     {
@@ -40,7 +43,16 @@ public class MindPower : MonoBehaviour {
         Aim();
         ReticleParticles();
         RayonController();
-        
+        if ( isMindManipulated == false && hit.collider != null)
+        {
+            offset = transform.position - hit.transform.position;
+        }
+
+        else if (isMindManipulated == true && currentHit != null)
+            offset = transform.position - currentHit.transform.position;
+
+
+
 
     }
     // A changer de script 
@@ -75,52 +87,32 @@ public class MindPower : MonoBehaviour {
     {
         // We want to control the ennemy
         // If LT and RT are triggered
-        if (isFire1Triggered() == true && isFire2Triggered() == true && isAiming() == true)
+        if (isFire1Triggered() == true && isFire2Triggered() == true && isAiming() == true &&  offset.x < maxRange && offset.x > -maxRange && offset.y < maxRange && offset.y > -maxRange)
         {
             
             // If the timer = 0...
                 if (timer == 0 )
                 {
-
-
-                //... so timer = time ( since the beginning of the game ) + (the time we want to wait * the slowdown factor in "Time Manager " because it's during a bullet time)
-                timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
+                
+                   timer = (Time.time + (timerOffset /** timeManager.GetComponent<TimeManager>().slowDownFactor*/));
                     zoomCam.GetComponent<CameraZoomController>().CameraShake(1, 1);
                     
                 }
-
                 
-
-
                 // If time > timer...
                  if (Time.time > timer )
                 {
-
-                // ... so the bool isMindManipulated = true...
-                    
+                
                     timer = 0;
-                     // ... we desactivate the script CharacterController, our player can't move
-                    //GetComponent<CharacterController>().enabled = false;
-                //... and we activate the script EnnemiController of the ennemi touched, we can control the ennemu
-                //hit.transform.GetComponent<EnnemiController>().enabled = true;
-                    //hit.transform.GetComponent<CombatManager>().enabled = false;
                     hit.transform.GetComponent<EnnemiController>().enabled = true;
                     GetComponent<CharacterController>().enabled = false;
-                    currentHit = hit.transform;
-                    // ... our mind gauge loose 10 of units.
-
+                    currentHit = hit.transform; 
                     normalCam.GetComponent<CameraController>().Follow(currentHit);
+                    StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+                    zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
+                isMindManipulated = true;
 
-                     StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
-
-                zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
-
-
-                     isMindManipulated = true;
-
-                 }
-
-
+            }
         }
         // Else if RT is not triggered
         else if (isAiming() == false && isMindManipulated == false)
@@ -129,28 +121,23 @@ public class MindPower : MonoBehaviour {
             {
                 timer = 0;
                 zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
-
+                offset = Vector3.zero;
+            }
+            
+        }
+        
+        else if (isFire1Triggered() == true && isMindManipulated == true || isMindManipulated == false || offset.x > maxRange || offset.x < -maxRange || offset.y > maxRange || offset.y < -maxRange)
+        {
+            if (currentHit != null )
+            {
+                currentHit.transform.GetComponent<EnnemiController>().enabled = false;
+                GetComponent<CharacterController>().enabled = true;
+                normalCam.GetComponent<CameraController>().Follow(transform);
+                isMindManipulated = false;
+                StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+                currentHit = null;
             }
 
-
-        }
-
-        // We are controlling the ennemy and we want to go back in our player
-        // Else if RT is triggered and bool isMindManipulated is true...
-        else if (isFire1Triggered() == true && isMindManipulated == true && currentHit.transform != null )
-        {
-            //... so we activate our player movement script, and desactivate ennemy, is MindManipulated is false
-            //GetComponent<CharacterController>().enabled = true;
-            //currentHit.transform.GetComponent<EnnemiController>().enabled = false;
-            //currentHit.transform.GetComponent<CombatManager>().speed = 3;
-
-            //currentHit.transform.GetComponent<CombatManager>().enabled = true;
-            currentHit.transform.GetComponent<EnnemiController>().enabled = false;
-            GetComponent<CharacterController>().enabled = true;
-            normalCam.GetComponent<CameraController>().Follow(transform);
-            isMindManipulated = false;
-            StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
-            currentHit = null;
 
         }
 
@@ -221,7 +208,6 @@ public class MindPower : MonoBehaviour {
     }
 
 
-
     // To Know if an ennemy is touched by the ray which allows the Mind Manipulation
     bool isAiming()
     {
@@ -278,16 +264,12 @@ public class MindPower : MonoBehaviour {
             possessionParticles.gameObject.SetActive(true);
         }
 
-        else if (isMindManipulated == true && currentHit.transform != null)
+        else if (isMindManipulated == true && currentHit.transform != null )
         {
-            possessionParticles.transform.parent = currentHit.transform;
-        }
-
-        else
-        {
-
             possessionParticles.gameObject.SetActive(false);
         }
+
+      
     }
 
   
