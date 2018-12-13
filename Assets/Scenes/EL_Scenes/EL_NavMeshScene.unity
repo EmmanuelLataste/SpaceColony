@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44971097, g: 0.49977946, b: 0.5756361, a: 1}
+  m_IndirectSpecularColor: {r: 0.1826388, g: 0.22834994, b: 0.30714586, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -338,6 +338,78 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1001 &611493250
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -9.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 7.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4670276450548354, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1038496091485150, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+      propertyPath: m_Name
+      value: Little Brainless V2 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114443272776470564, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: eSO
+      value: 
+      objectReference: {fileID: 11400000, guid: a1d5ac623ddebb04fa7a533610f598fb,
+        type: 2}
+    - target: {fileID: 114443272776470564, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: waypoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 1842649637}
+    - target: {fileID: 114443272776470564, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: waypoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 984015551}
+    - target: {fileID: 114443272776470564, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: waypoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 194669594}
+    - target: {fileID: 114501786856851424, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: targetMask.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &704923590
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,6 +551,17 @@ Prefab:
       propertyPath: targetObject
       value: 
       objectReference: {fileID: 1610692464}
+    - target: {fileID: 114443272776470564, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: eSO
+      value: 
+      objectReference: {fileID: 11400000, guid: a1d5ac623ddebb04fa7a533610f598fb,
+        type: 2}
+    - target: {fileID: 114501786856851424, guid: 59693c145ba2ed841a2654cbc98b3cc7,
+        type: 2}
+      propertyPath: targetMask.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59693c145ba2ed841a2654cbc98b3cc7, type: 2}
   m_IsPrefabAsset: 0
@@ -523,72 +606,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1303154234
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -4.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 11.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4304179843536594, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114487032177565404, guid: 4055227ae0dab5e4d85277b334b2fd7e,
-        type: 2}
-      propertyPath: waypoints.Array.data[0]
-      value: 
-      objectReference: {fileID: 1842649637}
-    - target: {fileID: 114487032177565404, guid: 4055227ae0dab5e4d85277b334b2fd7e,
-        type: 2}
-      propertyPath: waypoints.Array.data[1]
-      value: 
-      objectReference: {fileID: 984015551}
-    - target: {fileID: 114487032177565404, guid: 4055227ae0dab5e4d85277b334b2fd7e,
-        type: 2}
-      propertyPath: waypoints.Array.data[2]
-      value: 
-      objectReference: {fileID: 194669594}
-    - target: {fileID: 114898850074753418, guid: 4055227ae0dab5e4d85277b334b2fd7e,
-        type: 2}
-      propertyPath: targetObject
-      value: 
-      objectReference: {fileID: 1610692464}
-    - target: {fileID: 1544667058510588, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-      propertyPath: m_Name
-      value: Little Brainless 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4055227ae0dab5e4d85277b334b2fd7e, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1610692464
 GameObject:
   m_ObjectHideFlags: 0
