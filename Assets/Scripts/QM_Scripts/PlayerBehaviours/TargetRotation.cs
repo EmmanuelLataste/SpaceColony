@@ -22,7 +22,7 @@ public class TargetRotation : MonoBehaviour {
         vertical2 = Input.GetAxis("Vertical2");
         horizontal2 = Input.GetAxis("Horizontal2");
         Rotation();
-        StartCoroutine(ReturnBehindPlayer());
+        //StartCoroutine(ReturnBehindPlayer());
         //Rotation2();
     }
 

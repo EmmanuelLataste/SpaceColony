@@ -61,7 +61,7 @@ public class CameraZoomController : MonoBehaviour {
 
         }
 
-        if (hit.collider == null && camTransposer.m_CameraDistance < 3 )
+        if (hit.collider == null && camTransposer.m_CameraDistance < 0 )
         {
             camTransposer.m_CameraDistance += .1f;
 
@@ -73,30 +73,39 @@ public class CameraZoomController : MonoBehaviour {
 
     private void Rotation()
     {
-        if (Input.GetAxis("Vertical") > 0 )
+        if (Input.GetAxis("Fire2") > 0)
         {
+          
+                if (Input.GetAxis("Vertical") > 0)
+                {
 
-            if (transform.localRotation.eulerAngles.x >= 345 || transform.localRotation.eulerAngles.x <= 6)
-            {
-                transform.Rotate(new Vector3(-.6f, 0, 0));
-            }
+                    if (transform.localRotation.eulerAngles.x >= 345 || transform.localRotation.eulerAngles.x <= 36)
+                    {
+                        transform.Rotate(new Vector3(-.6f, 0, 0));
+                    }
 
+                }
+
+                else if (Input.GetAxis("Vertical") < 0)
+                {
+
+                    if (transform.localRotation.eulerAngles.x >= 344 || transform.localRotation.eulerAngles.x < 35)
+                    {
+                        transform.Rotate(new Vector3(.6f, 0, 0));
+                    }
+
+                }
+
+                else if (Input.GetAxis("Fire2") == 0)
+                {
+                    transform.localRotation = Quaternion.Euler(new Vector3(5, 0, 0));
+                }
+            
+           
         }
 
-        else if (Input.GetAxis("Vertical") < 0  )
-        {
-
-            if (transform.localRotation.eulerAngles.x >= 344 || transform.localRotation.eulerAngles.x < 5)
-            {
-                transform.Rotate(new Vector3(.6f, 0, 0));
-            }
-
-        }
-
-        else if (Input.GetAxis("Fire2") == 0)
-        {
-            transform.localRotation = Quaternion.Euler(new Vector3(5, 90, 0));
-        }
+   
+      
     }
 
 }

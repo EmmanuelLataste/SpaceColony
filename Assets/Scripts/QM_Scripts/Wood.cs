@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wood : Flammable {
+public class Wood : Flammable{
     private bool isOtherBurning;
     private GameObject particleFires;
+    public Transform firePosition;
 
     private void Update()
     {
@@ -19,7 +20,7 @@ public class Wood : Flammable {
             if (Input.GetButtonDown("B"))
             {
                 isBurning = true;
-                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), transform.position, Quaternion.identity) as GameObject;
+                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), firePosition.position, Quaternion.identity) as GameObject;
                 particleFires.transform.parent = this.transform;
                 particleFires.transform.localScale = Vector3.one;
                 gameObject.AddComponent<Ignitable>();
@@ -39,7 +40,7 @@ public class Wood : Flammable {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
-        if (other.gameObject.layer == 11)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Entity"))
         {
             if (isBurning == true && other.gameObject.GetComponent<Ignitable>() == false)
             {

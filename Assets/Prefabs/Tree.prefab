@@ -53,6 +53,7 @@ GameObject:
   - component: {fileID: 4424652801220488}
   - component: {fileID: 33511820173839974}
   - component: {fileID: 23619502327349862}
+  - component: {fileID: 65541610985677610}
   m_Layer: 0
   m_Name: 'Leafs_low '
   m_TagString: Untagged
@@ -70,6 +71,7 @@ GameObject:
   - component: {fileID: 4729826713737800}
   - component: {fileID: 33318134587851250}
   - component: {fileID: 23690660887763280}
+  - component: {fileID: 65742497670164622}
   m_Layer: 0
   m_Name: Tronc2_low
   m_TagString: Untagged
@@ -83,9 +85,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1104901779918106}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.322, y: 0.19130373, z: -8.136}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -37.287373, y: -7.0499697, z: -26.297268}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4982518822751034}
   m_Father: {fileID: 0}
@@ -259,3 +261,27 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1459157775060498}
   m_Mesh: {fileID: 4300000, guid: 5f145069f905d4e4ba06430894a15eaf, type: 3}
+--- !u!65 &65541610985677610
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1459157775060498}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8435392, y: 0.8294834, z: 0.70392686}
+  m_Center: {x: -0.10596455, y: -0.29984233, z: -0.12148065}
+--- !u!65 &65742497670164622
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1638663509873514}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5349205, y: 0.4296757, z: 0.628154}
+  m_Center: {x: 0.0130259, y: 0.011532277, z: 0.30111864}

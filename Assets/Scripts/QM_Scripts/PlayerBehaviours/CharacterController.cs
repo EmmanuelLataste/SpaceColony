@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class CharacterController : MonoBehaviour {
+public class CharacterController : Flammable {
     [Header("Rotation")]
     private float horizontal;
     private float vertical;
@@ -129,7 +129,7 @@ public class CharacterController : MonoBehaviour {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-                positionToMove = transform.position + transform.right * speed * Time.deltaTime;
+                positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
                 GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                 smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
             }
@@ -179,13 +179,15 @@ public class CharacterController : MonoBehaviour {
         {
             if (Input.GetButtonUp("X"))
             {
-
+                
                 other.transform.position = hangingObjectPosition.transform.position;
+
                 other.GetComponent<Rigidbody>().isKinematic = true;
                 other.GetComponent<Rigidbody>().detectCollisions = false;
-                other.transform.rotation = this.transform.rotation;
+                
                 isPickable = false;
                 yield return new WaitForEndOfFrame();
+                other.transform.eulerAngles = other.GetComponent<PositionWhenPicked>().position;
                 other.transform.parent = hangingObjectPosition.transform;
                 isPicked = true;
             }
@@ -198,11 +200,11 @@ public class CharacterController : MonoBehaviour {
         {
             if (Input.GetButtonUp("X") || throwStrengthX >= 500)
             {
-                Debug.Log("X3");
+                
                 other.transform.parent = null;
                 other.GetComponent<Rigidbody>().isKinematic = false;
                 isPicked = false;
-                other.GetComponent<Rigidbody>().AddForce((transform.right * throwStrengthX) + (transform.up * throwStrengthY));
+                other.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
                 throwStrengthX = 0;
                 throwStrengthY = 0;
                 yield return new WaitForEndOfFrame();
@@ -216,7 +218,7 @@ public class CharacterController : MonoBehaviour {
             else if (Input.GetButton("X"))
 
             {
-                Debug.Log("X2");
+                
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
               
@@ -235,7 +237,7 @@ public class CharacterController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 13 && isPicked == false)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Pickable") && isPicked == false)
         {
             otherGameObject = other.gameObject;
             isPickable = true;
@@ -245,7 +247,7 @@ public class CharacterController : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 13)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Pickable"))
         {
             isPickable = false;
 

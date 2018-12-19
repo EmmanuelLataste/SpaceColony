@@ -6,6 +6,13 @@ using UnityEngine.Playables;
 
 public class CameraController : MonoBehaviour
 {
+    public enum BlendMode
+    {
+        Opaque,
+        Cutout,
+        Fade,
+        Transparent
+    }
     private CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
     public Camera camNonVirtual;
@@ -33,6 +40,13 @@ public class CameraController : MonoBehaviour
     private RaycastHit hit;
     public float rayLength;
 
+
+    public List<Collider> collidList;
+    public RaycastHit[] hits;
+    public bool transparencyActivated = false;
+    RaycastHit[] transparencyCollidersSaved;
+
+    public LayerMask layerMask;
     private void Start()
     {
         cam = GetComponent<CinemachineVirtualCamera>();
@@ -47,8 +61,10 @@ public class CameraController : MonoBehaviour
         rotationX = transform.rotation.x;
         //RotationCam2();
         RotationCam();
-        StartCoroutine(ReturnBehindPlayer());
+        //StartCoroutine(ReturnBehindPlayer());
         CameraRay();
+
+       
 
     }
 
@@ -74,23 +90,6 @@ public class CameraController : MonoBehaviour
         }
 
         transform.position = originalPos;
-    }
-
-    void RotationCam2()
-    {
-        if (horizontal2 != 0 || vertical2 != 0)
-        {
-            transform.localRotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(45,
-                                                                                            targetRotation.transform.rotation.eulerAngles.y + 90,
-                                                                                            targetRotation.transform.rotation.eulerAngles.z)
-                                                                                            , smoothRotationCam);
-            smoothRotationCam += .1f * Time.deltaTime;
-        }
-
-        else if (horizontal2 == 0 && vertical2 == 0)
-        {
-            smoothRotationCam = 0;
-        }
     }
 
     void RotationCam()
@@ -123,7 +122,7 @@ public class CameraController : MonoBehaviour
         if (vertical2 > 0)
         {
 
-            if (transform.eulerAngles.x < 10 && transform.eulerAngles.x > 0)
+            if (transform.eulerAngles.x < 20 && transform.eulerAngles.x > 0)
             {
                 transform.Rotate(new Vector3(.2f, 0, 0));
             }
@@ -131,7 +130,7 @@ public class CameraController : MonoBehaviour
 
         else if (vertical2 < 0)
         {
-            if (transform.eulerAngles.x < 11 && transform.eulerAngles.x > 1)
+            if (transform.eulerAngles.x < 21 && transform.eulerAngles.x > 1)
             {
                 transform.Rotate(new Vector3(-.2f, 0, 0));
             }
@@ -194,27 +193,124 @@ public class CameraController : MonoBehaviour
         camNoise.m_FrequencyGain = 0;
     }
     Collider currentHit;
+
+
+
     private void CameraRay()
     {
+        
+        hits = Physics.RaycastAll(player.transform.position, transform.position - player.transform.position, rayLength, layerMask);
+
+
+        if (hits.Length > 0)
+        {
+            transparencyActivated = true;
+            
+        }
+        else
+        {
+            transparencyActivated = false;
+          
+            
+               
+                foreach (Collider collider in collidList)
+                {
+                    Color32 col = collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+                    col.a = 255;
+                    collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+                    ChangeRenderMode(collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Opaque);
+
+                }
+        }
+
+        if (transparencyActivated)
+        {
+            foreach (RaycastHit rayCast in hits)
+            {
+                if (!collidList.Contains(rayCast.collider))
+                {
+                    collidList.Add(rayCast.collider);
+                }
+
+                Color32 col = rayCast.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+                col.a = 70;
+                rayCast.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+                ChangeRenderMode(rayCast.collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Transparent);
+                
+
+            }
+        }
+        else
+        {
+            if (transparencyCollidersSaved != null && transparencyCollidersSaved.Length > 0)
+            {
+                foreach (RaycastHit rayCast in transparencyCollidersSaved)
+                {
+                    if (collidList.Contains(rayCast.collider))
+                    {
+                        collidList.Remove(rayCast.collider);
+                    }
+                    Color32 col = rayCast.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+                    col.a = 255;
+                    rayCast.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+                    ChangeRenderMode(rayCast.collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Opaque);
+
+                }
+            }
+        }
+
+       
+        transparencyCollidersSaved = hits;
+
         Debug.DrawRay(player.transform.position, transform.position - player.transform.position, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
 
-        if (Physics.Raycast(player.transform.position, transform.position - player.transform.position, out hit, rayLength))
-        {
-            Debug.Log(hit.collider.name);
-            currentHit = hit.collider;
-            
-            Color32 col = hit.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
-            col.a = 100;
-            hit.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
-        }
-
-        if (currentHit != hit.collider)
-        {
-            Color32 col = currentHit.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
-            col.a = 255;
-            currentHit.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
-        }
 
     }
 
+
+    public void ChangeRenderMode( Material standardShaderMaterial, BlendMode blendMode)
+    {
+        switch (blendMode)
+        {
+            case BlendMode.Opaque:
+                
+                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                standardShaderMaterial.SetInt("_ZWrite", 1);
+                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                standardShaderMaterial.renderQueue = -1;
+                break;
+            case BlendMode.Cutout:
+                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                standardShaderMaterial.SetInt("_ZWrite", 1);
+                standardShaderMaterial.EnableKeyword("_ALPHATEST_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                standardShaderMaterial.renderQueue = 2450;
+                break;
+            case BlendMode.Fade:
+                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                standardShaderMaterial.SetInt("_ZWrite", 0);
+                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
+                standardShaderMaterial.EnableKeyword("_ALPHABLEND_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                standardShaderMaterial.renderQueue = 3000;
+                break;
+            case BlendMode.Transparent:
+               
+                standardShaderMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                standardShaderMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                standardShaderMaterial.SetInt("_ZWrite",0);
+                standardShaderMaterial.DisableKeyword("_ALPHATEST_ON");
+                standardShaderMaterial.DisableKeyword("_ALPHABLEND_ON");
+                standardShaderMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                standardShaderMaterial.renderQueue = 3000;
+                break;
+        }
+
+    }
 }
