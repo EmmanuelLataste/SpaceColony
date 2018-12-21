@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class PatrollingBehaviour : StateMachineBehaviour {
 
     GameObject entity;
@@ -32,7 +33,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {     
         
-        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f) {
+        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
             ToNextWaypoint();
         }
         

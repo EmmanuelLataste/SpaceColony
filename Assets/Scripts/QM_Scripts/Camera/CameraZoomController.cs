@@ -4,6 +4,7 @@ using Cinemachine;
 
 public class CameraZoomController : MonoBehaviour {
 
+    public Camera camMain;
     private CinemachineVirtualCamera cam;
     private CinemachineFramingTransposer camTransposer;
     private CinemachineBasicMultiChannelPerlin camNoise;

@@ -18,16 +18,36 @@ public class TargetRotation : MonoBehaviour {
     private float smoothReturn;
     public float speedReturn;
 
+
+    public float speedMouseX;
+    public float speedMouseY;
+
+    private float initialMouseX = 0;
+    private float initialMouseY = 0;
+
+
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
         horizontal2 = Input.GetAxis("Horizontal2");
         Rotation();
         //StartCoroutine(ReturnBehindPlayer());
         //Rotation2();
+        CameraMouse();
+        
     }
 
 
-   void Rotation2()
+    void CameraMouse()
+    {
+        initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
+        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+        transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+
+
+    }
+
+    void Rotation2()
     {
         if (horizontal2!= 0 || vertical2 != 0)
         {

@@ -12,7 +12,7 @@ public class TargetRotationCAM : MonoBehaviour {
         {
             rotation = (Mathf.Atan2(-Input.GetAxis("Vertical"), Input.GetAxis("Horizontal")) * Mathf.Rad2Deg);
 
-            transform.localRotation = Quaternion.Euler(new Vector3(0, rotation + 180, 0));
+            transform.localRotation = Quaternion.Euler(new Vector3(0, rotation + 90, 0));
         }
         
     }

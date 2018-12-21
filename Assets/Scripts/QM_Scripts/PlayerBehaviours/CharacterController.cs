@@ -41,12 +41,15 @@ public class CharacterController : Flammable {
     public GameObject hangingObjectPosition;
     [SerializeField]
     public GameObject cam;
+    public GameObject camZoom;
+    public Camera mainCam;
     private GameObject otherGameObject;
     private float throwStrengthX;
     public float throwStrengh;
     private float throwStrengthY;
     public float throwHigh;
     private GameObject player;
+    public Ray point;
 
     public Animator anim;
 
@@ -54,6 +57,7 @@ public class CharacterController : Flammable {
     {
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
+        
     }
 
     void Update()
@@ -67,6 +71,9 @@ public class CharacterController : Flammable {
         Hit();
         Debug.DrawRay(transform.position, transform.right, Color.yellow);
 
+
+       
+        
     }
 
     private void FixedUpdate()
@@ -88,29 +95,29 @@ public class CharacterController : Flammable {
                 isAimingRotating = false;
 
             }
-            else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
-            {
+            //else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
+            //{
               
-                 if (Input.GetAxis("Horizontal") > 0)
-                 {
+            //     if (Input.GetAxis("Horizontal") > 0)
+            //     {
                      
-                       transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
+            //           transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
                      
-                 }
+            //     }
 
-                 else if (Input.GetAxis("Horizontal") < 0)
-                 {
+            //     else if (Input.GetAxis("Horizontal") < 0)
+            //     {
                     
-                        transform.Rotate(-Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
+            //            transform.Rotate(-Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
                     
-                 }
+            //     }
 
-                 if (Input.GetAxis("Vertical2") > 0)
-                {
-                    transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
-                }
+            //     if (Input.GetAxis("Vertical2") > 0)
+            //    {
+            //        transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
+            //    }
 
-            }
+            //} ( MANETTE CONTROLLER )
 
         }
 
@@ -129,6 +136,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
+
                 positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
                 GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                 smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;

@@ -46,6 +46,12 @@ public class CameraController : MonoBehaviour
     public bool transparencyActivated = false;
     RaycastHit[] transparencyCollidersSaved;
 
+    public float speedMouseX;
+    public float speedMouseY;
+
+    private float initialMouseX = 0;
+    private float initialMouseY = 0;
+
     public LayerMask layerMask;
     private void Start()
     {
@@ -63,9 +69,21 @@ public class CameraController : MonoBehaviour
         RotationCam();
         //StartCoroutine(ReturnBehindPlayer());
         CameraRay();
-
+        CameraMouse();
        
 
+    }
+
+    void CameraMouse()
+    {
+        initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
+        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+        transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+
+        
+
+       
     }
 
     public IEnumerator CameraShakeMindManipulation(float duration, float magnitude)
@@ -313,4 +331,6 @@ public class CameraController : MonoBehaviour
         }
 
     }
+
+  
 }
