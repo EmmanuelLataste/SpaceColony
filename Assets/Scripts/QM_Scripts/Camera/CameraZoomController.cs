@@ -4,7 +4,6 @@ using Cinemachine;
 
 public class CameraZoomController : MonoBehaviour {
 
-    public Camera camMain;
     private CinemachineVirtualCamera cam;
     private CinemachineFramingTransposer camTransposer;
     private CinemachineBasicMultiChannelPerlin camNoise;
@@ -97,7 +96,7 @@ public class CameraZoomController : MonoBehaviour {
 
                 }
 
-                else if (Input.GetAxis("Fire2") == 0)
+            if (Input.GetAxis("Fire2") == 0)
                 {
                     transform.localRotation = Quaternion.Euler(new Vector3(5, 0, 0));
                 }

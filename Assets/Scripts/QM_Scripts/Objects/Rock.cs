@@ -68,8 +68,7 @@ public class Rock : MonoBehaviour {
 
         if (collision.gameObject.layer == LayerMask.NameToLayer("Entity") && Crush() == true)
         {
-            player.GetComponent<MindPower>().isMindManipulated = false;
-            Destroy(collision.gameObject);
+            collision.transform.GetComponent<EnnemiController>().isAlive = false;
         }
     }
 

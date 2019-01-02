@@ -25,6 +25,8 @@ public class TargetRotation : MonoBehaviour {
     private float initialMouseX = 0;
     private float initialMouseY = 0;
 
+    public GameObject player;
+
 
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
@@ -32,6 +34,7 @@ public class TargetRotation : MonoBehaviour {
         Rotation();
         //StartCoroutine(ReturnBehindPlayer());
         //Rotation2();
+
         CameraMouse();
         
     }
@@ -40,10 +43,48 @@ public class TargetRotation : MonoBehaviour {
     void CameraMouse()
     {
         initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
-        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
 
-        transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+        if(Input.GetButton("Fire2") == false)
+        {
+            transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+            
+        }
 
+        if (Input.GetButtonUp("Fire2"))
+        {
+            player.transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+
+        }
+        if (Input.GetButton("Fire2") == true)
+        {
+            if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+            {
+
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+
+            else if (transform.rotation.eulerAngles.x >= 350 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+            {
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+            else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
+            {
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+            else if (transform.rotation.eulerAngles.x < 350 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0)
+            {
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+            transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+           
+        }
+         
+        
+        
 
     }
 

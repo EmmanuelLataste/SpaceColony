@@ -5,56 +5,59 @@ using UnityEngine;
 
 public class CharacterController : Flammable {
     [Header("Rotation")]
-    private float horizontal;
-    private float vertical;
+    float horizontal;
+    float vertical;
     public float rotationAiming;
     public float speedRotationPlayer;
-    public float smoothRotationPlayer;
-    [SerializeField]
+    float smoothRotationPlayer;
     public GameObject targetRotationCam;
-
-    private float currentRotationY;
-    private bool isAimingRotating = false;
+    bool isAimingRotating = false;
 
     [Header("Jump")]
     [ SerializeField]
-    private float jump;
+    float jump;
     public float groundDistance;
-
 
     [Header("Move")]
 
     public float speed;
-    private float smoothPlayerMove;
+    float smoothPlayerMove;
     public float smoothSpeedPlayerMove;
-    private Vector3 positionToMove;
-  
-
-    [Header("Hold")]
-    public bool isHolding = false;
+    Vector3 positionToMove;
 
     [Header("PickObjects")]
-    public bool isPickable = false;
-    public bool isPicked = false;
-    
-    [SerializeField]
+    bool isPickable = false;
+    bool isPicked = false;
     public GameObject hangingObjectPosition;
-    [SerializeField]
+    public GameObject otherGameObject;
+    bool isHolding = false;
+
+    [Header("ThrowObjects")]
+    float throwStrengthX;
+    public float throwStrengh;
+    float throwStrengthY;
+    public float throwHigh;
+
+    [Header("Animations")]
+    Animator anim;
+    AnimatorStateInfo animStateInfoCrouch;
+    int crouchStateHash = Animator.StringToHash("Crouch Layer.Crouch");
+
+    [Header("Cameras")]
     public GameObject cam;
     public GameObject camZoom;
     public Camera mainCam;
-    private GameObject otherGameObject;
-    private float throwStrengthX;
-    public float throwStrengh;
-    private float throwStrengthY;
-    public float throwHigh;
-    private GameObject player;
-    public Ray point;
 
-    public Animator anim;
 
+    GameObject player;
+    MindPower mindPower;
+
+    public bool isAlive = true;
+    
     private void Start()
     {
+        anim = GetComponent<Animator>();
+        mindPower = GetComponent<MindPower>();
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
         
@@ -62,18 +65,21 @@ public class CharacterController : Flammable {
 
     void Update()
     {
+        
+        animStateInfoCrouch = anim.GetCurrentAnimatorStateInfo(1);
         horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
         vertical = Input.GetAxis("Vertical");
+        Dead();
         Jump();
         Rotation();
-        StartCoroutine(PickUp(otherGameObject));
-        StartCoroutine(Throw(otherGameObject));
-        Hit();
+        if (isPickable == true && isPicked == false)
+            StartCoroutine(PickUp(otherGameObject));
+        if (isPicked == true && isPickable == false && mindPower.isAiming2() == false)
+            StartCoroutine(Throw(otherGameObject));
         Debug.DrawRay(transform.position, transform.right, Color.yellow);
-
-
-       
         
+
+        anim.SetFloat("Direction", vertical);
     }
 
     private void FixedUpdate()
@@ -136,7 +142,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-
+                anim.SetBool("Run", true);
                 positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
                 GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                 smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
@@ -144,13 +150,15 @@ public class CharacterController : Flammable {
 
             else
             {
+                anim.SetBool("Run", false);
                 smoothPlayerMove = 0;
             }
         }
 
         else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
         {
-
+            anim.SetBool("Run", false);
+            transform.rotation = camZoom.transform.rotation;
             positionToMove = transform.position;
         }
             
@@ -173,74 +181,73 @@ public class CharacterController : Flammable {
 
     }
 
-    private void Hit()
-    {
-        if (Input.GetButtonDown("Y"))
-        {
-            anim.SetTrigger("Hit");
-        }
-    }
-
     private IEnumerator PickUp(GameObject other)
     {
-        if (isPickable == true && isPicked == false)
-        {
-            if (Input.GetButtonUp("X"))
+       
+        
+            if (Input.GetButtonUp("B"))
+                
             {
+                anim.SetBool("Crouch", true);
+                //if (animStateInfoCrouch.fullPathHash == crouchStateHash)
+                //{
+                yield return new WaitForSeconds(0.2f);
                 
-                other.transform.position = hangingObjectPosition.transform.position;
+                    other.transform.position = hangingObjectPosition.transform.position;
 
-                other.GetComponent<Rigidbody>().isKinematic = true;
-                other.GetComponent<Rigidbody>().detectCollisions = false;
+                    other.GetComponent<Rigidbody>().isKinematic = true;
+                    other.GetComponent<Rigidbody>().detectCollisions = false;
+
+                    isPickable = false;
+                    yield return new WaitForEndOfFrame();
+                    other.transform.eulerAngles = other.GetComponent<PositionWhenPicked>().position;
+                    other.transform.parent = hangingObjectPosition.transform; anim.SetBool("Crouch", true);
+                    isPicked = true;
+                    anim.SetBool("Crouch", false);
                 
-                isPickable = false;
-                yield return new WaitForEndOfFrame();
-                other.transform.eulerAngles = other.GetComponent<PositionWhenPicked>().position;
-                other.transform.parent = hangingObjectPosition.transform;
-                isPicked = true;
+                //}
             }
-        }
+          
+        
     }
 
     private IEnumerator Throw(GameObject other)
     {
-        if (isPicked == true && isPickable == false)
-        {
-            if (Input.GetButtonUp("X") || throwStrengthX >= 500)
+        
+            if (Input.GetButtonUp("B") || throwStrengthX >= 500)
             {
-                
+                isPicked = false;
+                anim.SetTrigger("Throw");
+                yield return new WaitForSeconds(.65f);
                 other.transform.parent = null;
                 other.GetComponent<Rigidbody>().isKinematic = false;
-                isPicked = false;
+                
                 other.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
                 throwStrengthX = 0;
                 throwStrengthY = 0;
                 yield return new WaitForEndOfFrame();
                 //this.transform.GetComponent<CharacterController>().speed *= 3;
-
                 yield return new WaitForSeconds(.01f);
                 other.GetComponent<Rigidbody>().detectCollisions = true;
+                
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
 
-            else if (Input.GetButton("X"))
+            else if (Input.GetButton("B"))
 
             {
                 
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
               
-
             }
 
-            if (Input.GetButtonDown("X"))
+            if (Input.GetButtonDown("B"))
             {
                
-                
             }
-
-
-        }
+            
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -285,7 +292,14 @@ public class CharacterController : Flammable {
 
     }
 
-    
+    void Dead()
+    {
+        if (isAlive == false)
+        {
+            gameObject.SetActive(false);
+            
+        }
+    }
 
-  
+    
 }

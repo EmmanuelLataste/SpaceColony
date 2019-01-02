@@ -76,14 +76,33 @@ public class CameraController : MonoBehaviour
 
     void CameraMouse()
     {
-        initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
-        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+        if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+        {
+            
+            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+        }
 
+
+        else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+        {
+            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+        }
+
+        else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
+        {
+            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+        }
+
+        else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0)
+        {
+
+            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+        }
+
+
+        initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
         transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
 
-        
-
-       
     }
 
     public IEnumerator CameraShakeMindManipulation(float duration, float magnitude)

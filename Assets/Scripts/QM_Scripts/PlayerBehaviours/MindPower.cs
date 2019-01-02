@@ -12,17 +12,19 @@ public class MindPower : MonoBehaviour {
     [Header("Control")]
     public ParticleSystem possessionParticles;
     RaycastHit hit;
-    private Transform currentHit;
+    public Transform currentHit;
     public bool isMindManipulated = false;
     public LineRenderer rayon;
-    private bool onceTrue = false;
+    public bool onceTrue = false;
     private bool isPossessionCoroutineRunning = false;
     public float timerPossess = 2;
     [Range(0,5)]
     public float forceOfShake;
+    float currentHitSpeed;
     
 
     [Header("Camera")]
+    public Camera cameraMain;
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera zoomCam;
     private bool isZoom = false;
@@ -32,10 +34,9 @@ public class MindPower : MonoBehaviour {
     private Vector3 ray2 = new Vector3(0, 0, 1);
     private Vector3 offset;
     public float maxRange;
+ 
 
-    RaycastHit hitMind;
 
-    public Camera cameraMain;
 
 
     private void Start()
@@ -46,8 +47,9 @@ public class MindPower : MonoBehaviour {
     void Update()
     {
         Control();
-        ReticleParticles();
-        RayonController();
+        currentHitNull();
+        //ReticleParticles();
+        //RayonController();
 
         if ( isMindManipulated == false && hit.collider != null)
         {
@@ -56,6 +58,23 @@ public class MindPower : MonoBehaviour {
 
         else if (isMindManipulated == true && currentHit != null)
             offset = transform.position - currentHit.transform.position;
+
+        if (isFire2Triggered() == false || isMindManipulated == true )
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        if (currentHit != null &&  currentHit.GetComponent<EnnemiController>().isAlive == false )
+        {
+            currentHit = null;
+        }
+
+
 
     }
    
@@ -91,23 +110,24 @@ public class MindPower : MonoBehaviour {
         {
             if (isFire2Triggered() == true)
             {
-                rayon.GetComponent<LineRenderer>().enabled = true;
+                //rayon.GetComponent<LineRenderer>().enabled = true;
                 if (isZoom == false)
                 {
                     normalCam.GetComponent<CameraController>().CameraZoomFocus();
                     isZoom = true;
                 }
 
-                if (isAiming()==true || isAiming2() == true)
+                if (/*isAiming()==true ||*/ isAiming2() == true)
                 {
                     possessionParticles.gameObject.SetActive(true);
                     possessionParticles.gameObject.transform.position = hit.transform.position;
                     possessionParticles.gameObject.transform.parent = hit.transform;
 
-                    if (isFire1Triggered() == true )
+                    if (Input.GetButtonDown("Fire1") == true )
                     {
 
                         currentHit = hit.transform;
+                        currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
                         FindObjectOfType<CameraZoomController>().CameraShake(forceOfShake, forceOfShake);
                         StopCoroutine(TimerBeforePossession());
                         StartCoroutine(TimerBeforePossession());
@@ -136,7 +156,7 @@ public class MindPower : MonoBehaviour {
                 if (isZoom == true)
                 {
                     
-                    rayon.GetComponent<LineRenderer>().enabled = false;
+                    //rayon.GetComponent<LineRenderer>().enabled = false;
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
                     isZoom = false;
                 }
@@ -151,36 +171,40 @@ public class MindPower : MonoBehaviour {
             
                 if (isZoom == true)
                 {
-                    rayon.GetComponent<LineRenderer>().enabled = false;
+                   // rayon.GetComponent<LineRenderer>().enabled = false;
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
                     isZoom = false;
                 }
-                StartCoroutine(Possession(LayerMask.GetMask("Nothing"), true, false, currentHit, true,1));
+                Possession(0,LayerMask.GetMask("Nothing"), true, false, currentHit, true,1);
                 
             }
 
-            else if (isFire1Triggered() == true && onceTrue == true)
+            else if (Input.GetButtonDown("Fire1") && onceTrue == true)
             {
-                StartCoroutine(Possession(LayerMask.GetMask("Player"),false, true,transform, false,.2f));
+                Possession(currentHitSpeed, LayerMask.GetMask("Player"),false, true,transform, false,.2f);
                 isMindManipulated = false;
             }
+
+          
             
         }
 
     }
 
-    IEnumerator Possession(LayerMask targetLayer, bool isEnemyControlled, bool isPlayerControlled, Transform follow, bool isonceTrue, float timer)
+    void Possession(float speed,LayerMask targetLayer, bool isEnemyControlled, bool isPlayerControlled, Transform follow, bool isonceTrue, float timer)
     {
-       
-        currentHit.transform.GetComponent<FieldOfView>().enabled = isPlayerControlled;
-        currentHit.transform.GetComponent<NavMeshAgent>().enabled = isPlayerControlled;
-        currentHit.transform.GetComponent<FieldOfView>().targetMask = targetLayer;
-        currentHit.transform.GetComponent<EnnemiController>().enabled = isEnemyControlled;
+        if ( currentHit != null)
+        {
+            currentHit.transform.GetComponent<EnnemiController>().enabled = isEnemyControlled;
+            currentHit.transform.GetComponent<NavMeshAgent>().speed = speed;
+            StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
+        }
+
         GetComponent<CharacterController>().enabled = isPlayerControlled;
+
         normalCam.GetComponent<CameraController>().Follow(follow);
         zoomCam.GetComponent<CameraZoomController>().CameraShake(0, 0);
-        StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
-        yield return new WaitForSeconds(timer);
+
         onceTrue = isonceTrue;
     }
 
@@ -192,32 +216,32 @@ public class MindPower : MonoBehaviour {
     }
 
     // To Know if an ennemy is touched by the ray which allows the Mind Manipulation
-    bool isAiming()
-    {
+    //bool isAiming()
+    //{
 
 
-        Debug.DrawRay(transform.position, (ray2 + (transform.forward * 100)), Color.green);
+    //    Debug.DrawRay(transform.position, (ray2 + (transform.forward * 100)), Color.green);
         
-        // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
-        if (Physics.Raycast(transform.position, (ray2 + (transform.forward * 100)), out hit ))
-            {
-                // If the object stocked in " hit " has the tag " Ennemy "...
-                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Entity") )
-                {
-                // ... the function is true...
-                return true;
+    //    // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
+    //    if (Physics.Raycast(transform.position, (ray2 + (transform.forward * 100)), out hit ))
+    //        {
+    //            // If the object stocked in " hit " has the tag " Ennemy "...
+    //            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Entity") )
+    //            {
+    //            // ... the function is true...
+    //            return true;
                 
-                }
+    //            }
 
                 
 
-            }
+    //        }
 
-       // ... else it's false
-        return false;
-    }
+    //   // ... else it's false
+    //    return false;
+    //}
 
-    bool isAiming2()
+   public bool isAiming2()
     {
         if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit))
 
@@ -254,9 +278,10 @@ public class MindPower : MonoBehaviour {
     {
         if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2"))
         {
-            transform.rotation = zoomCam.transform.rotation;
+            
+            Cursor.lockState = CursorLockMode.None;
             return true;
-           
+          
         }
         
 
@@ -270,7 +295,7 @@ public class MindPower : MonoBehaviour {
     void ReticleParticles()
     {
 
-        if (isAiming() == true && Input.GetAxis("Fire2") > 0)
+        if (/*isAiming() == true && */Input.GetAxis("Fire2") > 0)
         {
 
             possessionParticles.gameObject.transform.position = hit.transform.position;
@@ -283,6 +308,15 @@ public class MindPower : MonoBehaviour {
         }
 
       
+    }
+
+    void currentHitNull()
+    {
+        if ( currentHit == null)
+        {
+            Possession(currentHitSpeed, LayerMask.GetMask("Player"), false, true, transform, false, .2f);
+            isMindManipulated = false;
+        }
     }
 
   

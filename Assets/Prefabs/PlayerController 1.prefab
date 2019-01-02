@@ -1051,6 +1051,7 @@ MonoBehaviour:
   speedReturn: 0.001
   speedMouseX: 1
   speedMouseY: 1
+  player: {fileID: 1276624998940586}
 --- !u!114 &114071257647765020
 MonoBehaviour:
   m_ObjectHideFlags: 1

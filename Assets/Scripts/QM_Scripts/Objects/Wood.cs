@@ -17,7 +17,7 @@ public class Wood : Flammable{
     {
         if (transform.parent != null && isBurning == false)
         {
-            if (Input.GetButtonDown("B"))
+            if (Input.GetKey(KeyCode.Space))
             {
                 isBurning = true;
                 GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), firePosition.position, Quaternion.identity) as GameObject;
