@@ -31,7 +31,7 @@ GameObject:
   - component: {fileID: 95191909766990878}
   m_Layer: 11
   m_Name: Little Brainless V2
-  m_TagString: Little Brainless
+  m_TagString: Big Brainless
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,16 +130,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1038496091485150}
-  m_LocalRotation: {x: 0, y: 0.9997951, z: -0, w: -0.020244468}
-  m_LocalPosition: {x: 4.0626283, y: -6.42997, z: 0.8587198}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalRotation: {x: 0, y: 0.99961746, z: 0, w: 0.027659994}
+  m_LocalPosition: {x: 0.88, y: 3.87, z: 10.04}
+  m_LocalScale: {x: 2, y: 3, z: 2}
   m_Children:
   - {fileID: 4098912656176046}
   - {fileID: 4040738701523476}
   - {fileID: 4146021490787352}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 182.32, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 176.83, z: 0}
 --- !u!23 &23313248070821750
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -280,7 +280,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &65248153496934912
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -335,21 +335,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationAiming: 50
-  speedRotationPlayer: 0.7
-  smoothRotationPlayer: 0
+  speedRotationPlayer: 0.01
+  smoothRotationPlayer: 0.1
   targetRotationCam: {fileID: 0}
   jump: 10
   groundDistance: 1
-  speed: 4
+  speed: 6
   smoothSpeedPlayerMove: 0.8
-  isHolding: 0
-  isPickable: 0
   isPicked: 0
   hangingObjectPosition: {fileID: 0}
-  cam: {fileID: 0}
+  otherGameObject: {fileID: 0}
   throwStrengh: 3
   throwHigh: 1.1
-  anim: {fileID: 0}
+  cam: {fileID: 0}
+  camZoom: {fileID: 0}
+  mainCam: {fileID: 0}
+  isAlive: 1
+  dodgeTimer: 0
+  dodgePower: 0
 --- !u!114 &114443272776470564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -401,7 +404,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

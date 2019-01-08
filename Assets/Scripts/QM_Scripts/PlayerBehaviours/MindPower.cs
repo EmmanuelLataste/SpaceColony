@@ -13,7 +13,7 @@ public class MindPower : MonoBehaviour {
     public ParticleSystem possessionParticles;
     RaycastHit hit;
     public Transform currentHit;
-    public bool isMindManipulated = false;
+    public static bool isMindManipulated = false;
     public LineRenderer rayon;
     public bool onceTrue = false;
     private bool isPossessionCoroutineRunning = false;
@@ -34,14 +34,14 @@ public class MindPower : MonoBehaviour {
     private Vector3 ray2 = new Vector3(0, 0, 1);
     private Vector3 offset;
     public float maxRange;
- 
 
-
+    bool isF1InUse;
 
 
     private void Start()
     {
         currentHit = null;
+      
     }
 
     void Update()
@@ -66,7 +66,7 @@ public class MindPower : MonoBehaviour {
 
         else
         {
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         if (currentHit != null &&  currentHit.GetComponent<EnnemiController>().isAlive == false )
@@ -74,7 +74,7 @@ public class MindPower : MonoBehaviour {
             currentHit = null;
         }
 
-
+       
 
     }
    
@@ -106,7 +106,7 @@ public class MindPower : MonoBehaviour {
 
     void Control()
     {
-        if (isMindManipulated == false)
+        if (isMindManipulated == false )
         {
             if (isFire2Triggered() == true)
             {
@@ -123,22 +123,31 @@ public class MindPower : MonoBehaviour {
                     possessionParticles.gameObject.transform.position = hit.transform.position;
                     possessionParticles.gameObject.transform.parent = hit.transform;
 
-                    if (Input.GetButtonDown("Fire1") == true )
+                    if (Input.GetButtonDown("Fire1") == true || Input.GetAxis("Fire1") > 0)
                     {
+                        if (isF1InUse == false)
+                        {
+                            currentHit = hit.transform;
+                            currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
+                            FindObjectOfType<CameraZoomController>().CameraShake(forceOfShake, forceOfShake);
+                            StopCoroutine(TimerBeforePossession());
+                            StartCoroutine(TimerBeforePossession());
+                            isF1InUse = true;
+                        }
 
-                        currentHit = hit.transform;
-                        currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
-                        FindObjectOfType<CameraZoomController>().CameraShake(forceOfShake, forceOfShake);
-                        StopCoroutine(TimerBeforePossession());
-                        StartCoroutine(TimerBeforePossession());
 
                     }
 
-                    if (isFire1Triggered() == false && isPossessionCoroutineRunning == true)
+                    if (Input.GetButtonUp("Fire1") == true && isPossessionCoroutineRunning == true || Input.GetAxis("Fire1") == 0)
                     {
-                        FindObjectOfType<CameraZoomController>().CameraShake(0, 0);
-                        isPossessionCoroutineRunning = false;
-                        StopAllCoroutines();
+                        if (isF1InUse == true)
+                        {
+                            FindObjectOfType<CameraZoomController>().CameraShake(0, 0);
+                            isPossessionCoroutineRunning = false;
+                            StopAllCoroutines();
+                            isF1InUse = false;
+                        }
+
                     }
                 }
 
@@ -147,6 +156,7 @@ public class MindPower : MonoBehaviour {
                     possessionParticles.gameObject.SetActive(false);
                     FindObjectOfType<CameraZoomController>().CameraShake(0, 0);
                     StopAllCoroutines();
+                    isF1InUse = false;
                 }
             }
 
@@ -159,11 +169,12 @@ public class MindPower : MonoBehaviour {
                     //rayon.GetComponent<LineRenderer>().enabled = false;
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
                     isZoom = false;
+                    StopAllCoroutines();
                 }
             }
         }
 
-        else if (isMindManipulated == true)
+        else if (isMindManipulated == true && currentHit.GetComponent<EnnemiController>().isPicked == false)
         {
 
             if (onceTrue == false)
@@ -175,14 +186,34 @@ public class MindPower : MonoBehaviour {
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
                     isZoom = false;
                 }
+                isF1InUse = false;
                 Possession(0,LayerMask.GetMask("Nothing"), true, false, currentHit, true,1);
-                
             }
 
-            else if (Input.GetButtonDown("Fire1") && onceTrue == true)
+            else if (onceTrue == true)
             {
-                Possession(currentHitSpeed, LayerMask.GetMask("Player"),false, true,transform, false,.2f);
-                isMindManipulated = false;
+                if (Input.GetButtonUp("Fire1") || Input.GetAxisRaw("Fire1") == 0)
+                {
+                    isF1InUse = true;
+                }
+
+                else if (Input.GetButtonDown("Fire1") || Input.GetAxisRaw("Fire1") == 1)
+                {
+                    if (isF1InUse == true)
+                    {
+                        isF1InUse = false;
+                        isMindManipulated = false;
+                        Possession(currentHitSpeed, LayerMask.GetMask("Player"), false, true, transform, false, .2f);
+                        FindObjectOfType<CameraController>().CameraShake(0f, 0f);
+                    }
+
+                }
+                // if (Input.GetButtonDown("Fire3"))
+                //{
+                //    isMindManipulated = false;
+                //    Possession(currentHitSpeed, LayerMask.GetMask("Player"), false, true, transform, false, .2f);
+                //    FindObjectOfType<CameraController>().CameraShake(0f, 0f);
+                //}
             }
 
           
@@ -276,10 +307,10 @@ public class MindPower : MonoBehaviour {
 
     bool isFire2Triggered()
     {
-        if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2"))
+        if (Input.GetAxisRaw("Fire2") > 0 || Input.GetButton("Fire2"))
         {
             
-            Cursor.lockState = CursorLockMode.None;
+            
             return true;
           
         }

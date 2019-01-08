@@ -52,6 +52,10 @@ public class CameraController : MonoBehaviour
     private float initialMouseX = 0;
     private float initialMouseY = 0;
 
+    private float initialHorizontal;
+    private float initialVertical;
+
+
     public LayerMask layerMask;
     private void Start()
     {
@@ -76,32 +80,106 @@ public class CameraController : MonoBehaviour
 
     void CameraMouse()
     {
-        if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+        if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
         {
-            
-            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+            {
+
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+
+            else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+            {
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+            }
+
+            else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
+            {
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+            }
+
+
+            else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0 )
+            {
+
+                initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+            }
+
+            initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
+            transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+        }
+        if (Input.GetAxis("Vertical2") != 0 || Input.GetAxis("Horizontal2") != 0)
+        {
+            if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
+            {
+                if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                {
+
+                    initialVertical -= speedMouseY * -Input.GetAxis("Vertical2");
+                }
+
+
+                else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+                {
+                    initialVertical -= speedMouseY * -Input.GetAxis("Vertical2");
+                }
+
+                else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical2") < 0)
+                {
+                    initialVertical -= speedMouseY * -Input.GetAxis("Vertical2");
+                }
+
+                else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical2") > 0)
+                {
+
+                    initialVertical -= speedMouseY * -Input.GetAxis("Vertical2");
+                }
+
+                initialHorizontal += speedMouseX * Input.GetAxis("Horizontal2");
+                transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
+
+
+            }
+        }
+     
+        else if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
+        {
+             if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false)
+            {
+                if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                {
+
+                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                }
+
+
+                else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+                {
+                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                }
+
+                else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical") > 0)
+                {
+                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                }
+
+                else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical") < 0)
+                {
+
+                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                }
+
+                initialHorizontal += speedMouseX * Input.GetAxis("Horizontal");
+                transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
+
+
+            }
+
         }
 
-
-        else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
-        {
-            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-        }
-
-        else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
-        {
-            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-        }
-
-        else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0)
-        {
-
-            initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-        }
-
-
-        initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
-        transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
 
     }
 

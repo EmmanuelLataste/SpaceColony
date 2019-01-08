@@ -9,7 +9,7 @@ public class CharacterController : Flammable {
     float vertical;
     public float rotationAiming;
     public float speedRotationPlayer;
-    float smoothRotationPlayer;
+    public float smoothRotationPlayer;
     public GameObject targetRotationCam;
     bool isAimingRotating = false;
 
@@ -27,7 +27,7 @@ public class CharacterController : Flammable {
 
     [Header("PickObjects")]
     bool isPickable = false;
-    bool isPicked = false;
+    public bool isPicked = false;
     public GameObject hangingObjectPosition;
     public GameObject otherGameObject;
     bool isHolding = false;
@@ -48,43 +48,50 @@ public class CharacterController : Flammable {
     public GameObject camZoom;
     public Camera mainCam;
 
-
+    Rigidbody rb;
     GameObject player;
     MindPower mindPower;
 
     public bool isAlive = true;
-    
+    bool isAxisF1InUse;
+
+    public float dodgeTimer;
+    public float dodgePower;
     private void Start()
     {
         anim = GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        
+
         animStateInfoCrouch = anim.GetCurrentAnimatorStateInfo(1);
         horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
         vertical = Input.GetAxis("Vertical");
         Dead();
-        Jump();
+
         Rotation();
         if (isPickable == true && isPicked == false)
             StartCoroutine(PickUp(otherGameObject));
-        if (isPicked == true && isPickable == false && mindPower.isAiming2() == false)
+        if ( isPicked == true && isPickable == false)
             StartCoroutine(Throw(otherGameObject));
+
         Debug.DrawRay(transform.position, transform.right, Color.yellow);
         
 
         anim.SetFloat("Direction", vertical);
+
     }
 
     private void FixedUpdate()
     {
         Movements();
+        StartCoroutine(Dodge());
+        Jump();
     }
 
 
@@ -93,11 +100,11 @@ public class CharacterController : Flammable {
 
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
-            if (Input.GetAxis("Fire2") == 0 || player.GetComponent<MindPower>().isMindManipulated == true)
+            if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
                 
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
-                smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
+                //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
 
             }
@@ -129,7 +136,7 @@ public class CharacterController : Flammable {
 
         else if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
         {
-            smoothRotationPlayer = 0;
+            //smoothRotationPlayer = 0;
         }
 
        
@@ -138,24 +145,30 @@ public class CharacterController : Flammable {
     void Movements()
     {
 
-        if (Input.GetAxis("Fire2") == 0 || player.GetComponent<MindPower>().isMindManipulated == true)
+        if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-                anim.SetBool("Run", true);
-                positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
-                GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
-                smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
+                
+                    anim.SetBool("Run", true);
+                    positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
+                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
+                    smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
+                
+                
             }
 
             else
             {
-                anim.SetBool("Run", false);
-                smoothPlayerMove = 0;
+               
+                    anim.SetBool("Run", false);
+                    smoothPlayerMove = 0;
+                
+
             }
         }
 
-        else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
+        else if (Input.GetAxis("Fire2") > 0 && MindPower.isMindManipulated == false)
         {
             anim.SetBool("Run", false);
             transform.rotation = camZoom.transform.rotation;
@@ -185,14 +198,17 @@ public class CharacterController : Flammable {
     {
        
         
-            if (Input.GetButtonUp("B"))
+            if (isPicked == false)
                 
             {
-                anim.SetBool("Crouch", true);
-                //if (animStateInfoCrouch.fullPathHash == crouchStateHash)
-                //{
-                yield return new WaitForSeconds(0.2f);
-                
+                if (/*Input.GetAxis("Fire1") > 0*/ Input.GetButtonDown("Fire3"))
+                {
+                    isAxisF1InUse = true;
+                    anim.SetBool("Crouch", true);
+                    //if (animStateInfoCrouch.fullPathHash == crouchStateHash)
+                    //{
+                    yield return new WaitForSeconds(0.2f);
+
                     other.transform.position = hangingObjectPosition.transform.position;
 
                     other.GetComponent<Rigidbody>().isKinematic = true;
@@ -204,6 +220,13 @@ public class CharacterController : Flammable {
                     other.transform.parent = hangingObjectPosition.transform; anim.SetBool("Crouch", true);
                     isPicked = true;
                     anim.SetBool("Crouch", false);
+                }
+
+                else if (/*Input.GetAxisRaw("Fire1") == 0*/ Input.GetButtonUp("Fire3"))
+            {
+                isAxisF1InUse = false;
+            }
+               
                 
                 //}
             }
@@ -213,39 +236,53 @@ public class CharacterController : Flammable {
 
     private IEnumerator Throw(GameObject other)
     {
-        
-            if (Input.GetButtonUp("B") || throwStrengthX >= 500)
+            if ( isPicked == true)
+        {
+            if (Input.GetButtonUp("Fire1") || throwStrengthX >= 500 || Input.GetButtonUp("Fire3") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
-                isPicked = false;
-                anim.SetTrigger("Throw");
-                yield return new WaitForSeconds(.65f);
-                other.transform.parent = null;
-                other.GetComponent<Rigidbody>().isKinematic = false;
-                
-                other.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
-                throwStrengthX = 0;
-                throwStrengthY = 0;
-                yield return new WaitForEndOfFrame();
-                //this.transform.GetComponent<CharacterController>().speed *= 3;
-                yield return new WaitForSeconds(.01f);
-                other.GetComponent<Rigidbody>().detectCollisions = true;
-                
+                if (isAxisF1InUse == true)
+                {
+                    isPicked = false;
+                    anim.SetTrigger("Throw");
+                    yield return new WaitForSeconds(.65f);
+                    other.transform.parent = null;
+                    other.GetComponent<Rigidbody>().isKinematic = false;
+
+                    other.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
+                    throwStrengthX = 0;
+                    throwStrengthY = 0;
+                    yield return new WaitForEndOfFrame();
+                    //this.transform.GetComponent<CharacterController>().speed *= 3;
+                    yield return new WaitForSeconds(.01f);
+                    other.GetComponent<Rigidbody>().detectCollisions = true;
+
+                }
+
+
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
 
-            else if (Input.GetButton("B"))
+            else if (Input.GetButton("Fire1") || Input.GetButton("Fire3") /*Input.GetAxisRaw("Fire1") == 1*/ )
 
             {
-                
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
-              
+                if (isAxisF1InUse == false)
+                {
+                    
+                    isAxisF1InUse = true;
+                }
+
+
+
             }
 
-            if (Input.GetButtonDown("B"))
+            if (Input.GetButtonDown("Fire1"))
             {
-               
+
             }
+        }
+            
             
         
     }
@@ -296,7 +333,20 @@ public class CharacterController : Flammable {
     {
         if (isAlive == false)
         {
+            
             gameObject.SetActive(false);
+            
+        }
+    }
+
+    IEnumerator Dodge()
+    {
+        if (Input.GetButtonDown("X") && MindPower.isMindManipulated == false)
+        {
+            
+            rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
+            yield return new WaitForSeconds(dodgeTimer);
+            rb.velocity = new Vector3 (0,0,0);
             
         }
     }

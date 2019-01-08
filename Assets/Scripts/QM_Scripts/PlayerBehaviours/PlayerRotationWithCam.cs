@@ -28,7 +28,7 @@ public class PlayerRotationWithCam : MonoBehaviour {
 
         if (horizontal != 0 || vertical != 0) // Si on utilise le joystick
         {
-            if (Input.GetAxis("Fire2") == 0 || player.GetComponent<MindPower>().isMindManipulated == true)
+            if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
                 rotation = (Mathf.Atan2(-vertical, horizontal) * Mathf.Rad2Deg);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationGO.transform.rotation, smoothRotation);
@@ -38,7 +38,7 @@ public class PlayerRotationWithCam : MonoBehaviour {
                 smoothRotation += speedRotation * Time.deltaTime;
 
             }
-            else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
+            else if (Input.GetAxis("Fire2") > 0 && MindPower.isMindManipulated == false)
             {
                 if (horizontal > 0)
                 {

@@ -23,7 +23,7 @@ public class CameraZoomController : MonoBehaviour {
     private void Update()
     {
         CameraRay();
-        Rotation();
+        //Rotation();
     }
 
     public void CameraShake(float amplitude, float frequency)
