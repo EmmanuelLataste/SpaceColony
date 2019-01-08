@@ -90,7 +90,7 @@ public class CharacterController : Flammable {
     private void FixedUpdate()
     {
         Movements();
-        StartCoroutine(Dodge());
+        //StartCoroutine(Dodge());
         Jump();
     }
 
