@@ -12,7 +12,7 @@ public class MindPower : MonoBehaviour {
     [Header("Control")]
     public ParticleSystem possessionParticles;
     RaycastHit hit;
-    public Transform currentHit;
+    public static Transform currentHit;
     public static bool isMindManipulated = false;
     public LineRenderer rayon;
     public bool onceTrue = false;

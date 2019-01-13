@@ -85,7 +85,7 @@ public class PickObjects : MonoBehaviour {
                 //this.transform.GetComponent<CharacterController>().speed *= 3;
                 
                 yield return new WaitForSeconds(.01f);
-                GetComponent<CharacterController>().speed *= 1.5f;
+          
                 other.GetComponent<Rigidbody>().detectCollisions = true;
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
@@ -99,7 +99,7 @@ public class PickObjects : MonoBehaviour {
 
             if (Input.GetButtonDown("X"))
             {
-                GetComponent<CharacterController>().speed /= 1.5f;
+                
                 //cam.GetComponent<CameraController>().CameraZoomFocus(1);
                 //this.transform.GetComponent<CharacterController>().speed /= 3;
                 //this.transform.GetComponent<CharacterController>().speedRotationPlayer /= 3;

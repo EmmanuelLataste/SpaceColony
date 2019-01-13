@@ -20,6 +20,7 @@ public class CharacterController : Flammable {
 
     [Header("Move")]
 
+    public float beginSpeed;
     public float speed;
     float smoothPlayerMove;
     public float smoothSpeedPlayerMove;
@@ -33,9 +34,9 @@ public class CharacterController : Flammable {
     bool isHolding = false;
 
     [Header("ThrowObjects")]
-    float throwStrengthX;
+    public float throwStrengthX;
     public float throwStrengh;
-    float throwStrengthY;
+    public float throwStrengthY;
     public float throwHigh;
 
     [Header("Animations")]
@@ -57,8 +58,10 @@ public class CharacterController : Flammable {
 
     public float dodgeTimer;
     public float dodgePower;
+    
     private void Start()
     {
+        beginSpeed = speed;
         anim = GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
         otherGameObject = null;
@@ -66,19 +69,18 @@ public class CharacterController : Flammable {
         rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+     public override void Update()
     {
-
+        base.Update();
         animStateInfoCrouch = anim.GetCurrentAnimatorStateInfo(1);
         horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
         vertical = Input.GetAxis("Vertical");
-        Dead();
 
         Rotation();
         if (isPickable == true && isPicked == false)
-            StartCoroutine(PickUp(otherGameObject));
-        if ( isPicked == true && isPickable == false)
-            StartCoroutine(Throw(otherGameObject));
+            StartCoroutine(PickUp());
+        if (isPicked == true && isPickable == false)
+            Throw();
 
         Debug.DrawRay(transform.position, transform.right, Color.yellow);
         
@@ -194,33 +196,35 @@ public class CharacterController : Flammable {
 
     }
 
-    private IEnumerator PickUp(GameObject other)
+    private IEnumerator PickUp()
     {
        
-        
+            
             if (isPicked == false)
                 
             {
                 if (/*Input.GetAxis("Fire1") > 0*/ Input.GetButtonDown("Fire3"))
                 {
-                    isAxisF1InUse = true;
+                    
+                    isPicked = true;
                     anim.SetBool("Crouch", true);
-                    //if (animStateInfoCrouch.fullPathHash == crouchStateHash)
-                    //{
-                    yield return new WaitForSeconds(0.2f);
+                    isAxisF1InUse = true;
+                    
+                    yield return new WaitForSeconds(.5f);
 
-                    other.transform.position = hangingObjectPosition.transform.position;
+                    otherGameObject.transform.position = hangingObjectPosition.transform.position;
 
-                    other.GetComponent<Rigidbody>().isKinematic = true;
-                    other.GetComponent<Rigidbody>().detectCollisions = false;
+                otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
+                otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
 
                     isPickable = false;
                     yield return new WaitForEndOfFrame();
-                    other.transform.eulerAngles = other.GetComponent<PositionWhenPicked>().position;
-                    other.transform.parent = hangingObjectPosition.transform; anim.SetBool("Crouch", true);
-                    isPicked = true;
+                otherGameObject.transform.eulerAngles = otherGameObject.GetComponent<PositionWhenPicked>().position;
+                otherGameObject.transform.parent = hangingObjectPosition.transform; anim.SetBool("Crouch", true);
                     anim.SetBool("Crouch", false);
-                }
+               
+
+            }
 
                 else if (/*Input.GetAxisRaw("Fire1") == 0*/ Input.GetButtonUp("Fire3"))
             {
@@ -234,7 +238,32 @@ public class CharacterController : Flammable {
         
     }
 
-    private IEnumerator Throw(GameObject other)
+    void Throw2()
+
+    {
+
+        isPicked = false;
+
+        otherGameObject.transform.parent = null;
+        otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
+
+        otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
+        throwStrengthX = 0;
+        throwStrengthY = 0;
+
+        //this.transform.GetComponent<CharacterController>().speed *= 3;
+
+
+        otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
+        if (otherGameObject.GetComponent<Goo>() != null)
+        {
+            otherGameObject.GetComponent<Goo>().isGooAble = true;
+        }
+        
+
+    }
+
+    private void Throw()
     {
             if ( isPicked == true)
         {
@@ -242,20 +271,7 @@ public class CharacterController : Flammable {
             {
                 if (isAxisF1InUse == true)
                 {
-                    isPicked = false;
                     anim.SetTrigger("Throw");
-                    yield return new WaitForSeconds(.65f);
-                    other.transform.parent = null;
-                    other.GetComponent<Rigidbody>().isKinematic = false;
-
-                    other.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
-                    throwStrengthX = 0;
-                    throwStrengthY = 0;
-                    yield return new WaitForEndOfFrame();
-                    //this.transform.GetComponent<CharacterController>().speed *= 3;
-                    yield return new WaitForSeconds(.01f);
-                    other.GetComponent<Rigidbody>().detectCollisions = true;
-
                 }
 
 
@@ -287,18 +303,21 @@ public class CharacterController : Flammable {
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickable") && isPicked == false)
         {
+            base.OnTriggerEnter(other);
+            
             otherGameObject = other.gameObject;
             isPickable = true;
 
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public override void OnTriggerExit(Collider other)
     {
+        base.OnTriggerExit(other);
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickable"))
         {
             isPickable = false;
@@ -329,15 +348,6 @@ public class CharacterController : Flammable {
 
     }
 
-    void Dead()
-    {
-        if (isAlive == false)
-        {
-            
-            gameObject.SetActive(false);
-            
-        }
-    }
 
     IEnumerator Dodge()
     {

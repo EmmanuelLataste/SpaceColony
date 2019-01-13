@@ -28,15 +28,15 @@ public class Rock : MonoBehaviour {
     {
         
 
-        if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == true)
-        {
-            player.GetComponent<CharacterController>().speed = 0;
-        }
+        //if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == true)
+        //{
+        //    player.GetComponent<CharacterController>().speed = 0;
+        //}
 
-        else if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == false)
-        {
-            player.GetComponent<CharacterController>().speed = 8;
-        }
+        //else if (player.GetComponent<CharacterController>().DetectCollisions(.6f) == false)
+        //{
+        //    player.GetComponent<CharacterController>().speed = 8;
+        //}
 
 
         if (isFixed == true && Input.GetButtonUp("Fire3"))
