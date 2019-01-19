@@ -14,6 +14,7 @@ public class Explosive : MonoBehaviour {
     public float radiusLowDamage;
     public float timer;
     public float timer2 = .5f;
+    public GameObject explosionPrefab;
 
     void Update()
     {
@@ -25,7 +26,7 @@ public class Explosive : MonoBehaviour {
     {
         if (collision.gameObject.GetComponent<Ignitable>() == true && isBoom == false)
         {
-            StartCoroutine(Boom());
+            Boom();
         }
     }
 
@@ -52,21 +53,20 @@ public class Explosive : MonoBehaviour {
 
     }
 
-    public IEnumerator Boom()
+    public void Boom()
     {
-        Debug.Log(transform.position);
+
         littleCircle = Physics.OverlapSphere(transform.position, radiusHighDamage);
         bigCircle = Physics.OverlapSphere(transform.position, radiusLowDamage);
         InTheBoom();
-        Debug.Log("BOOOOM");
+
         isBoom = true;
         timer = Time.time + timer2;
         Destroy(GetComponent<MeshRenderer>());
         GetComponent<Rigidbody>().isKinematic = true;
-        yield return new WaitForSeconds(2);
+        GameObject explosion = Instantiate(explosionPrefab) as GameObject;
+        explosion.transform.position = transform.position;
         Destroy(gameObject);
-
-        
     }
 
     public void InTheBoom()
@@ -77,7 +77,7 @@ public class Explosive : MonoBehaviour {
             if (deadCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && deadCollid is CapsuleCollider)
             {
                 deadCollid.GetComponent<Life>().healthPoints -= 50;
-                Debug.Log("Dead");
+                
             }
         }
 
@@ -85,7 +85,7 @@ public class Explosive : MonoBehaviour {
         {
             if (hurtCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && hurtCollid is CapsuleCollider)
             {
-                Debug.Log(Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10);
+               
                 hurtCollid.GetComponent<Life>().healthPoints -= Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10 ;
                 // fonction affine après calcul par rapport de la distance x de 5 à 10 et f(x) de 15 à 0.
             }

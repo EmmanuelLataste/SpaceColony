@@ -36,7 +36,7 @@ public class MindPower : MonoBehaviour {
     public float maxRange;
 
     bool isF1InUse;
-
+    
 
     private void Start()
     {
@@ -74,7 +74,6 @@ public class MindPower : MonoBehaviour {
             currentHit = null;
         }
 
-       
 
     }
    
@@ -128,7 +127,8 @@ public class MindPower : MonoBehaviour {
                         if (isF1InUse == false)
                         {
                             currentHit = hit.transform;
-                            currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
+                            
+                            //currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
                             FindObjectOfType<CameraZoomController>().CameraShake(forceOfShake, forceOfShake);
                             StopCoroutine(TimerBeforePossession());
                             StartCoroutine(TimerBeforePossession());
@@ -203,20 +203,15 @@ public class MindPower : MonoBehaviour {
                     {
                         isF1InUse = false;
                         isMindManipulated = false;
+                        
                         Possession(currentHitSpeed, LayerMask.GetMask("Player"), false, true, transform, false, .2f);
                         FindObjectOfType<CameraController>().CameraShake(0f, 0f);
                     }
 
                 }
-                // if (Input.GetButtonDown("Fire3"))
-                //{
-                //    isMindManipulated = false;
-                //    Possession(currentHitSpeed, LayerMask.GetMask("Player"), false, true, transform, false, .2f);
-                //    FindObjectOfType<CameraController>().CameraShake(0f, 0f);
-                //}
+               
             }
-
-          
+            
             
         }
 
@@ -227,7 +222,8 @@ public class MindPower : MonoBehaviour {
         if ( currentHit != null)
         {
             currentHit.transform.GetComponent<EnnemiController>().enabled = isEnemyControlled;
-            currentHit.transform.GetComponent<NavMeshAgent>().speed = speed;
+            //currentHit.transform.GetComponent<NavMeshAgent>().speed = speed;
+            currentHit.transform.GetComponent<PositionEnemies>().enabled = isPlayerControlled ;
             StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
         }
 
@@ -244,6 +240,7 @@ public class MindPower : MonoBehaviour {
         isPossessionCoroutineRunning = true;
         yield return new WaitForSeconds(timerPossess);
         isMindManipulated = true;
+        yield return null;
     }
 
     // To Know if an ennemy is touched by the ray which allows the Mind Manipulation
@@ -309,7 +306,7 @@ public class MindPower : MonoBehaviour {
     {
         if (Input.GetAxisRaw("Fire2") > 0 || Input.GetButton("Fire2"))
         {
-            
+
             
             return true;
           

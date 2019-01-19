@@ -17,12 +17,11 @@ public class Wood : Flammable{
     {
         if (transform.parent != null && isBurning == false)
         {
-            if (Input.GetButtonDown ("X"))
+            if (Input.GetButtonDown ("X") && GetComponent<Ignitable>() == false)
             {
+    
                 isBurning = true;
-                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), firePosition.position, Quaternion.identity) as GameObject;
-                particleFires.transform.parent = this.transform;
-                particleFires.transform.localScale = Vector3.one;
+
                 gameObject.AddComponent<Ignitable>();
 
             }
@@ -40,18 +39,9 @@ public class Wood : Flammable{
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Entity"))
-        {
-            if (isBurning == true && other.gameObject.GetComponent<Ignitable>() == false)
-            {
-                isOtherBurning = true;
-                GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), other.collider.transform.position, Quaternion.identity) as GameObject;
-                particleFires.transform.parent = other.transform;
-                particleFires.transform.localScale = Vector3.one;
-                particleFires.transform.rotation = Quaternion.Euler(new Vector3(270, 0, 0));
-                other.gameObject.AddComponent<Ignitable>();
-            }
-        }
+       
     }
+
+    
 
 }

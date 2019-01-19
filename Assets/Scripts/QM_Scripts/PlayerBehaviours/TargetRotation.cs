@@ -11,16 +11,15 @@ public class TargetRotation : MonoBehaviour {
     private float horizontal2;
     public float smoothRotationNegatif;
     public float smoothRotationPositif;
-    public float smoothRotationSpeed;
-    public float rotationSpeed;
+    float smoothRotationSpeed;
+    float rotationSpeed;
 
-    public GameObject returnToRotationTarget;
     private float smoothReturn;
-    public float speedReturn;
 
+    CameraController cameraController;
 
-    public float speedMouseX;
-    public float speedMouseY;
+    float speedMouseX;
+    float speedMouseY;
 
     private float initialMouseX = 0;
     private float initialMouseY = 0;
@@ -33,6 +32,15 @@ public class TargetRotation : MonoBehaviour {
     private bool isAxisF2inUse;
     float timerF2;
     public float timerF2Offset;
+
+    private void Start()
+    {
+        cameraController = cam.GetComponent<CameraController>();
+        speedMouseX = cameraController.speedMouseX;
+        speedMouseY = cameraController.speedMouseY;
+        smoothRotationSpeed = cameraController.smoothRotationSpeed;
+        rotationSpeed = cameraController.rotationSpeed;
+    }
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
         horizontal2 = Input.GetAxis("Horizontal2");
@@ -198,20 +206,20 @@ public class TargetRotation : MonoBehaviour {
         
     }
 
-    private IEnumerator ReturnBehindPlayer()
-    {
+    //private IEnumerator ReturnBehindPlayer()
+    //{
 
-        if (vertical2 == 0 && horizontal2 == 0 && Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
-        {
-            yield return new WaitForEndOfFrame();
-            transform.rotation = Quaternion.Slerp(transform.rotation, returnToRotationTarget.transform.rotation, smoothReturn);
-            smoothReturn += speedReturn * Time.deltaTime;
-        }
+    //    if (vertical2 == 0 && horizontal2 == 0 && Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+    //    {
+    //        yield return new WaitForEndOfFrame();
+    //        transform.rotation = Quaternion.Slerp(transform.rotation, returnToRotationTarget.transform.rotation, smoothReturn);
+    //        smoothReturn += speedReturn * Time.deltaTime;
+    //    }
 
-        else
-        {
-            smoothReturn = 0;
-        }
-    }
+    //    else
+    //    {
+    //        smoothReturn = 0;
+    //    }
+    //}
 
 }

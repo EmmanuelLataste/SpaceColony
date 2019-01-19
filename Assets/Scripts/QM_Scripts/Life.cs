@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Life : MonoBehaviour {
+public class Life : MonoBehaviour
+{
 
     public float healthPoints;
     bool isAlive = true;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    // Update is called once per frame
+    void Update()
+    {
         Dead();
 
         if (healthPoints <= 0)
@@ -32,3 +31,4 @@ public class Life : MonoBehaviour {
         }
     }
 }
+
