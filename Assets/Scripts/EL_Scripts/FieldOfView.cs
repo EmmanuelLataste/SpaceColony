@@ -13,7 +13,6 @@ public class FieldOfView : MonoBehaviour {
 
     public LayerMask targetMask;
     public LayerMask obstacleMask;
-    public GameObject targetObject; 
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
@@ -71,12 +70,15 @@ public class FieldOfView : MonoBehaviour {
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
                     visibleTargets.Add(target);
                     anim.SetBool("targetVisible", true);
-                    
+                    anim.SetBool("spot", true);
+
                 } else {
                     anim.SetBool("targetVisible", false);
+                    anim.SetBool("spot", false);
                 }
             } else {
                 anim.SetBool("targetVisible", false);
+                anim.SetBool("spot", false);
             }
         }
     }
