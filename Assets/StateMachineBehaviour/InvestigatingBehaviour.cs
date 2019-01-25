@@ -9,12 +9,16 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
     public List<Transform> visibleTargets = new List<Transform>();
     public NavMeshAgent entityAgent;
 
-    
+        
     
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         entity = animator.gameObject;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
         visibleTargets = animator.gameObject.GetComponent<FieldOfView>().visibleTargets;
+
+        animator.SetBool("spot", false);
+        animator.SetBool("isChasing", false);
+        animator.SetBool("targetVisible", false);
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;

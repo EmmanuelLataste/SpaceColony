@@ -25,6 +25,8 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
 
+        animator.SetBool("event", false);
+
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
 
