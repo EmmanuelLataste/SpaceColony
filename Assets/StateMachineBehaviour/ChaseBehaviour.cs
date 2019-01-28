@@ -29,6 +29,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
         }
         else if (visibleTargets.Count == 0) {
             entityAgent.destination = lastKnownPos.transform.position;
+            animator.SetBool("isChasing", false);
             Debug.Log("liste vide");
         }
 

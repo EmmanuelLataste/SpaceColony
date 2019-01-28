@@ -82,7 +82,6 @@ public class EntityAI : MonoBehaviour {
             Debug.Log("Investigate enter");
             yield return new WaitForSeconds(InvestigateTime);
             animator.SetBool("isChasing", true);
-            Debug.Log("Investigate exit");
         }
     }
 
