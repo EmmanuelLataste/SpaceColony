@@ -112,6 +112,7 @@ public class CharacterController : Flammable {
         Movements();
         //StartCoroutine(Dodge());
         Jump();
+    
     }
 
 
@@ -165,7 +166,7 @@ public class CharacterController : Flammable {
     void Movements()
     {
 
-        if (Input.GetAxis("Fire2") == 0 || Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
+        if (Input.GetAxis("Fire2") == 0 && Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
@@ -215,6 +216,7 @@ public class CharacterController : Flammable {
         {
             if (MindPower.isMindManipulated == false)
             {
+               
                 anim.SetBool("Run", false);
                 transform.rotation = camZoom.transform.rotation;
                 positionToMove = transform.position;
@@ -305,6 +307,12 @@ public class CharacterController : Flammable {
         }
         timerThrowOffset = Time.time + timerThrow;
         isThrowing = true;
+        anim.SetBool("Throw", false);
+
+    }
+
+    private void Sneak()
+    {
 
     }
 
@@ -314,11 +322,23 @@ public class CharacterController : Flammable {
 
             if ( isPicked == true)
         {
-            if (Input.GetButtonUp("Fire1") || throwStrengthX >= 500 || Input.GetButtonUp("Fire3") /*Input.GetAxisRaw("Fire1") == 0*/)
+            if (Input.GetButtonUp("Fire1") || throwStrengthX >= 500 ||  Input.GetButtonUp("Fire3") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
                 if (isAxisF1InUse == true)
                 {
-                    anim.SetTrigger("Throw");
+                    if (throwStrengthX >= 50)
+                    {
+                        anim.SetBool("Throw", true);
+                        
+                    }
+
+                    else if (throwStrengthX < 50)
+                    {
+                        ThrowEvent();
+                    }
+
+                    Debug.Log(throwStrengthX);
+                   
                 }
 
                 
@@ -326,6 +346,8 @@ public class CharacterController : Flammable {
 
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
+
+           
 
             else if (Input.GetButton("Fire1") || Input.GetButton("Fire3") /*Input.GetAxisRaw("Fire1") == 1*/ )
 

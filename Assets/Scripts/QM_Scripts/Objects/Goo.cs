@@ -15,6 +15,7 @@ public class Goo : MonoBehaviour {
     float timerBeforeDestroy;
 
     GameObject[] gooToThingObjetcs;
+    MeshRenderer mr;
 
     Rigidbody rb;
 
@@ -22,6 +23,7 @@ public class Goo : MonoBehaviour {
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        mr = GetComponent<MeshRenderer>();
     }
 
     private void Update()
@@ -36,8 +38,8 @@ public class Goo : MonoBehaviour {
             InTheGooEnemyControlled();
             InTheGooEnemyNonControlled();
             InTheGooPlayer();
-
             
+
         }
 
         GooToThings();
@@ -60,8 +62,9 @@ public class Goo : MonoBehaviour {
                 InTheGooEnemyNonControlled();
                 InTheGooPlayer();
                 isGooAble = false;
-               
-                
+                Destroy(mr);
+                Destroy(gameObject, timeSlow +.5f);
+
             }
 
 
@@ -98,7 +101,7 @@ public class Goo : MonoBehaviour {
                     else
                     {
                         gooCollid.GetComponent<CharacterController>().speed = gooCollid.GetComponent<CharacterController>().beginSpeed;
-                        Destroy(gameObject);
+                        
 
                     }
 
@@ -127,7 +130,7 @@ public class Goo : MonoBehaviour {
                     else
                     {
                         gooCollid.GetComponent<EnnemiController>().speed = gooCollid.GetComponent<EnnemiController>().beginSpeed;
-                        Destroy(gameObject);
+                        
 
                     }
                 }
@@ -156,7 +159,7 @@ public class Goo : MonoBehaviour {
                     else
                     {
                         gooCollid.GetComponent<NavMeshAgent>().speed = gooCollid.GetComponent<EnnemiController>().beginSpeed;
-                        Destroy(gameObject);
+                        
 
                     }
                 }
@@ -185,15 +188,15 @@ public class Goo : MonoBehaviour {
 
                             gooCollid.GetComponent<Cannister>().isFlying = true;
                             
-                            circle[i].transform.position = gooCollid.transform.position + new Vector3(1, 0, 1);
-                            circle[i].transform.parent = gooCollid.transform;
+                            circle[i].transform.parent.position = gooCollid.transform.position + new Vector3(1, 0, 1);
+                            circle[i].transform.parent.parent = gooCollid.transform;
                             Rigidbody rbI = circle[i].GetComponent<Rigidbody>();
                             rbI.useGravity = false;
                             rbI.detectCollisions = false;
                             rbI.constraints = RigidbodyConstraints.FreezeAll;
-                            if (circle[i].GetComponent<NavMeshAgent>() == true)
+                            if (circle[i].GetComponent<PositionEnemies>() == true)
                             {
-                                Destroy(circle[i].GetComponent<NavMeshAgent>());
+                                Destroy(circle[i].GetComponent<PositionEnemies>());
                             }
 
                             //circle[i].GetComponent<Rigidbody>().detectCollisions = false;

@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 95246460842398282}
   m_Layer: 12
   m_Name: boulder
-  m_TagString: Untagged
+  m_TagString: Rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334005769046316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.68, y: 12.19, z: 15.5}
+  m_LocalPosition: {x: -7.68, y: 12.19, z: 15.81}
   m_LocalScale: {x: 200, y: 200, z: 200}
   m_Children: []
   m_Father: {fileID: 0}
@@ -95,7 +95,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1334005769046316}
   serializedVersion: 2
-  m_Mass: 200000
+  m_Mass: 2000
   m_Drag: 0.4
   m_AngularDrag: 0.1
   m_UseGravity: 1
@@ -132,10 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f15552e329c1ddf42b6e6a09d41c0a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  massPushed: 100
-  speedSlowBB: 2
-  trueSpeedBB: 4
 --- !u!135 &135234996790009578
 SphereCollider:
   m_ObjectHideFlags: 1

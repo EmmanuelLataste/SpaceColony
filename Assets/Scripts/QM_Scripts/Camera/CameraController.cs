@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
         Fade,
         Transparent
     }
-    private CinemachineVirtualCamera cam;
+    public static CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
     public Camera camNonVirtual;
 
@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
     {
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-
+        transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
     }
 
     private void Update()
@@ -113,6 +113,7 @@ public class CameraController : MonoBehaviour
         {
             if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
+                
                 if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
                 {
 
@@ -290,20 +291,23 @@ public class CameraController : MonoBehaviour
         cam.m_Follow = follow;
     }
 
-    public void CameraShake(float amplitude, float frequency)
+    public void CameraShake(float amplitude, float frequency )
     {
         camNoise.m_AmplitudeGain = amplitude;
         camNoise.m_FrequencyGain = frequency;
     }
 
-
     public IEnumerator CameraShakeTiming(float amplitude, float frequency, float duration)
     {
+        float timer = 0;
+
         camNoise.m_AmplitudeGain = amplitude;
         camNoise.m_FrequencyGain = frequency;
         yield return new WaitForSeconds(duration);
+        timer += Time.time;
         camNoise.m_AmplitudeGain = 0;
         camNoise.m_FrequencyGain = 0;
+        yield return null;
     }
     Collider currentHit;
 

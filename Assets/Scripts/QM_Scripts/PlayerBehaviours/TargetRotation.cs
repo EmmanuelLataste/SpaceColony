@@ -44,7 +44,7 @@ public class TargetRotation : MonoBehaviour {
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
         horizontal2 = Input.GetAxis("Horizontal2");
-        Rotation();
+        //Rotation();
         //StartCoroutine(ReturnBehindPlayer());
         //Rotation2();
         CameraMouse();
@@ -107,6 +107,7 @@ public class TargetRotation : MonoBehaviour {
         
             if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
+           
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
                 initialHorizontal += speedMouseX * Input.GetAxis("Horizontal2");
                 if (isAxisF2inUse == true)
@@ -121,8 +122,9 @@ public class TargetRotation : MonoBehaviour {
 
          if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
         {
-            if (Input.GetAxisRaw("Fire2") == 1 && MindPower.isMindManipulated == false)
+            if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false && Input.GetButton("Fire2") == false)
             {
+
                 if (isAxisF2inUse == false)
                 {
                     timerF2 += Time.time + timerF2Offset;
@@ -182,8 +184,10 @@ public class TargetRotation : MonoBehaviour {
     {
         if (Input.GetAxis("Mouse Y") == 0 && Input.GetAxis("Mouse X") == 0)
         {
+
             if (horizontal2 > 0)
             {
+               
                 //smoothRotationNegatif = 0;
                 transform.Rotate(Vector3.up * Mathf.Lerp(0, rotationSpeed, smoothRotationPositif), Space.World);
                 //smoothRotationPositif += smoothRotationSpeed * Time.deltaTime;

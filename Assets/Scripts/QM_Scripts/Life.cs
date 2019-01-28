@@ -6,9 +6,14 @@ public class Life : MonoBehaviour
 {
 
     public float healthPoints;
-    bool isAlive = true;
+    public bool isAlive = true;
+    Rigidbody rb;
+    bool isGoingToDie = false;
 
-
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -18,6 +23,19 @@ public class Life : MonoBehaviour
         {
             isAlive = false;
         }
+
+
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+       
+        if (isGoingToDie == true)
+        {
+            isAlive = false;
+        }
+       
     }
 
 
@@ -29,6 +47,11 @@ public class Life : MonoBehaviour
             gameObject.SetActive(false);
 
         }
+        if (rb.velocity.y <= -25)
+        {
+            isGoingToDie = true;
+        }
+
     }
 }
 

@@ -10,14 +10,30 @@ public class Ignitable : MonoBehaviour {
     float initialTimer;
     float life;
     bool isOnContact;
+    GameObject firePosition;
+    GameObject particleFires;
 
 
     void Start()
     {
-        if (isBurning == false)
+        if (transform.Find("FirePosition") == true)
         {
+            firePosition = transform.Find("FirePosition").gameObject;
+        }
 
-            GameObject particleFires = Instantiate(Resources.Load("ParticleFire"), transform.position, Quaternion.identity) as GameObject;
+            if (isBurning == false)
+        {
+            if (transform.Find("FirePosition") == true)
+            {
+                particleFires = Instantiate(Resources.Load("ParticleFire"), firePosition.transform.position, Quaternion.identity) as GameObject;
+            }
+
+            else
+            {
+                particleFires = Instantiate(Resources.Load("ParticleFire"), transform.position, Quaternion.identity) as GameObject;
+               
+            }
+
             particleFires.transform.parent = this.transform;
             particleFires.transform.localScale = Vector3.one;
             isBurning = true;

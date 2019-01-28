@@ -137,7 +137,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcac79fc4c7972b448e5c89531cf9b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBoom: 0
   littleCircle: []
   bigCircle: []
   radiusHighDamage: 5
   radiusLowDamage: 10
+  timer: 0
+  timer2: 0.5
+  explosionPrefab: {fileID: 1925832842001016, guid: 3969d7dea1e005c49a53b3d35de1b84d,
+    type: 2}

@@ -10,6 +10,11 @@ public class Wood : Flammable{
     private void Update()
     {
         Ignite();
+        if (isBurning == true)
+        {
+            gameObject.AddComponent<Ignitable>();
+            isBurning = false;
+        }
 
     }
 
@@ -21,9 +26,7 @@ public class Wood : Flammable{
             {
     
                 isBurning = true;
-
-                gameObject.AddComponent<Ignitable>();
-
+                
             }
         }
     }

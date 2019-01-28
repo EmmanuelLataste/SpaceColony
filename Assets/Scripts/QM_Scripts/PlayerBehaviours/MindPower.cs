@@ -46,10 +46,16 @@ public class MindPower : MonoBehaviour {
 
     void Update()
     {
+
         Control();
         currentHitNull();
         //ReticleParticles();
         //RayonController();
+        if (isMindManipulated == false)
+        {
+            currentHit = null;
+        }
+
 
         if ( isMindManipulated == false && hit.collider != null)
         {
@@ -69,11 +75,12 @@ public class MindPower : MonoBehaviour {
             Cursor.visible = true;
         }
 
-        if (currentHit != null &&  currentHit.GetComponent<EnnemiController>().isAlive == false )
+        if (currentHit != null &&  currentHit.GetComponent<Life>().isAlive == false )
         {
             currentHit = null;
+            isMindManipulated = false;
         }
-
+        Debug.Log(currentHit);
 
     }
    
@@ -107,8 +114,10 @@ public class MindPower : MonoBehaviour {
     {
         if (isMindManipulated == false )
         {
+            CharacterController.anim.SetBool("isPossessing", false);
             if (isFire2Triggered() == true)
             {
+                CharacterController.anim.SetBool("isPossessing", true);
                 //rayon.GetComponent<LineRenderer>().enabled = true;
                 if (isZoom == false)
                 {
@@ -127,7 +136,7 @@ public class MindPower : MonoBehaviour {
                         if (isF1InUse == false)
                         {
                             currentHit = hit.transform;
-                            
+
                             //currentHitSpeed = currentHit.transform.GetComponent<NavMeshAgent>().speed;
                             FindObjectOfType<CameraZoomController>().CameraShake(forceOfShake, forceOfShake);
                             StopCoroutine(TimerBeforePossession());
@@ -153,6 +162,7 @@ public class MindPower : MonoBehaviour {
 
                 else
                 {
+                    
                     possessionParticles.gameObject.SetActive(false);
                     FindObjectOfType<CameraZoomController>().CameraShake(0, 0);
                     StopAllCoroutines();
@@ -165,7 +175,7 @@ public class MindPower : MonoBehaviour {
                 possessionParticles.gameObject.SetActive(false);
                 if (isZoom == true)
                 {
-                    
+                    CharacterController.anim.SetBool("isPossessing", false);
                     //rayon.GetComponent<LineRenderer>().enabled = false;
                     normalCam.GetComponent<CameraController>().CameraDeZoomFocus();
                     isZoom = false;
@@ -188,19 +198,23 @@ public class MindPower : MonoBehaviour {
                 }
                 isF1InUse = false;
                 Possession(0,LayerMask.GetMask("Nothing"), true, false, currentHit, true,1);
+                
             }
 
             else if (onceTrue == true)
             {
-                if (Input.GetButtonUp("Fire1") || Input.GetAxisRaw("Fire1") == 0)
+                if (Input.GetButtonUp("Fire1") || Input.GetAxis("Fire1") == 0)
                 {
+                    CharacterController.anim.SetBool("isPossessing", false);
                     isF1InUse = true;
+                   
                 }
 
-                else if (Input.GetButtonDown("Fire1") || Input.GetAxisRaw("Fire1") == 1)
+                else if (Input.GetButtonDown("Fire1") || Input.GetAxis("Fire1") == 1)
                 {
                     if (isF1InUse == true)
                     {
+                        CharacterController.anim.SetBool("isPossessing", false);
                         isF1InUse = false;
                         isMindManipulated = false;
                         
@@ -217,13 +231,14 @@ public class MindPower : MonoBehaviour {
 
     }
 
+
     void Possession(float speed,LayerMask targetLayer, bool isEnemyControlled, bool isPlayerControlled, Transform follow, bool isonceTrue, float timer)
     {
         if ( currentHit != null)
         {
             currentHit.transform.GetComponent<EnnemiController>().enabled = isEnemyControlled;
             //currentHit.transform.GetComponent<NavMeshAgent>().speed = speed;
-            currentHit.transform.GetComponent<PositionEnemies>().enabled = isPlayerControlled ;
+            //currentHit.transform.GetComponent<PositionEnemies>().enabled = isPlayerControlled ;
             StartCoroutine(FindObjectOfType<CameraController>().CameraShakeTiming(2, 2, .2f));
         }
 
@@ -249,7 +264,7 @@ public class MindPower : MonoBehaviour {
 
 
     //    Debug.DrawRay(transform.position, (ray2 + (transform.forward * 100)), Color.green);
-        
+
     //    // If a ray from our position to the right (Vector 3(1,0,0) * 100), touch an object, this object is stocked in " hit "
     //    if (Physics.Raycast(transform.position, (ray2 + (transform.forward * 100)), out hit ))
     //        {
@@ -258,10 +273,10 @@ public class MindPower : MonoBehaviour {
     //            {
     //            // ... the function is true...
     //            return true;
-                
+
     //            }
 
-                
+
 
     //        }
 
@@ -269,7 +284,22 @@ public class MindPower : MonoBehaviour {
     //    return false;
     //}
 
-   public bool isAiming2()
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Entity"))
+        {
+            if (isMindManipulated == false && isFire1Triggered() == true && currentHit == null)
+            {
+                StartCoroutine(CameraController.cam.GetComponent<CameraController>().CameraShakeTiming(1, 1, .25f));
+                CharacterController.anim.SetBool("isPossessing", true);
+                currentHit = other.transform;
+                isMindManipulated = true;
+               
+            }
+        }
+    }
+
+    public bool isAiming2()
     {
         if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit))
 
