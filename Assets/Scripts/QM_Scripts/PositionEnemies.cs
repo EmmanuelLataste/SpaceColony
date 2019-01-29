@@ -21,6 +21,7 @@ public class PositionEnemies : MonoBehaviour {
 
         else if (transformPosition != null && MindPower.isMindManipulated == true)
         {
+            
             transformPosition.transform.position = transform.position;
             transformPosition.transform.rotation = transform.rotation;
         }

@@ -68,6 +68,10 @@ public class CharacterController : Flammable {
     RaycastHit hitDetection;
     public float speedPush;
 
+    [SerializeField] GameObject attackPosition;
+    [SerializeField] float attackRadius;
+    [SerializeField] float health;
+
     private void Start()
     {
         beginSpeed = speed;
@@ -86,6 +90,8 @@ public class CharacterController : Flammable {
         vertical = Input.GetAxis("Vertical");
 
         Rotation();
+        Death();
+        Attack();
 
         if (Time.time >= timerThrowOffset && isThrowing == true)
         {
@@ -287,6 +293,7 @@ public class CharacterController : Flammable {
     {
         
         isPicked = false;
+        
         otherGameObject.transform.parent = null;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
         
@@ -307,13 +314,33 @@ public class CharacterController : Flammable {
         }
         timerThrowOffset = Time.time + timerThrow;
         isThrowing = true;
-        anim.SetBool("Throw", false);
+        
 
     }
 
     private void Sneak()
     {
 
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(attackPosition.transform.position, .5f);
+    }
+
+    private void Attack()
+    {
+        //if (Input.GetButtonDown("X"))
+        //{
+        //    anim.SetTrigger("Throw");
+        //    Collider[] attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
+        //    foreach(Collider hitCollider in attackCollider)
+        //    {
+        //        if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity"))
+        //        hitCollider.GetComponent<Life>().healthPoints -= .5f;
+        //    }
+        //}
+        
     }
 
     private void Throw()
@@ -328,8 +355,8 @@ public class CharacterController : Flammable {
                 {
                     if (throwStrengthX >= 50)
                     {
-                        anim.SetBool("Throw", true);
-                        
+                        anim.SetTrigger("Throw");
+
                     }
 
                     else if (throwStrengthX < 50)
@@ -340,9 +367,7 @@ public class CharacterController : Flammable {
                     Debug.Log(throwStrengthX);
                    
                 }
-
                 
-
 
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
@@ -369,8 +394,6 @@ public class CharacterController : Flammable {
             }
         }
             
-            
-        
     }
 
     public void OnTriggerEnter(Collider other)
@@ -433,5 +456,17 @@ public class CharacterController : Flammable {
         }
     }
 
+    public void Health(float damage)
+    {
+        health -= damage;
+    }
+
+    void Death()
+    {
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
     
 }

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 198938135870586102}
   - component: {fileID: 199747571523760440}
   m_Layer: 0
-  m_Name: Possession 2
+  m_Name: ParticlePossession
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
