@@ -35,6 +35,11 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {     
         
+        if (animator.GetComponent<FieldOfView>().visible == true) {
+            animator.SetBool("spot", true);
+            animator.SetBool("event", true);
+        }
+
         if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
             ToNextWaypoint();
         }

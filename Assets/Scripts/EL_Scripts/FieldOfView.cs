@@ -28,6 +28,9 @@ public class FieldOfView : MonoBehaviour {
     //Patrol State
     public Animator anim;
     public static bool targetOnSight;
+
+    //VisibleState
+    public bool visible;
   
 
 
@@ -68,17 +71,14 @@ public class FieldOfView : MonoBehaviour {
                 anim.SetFloat("targetDst", dstToTarget);
 
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                    visibleTargets.Add(target);
-                    anim.SetBool("targetVisible", true);
-                    anim.SetBool("spot", true);
+                    visibleTargets.Add(target);                    
+                    visible = true;
 
                 } else {
-                    anim.SetBool("targetVisible", false);
-                    anim.SetBool("spot", false);
+                    visible = false;
                 }
             } else {
-                anim.SetBool("targetVisible", false);
-                anim.SetBool("spot", false);
+                visible = false;
             }
         }
     }
