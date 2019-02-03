@@ -9,48 +9,49 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1196439885671002}
+  m_RootGameObject: {fileID: 1334005769046316}
   m_IsPrefabAsset: 1
---- !u!1 &1196439885671002
+--- !u!1 &1334005769046316
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4975919654726270}
-  - component: {fileID: 33865862051988706}
-  - component: {fileID: 23923438801319036}
-  - component: {fileID: 65878386812004984}
-  - component: {fileID: 114502053980509026}
-  - component: {fileID: 65662194112683062}
-  - component: {fileID: 54414588312982296}
-  m_Layer: 13
-  m_Name: Fruits
-  m_TagString: Untagged
+  - component: {fileID: 4351465093947494}
+  - component: {fileID: 33763149877389662}
+  - component: {fileID: 23502794027084742}
+  - component: {fileID: 54390095732716722}
+  - component: {fileID: 135234996790009578}
+  - component: {fileID: 135365638304500028}
+  - component: {fileID: 114859973093128266}
+  - component: {fileID: 95246460842398282}
+  m_Layer: 0
+  m_Name: boulder
+  m_TagString: Rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4975919654726270
+--- !u!4 &4351465093947494
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
+  m_GameObject: {fileID: 1334005769046316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.35, y: 10.1, z: 21.17}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: -7.68, y: 12.19, z: 15.81}
+  m_LocalScale: {x: 200, y: 200, z: 200}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23923438801319036
+--- !u!23 &23502794027084742
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
+  m_GameObject: {fileID: 1334005769046316}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -60,7 +61,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7097e2cb79180004593a7d5c301e0725, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -80,64 +81,82 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33865862051988706
+--- !u!33 &33763149877389662
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54414588312982296
+  m_GameObject: {fileID: 1334005769046316}
+  m_Mesh: {fileID: 4300000, guid: c8d99bef9629d5d43a05a45ecc55a135, type: 3}
+--- !u!54 &54390095732716722
 Rigidbody:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
+  m_GameObject: {fileID: 1334005769046316}
   serializedVersion: 2
-  m_Mass: 0.5
-  m_Drag: 0.1
-  m_AngularDrag: 0.05
+  m_Mass: 2000000
+  m_Drag: 0.4
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!65 &65662194112683062
-BoxCollider:
+  m_CollisionDetection: 2
+--- !u!95 &95246460842398282
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_GameObject: {fileID: 1334005769046316}
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65878386812004984
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114502053980509026
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114859973093128266
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1196439885671002}
+  m_GameObject: {fileID: 1334005769046316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81a37958f48b26643870fececf6cc46e, type: 3}
+  m_Script: {fileID: 11500000, guid: f15552e329c1ddf42b6e6a09d41c0a31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  circle: []
-  radiusColliderGoo: 5
-  timeSlow: 3
-  isGooAble: 0
+  player: {fileID: 0}
+  massPushed: 0
+  speedSlowBB: 0
+  trueSpeedBB: 4
+--- !u!135 &135234996790009578
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.010214064
+  m_Center: {x: -0.000038065013, y: -0.00005086511, z: 0.000016495118}
+--- !u!135 &135365638304500028
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334005769046316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.012
+  m_Center: {x: -0.000038065016, y: -0.000050865114, z: 0.00001649512}

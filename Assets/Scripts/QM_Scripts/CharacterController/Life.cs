@@ -21,11 +21,10 @@ public class Life : MonoBehaviour
 
         if (healthPoints <= 0)
         {
+          
             isAlive = false;
         }
-
-
-
+        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -41,7 +40,7 @@ public class Life : MonoBehaviour
 
     void Dead()
     {
-        if (isAlive == false)
+        if (isAlive == false )
         {
 
             gameObject.SetActive(false);
@@ -49,6 +48,7 @@ public class Life : MonoBehaviour
         }
         if (rb.velocity.y <= -25)
         {
+            Debug.Log(rb.velocity);
             isGoingToDie = true;
         }
 

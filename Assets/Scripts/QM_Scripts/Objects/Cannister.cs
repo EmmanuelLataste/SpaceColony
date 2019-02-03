@@ -17,7 +17,7 @@ public class Cannister : Explosive {
     {
         if (isFlying == true)
         {
-            StartCoroutine(Fly());
+            StartCoroutine(Fly(timerFly, timerBoom));
            
         }
     }
@@ -33,7 +33,7 @@ public class Cannister : Explosive {
 
     }
 
-    public IEnumerator Fly()
+    public IEnumerator Fly(float timerFLy, float timerBoom)
     {
 
         yield return new WaitForSeconds(timerFly);

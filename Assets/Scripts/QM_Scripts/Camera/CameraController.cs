@@ -43,6 +43,8 @@ public class CameraController : MonoBehaviour
     public RaycastHit[] hits;
     public bool transparencyActivated = false;
     RaycastHit[] transparencyCollidersSaved;
+    int lengthHits;
+    RaycastHit[] saveColliderHits;
 
     public float speedMouseX;
     public float speedMouseY;
@@ -53,13 +55,17 @@ public class CameraController : MonoBehaviour
     private float initialHorizontal;
     private float initialVertical;
 
+    Transform followMM;
+
 
     public LayerMask layerMask;
     private void Start()
     {
+        saveColliderHits = hits;
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
         transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
+        followMM = player.transform;
     }
 
     private void Update()
@@ -70,9 +76,9 @@ public class CameraController : MonoBehaviour
         //RotationCam2();
         RotationCam();
         //StartCoroutine(ReturnBehindPlayer());
-        CameraRay();
+        CameraRay2();
         CameraMouse();
-       
+
 
     }
 
@@ -289,6 +295,7 @@ public class CameraController : MonoBehaviour
     public void Follow(Transform follow)
     {
         cam.m_Follow = follow;
+        followMM = follow;
     }
 
     public void CameraShake(float amplitude, float frequency )
@@ -310,13 +317,55 @@ public class CameraController : MonoBehaviour
         yield return null;
     }
     Collider currentHit;
+    bool isSaveColliderHits;
+   
+    private void CameraRay2()
+    {
+       
+        hits = Physics.RaycastAll(followMM.transform.position, transform.position - followMM.transform.position, rayLength, layerMask);
+        if (isSaveColliderHits == false)
+        {
+            saveColliderHits = hits;
+            isSaveColliderHits = true;
+        } 
+
+        if (lengthHits != hits.Length)
+        {
+            
+             lengthHits = hits.Length;
+            
+                foreach (RaycastHit rh in saveColliderHits)
+                {
+                Color32 col = rh.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+                col.a = 255;
+                rh.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+                ChangeRenderMode(rh.collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Opaque);
+
+            }
+            
+          
+
+            foreach (RaycastHit rh in hits)
+            {
+                Color32 col = rh.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
+                col.a = 70;
+                rh.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
+                ChangeRenderMode(rh.collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Transparent);
+              
+
+            }
 
 
+            saveColliderHits = hits;
+
+        }
+
+    }
 
     private void CameraRay()
     {
         
-        hits = Physics.RaycastAll(player.transform.position, transform.position - player.transform.position, rayLength, layerMask);
+        hits = Physics.RaycastAll(followMM.transform.position, transform.position - followMM.transform.position, rayLength, layerMask);
 
 
         if (hits.Length > 0)

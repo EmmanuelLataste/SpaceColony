@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Rock : MonoBehaviour {
 
-
-
-
+    
     public GameObject player;
     private float currentSpeedRot;
     private float currentSpeed;
@@ -20,6 +18,8 @@ public class Rock : MonoBehaviour {
     EnnemiController enemyController;
     FixedJoint joint;
     bool isFixed;
+    float beginSpeed;
+    float speed;
 
     private void Start()
     {
@@ -42,12 +42,12 @@ public class Rock : MonoBehaviour {
         //}
 
 
-        if (isFixed == true && Input.GetButtonUp("Fire3"))
-        {
-            rb.mass = 200000;
-            isFixed = false;
-        }
-        Debug.DrawRay(transform.position, Vector3.up * -3);
+        //if (isFixed == true && Input.GetButtonUp("Fire3"))
+        //{
+        //    rb.mass = 200000;
+        //    isFixed = false;
+        //}
+        //Debug.DrawRay(transform.position, Vector3.up * -3);
 
 
     }
@@ -57,27 +57,23 @@ public class Rock : MonoBehaviour {
 
     }
 
-    private void OnCollisionStay(Collision other)
-    {
-        if (other.gameObject.tag == "Big Brainless" && MindPower.isMindManipulated == true)
-        {
-            if (Input.GetButton("Fire3"))
-            {
-                rb.MovePosition(transform.position + other.transform.forward * Time.deltaTime);
-                transform.Rotate(other.transform.right * Time.deltaTime * 30);
-            }
+    //private void OnCollisionStay(Collision other)
+    //{
+    //    if (other.gameObject.tag == "Big Brainless" && MindPower.isMindManipulated == true)
+    //    {
+            
+    //            rb.MovePosition(transform.position + other.transform.forward * Time.deltaTime);
+    //            transform.Rotate(other.transform.right * Time.deltaTime * 30);
+                
+            
+    //    }
 
-            if (Input.GetButtonDown("Fire3"))
-            {
-                isFixed = true;
-                rb.mass = 1000;
+    //}
 
-
-            }
-
-        }
-
-    }
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    speed = beginSpeed;
+    //}
 
     private void OnCollisionEnter(Collision collision)
     {

@@ -71,7 +71,7 @@ public class CharacterController : Flammable {
     [SerializeField] GameObject attackPosition;
     [SerializeField] float attackRadius;
     [SerializeField] float health;
-
+    bool isCrouch;
     private void Start()
     {
         beginSpeed = speed;
@@ -88,7 +88,7 @@ public class CharacterController : Flammable {
         animStateInfoCrouch = anim.GetCurrentAnimatorStateInfo(1);
         horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
         vertical = Input.GetAxis("Vertical");
-
+        Sneak();
         Rotation();
         Death();
         Attack();
@@ -100,7 +100,7 @@ public class CharacterController : Flammable {
         }
 
         if (isPickable == true && isPicked == false)
-            StartCoroutine(PickUp());
+            PickUp();
         if (isPicked == true && isPickable == false)
             Throw();
 
@@ -135,6 +135,8 @@ public class CharacterController : Flammable {
                 isAimingRotating = false;
 
             }
+
+            
             //else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
             //{
               
@@ -180,27 +182,11 @@ public class CharacterController : Flammable {
                 {
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
-                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
+                    rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                     smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
 
 
                 }
-
-                    else if (hitDetection.collider.gameObject.tag == "Rock" && gameObject.tag == "Big Brainless")
-                {
-                    anim.SetBool("Run", true);
-
-                    positionToMove = transform.position + transform.forward * speedPush * Time.deltaTime;
-                    Vector3 hitDetectionPositionToMove = hitDetection.transform.position + transform.forward * speedPush * Time.deltaTime;
-
-                    GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
-                    hitDetection.collider.GetComponent<Rigidbody>().MovePosition(Vector3.Lerp(hitDetection.transform.position, 
-                                             hitDetectionPositionToMove, smoothPlayerMove));
-
-                    hitDetection.collider.transform.Rotate(transform.right);
-                    smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
-                }
-
                     else if (DetectCollisions() == false)
                 {
                     anim.SetBool("Run", false);
@@ -214,7 +200,6 @@ public class CharacterController : Flammable {
                     anim.SetBool("Run", false);
                     smoothPlayerMove = 0;
                 
-
             }
         }
 
@@ -224,7 +209,7 @@ public class CharacterController : Flammable {
             {
                
                 anim.SetBool("Run", false);
-                transform.rotation = camZoom.transform.rotation;
+                transform.rotation =Quaternion.Euler(new Vector3( 0, camZoom.transform.rotation.eulerAngles.y, 0));
                 positionToMove = transform.position;
             }
            
@@ -248,41 +233,36 @@ public class CharacterController : Flammable {
         }
 
     }
+    void PickUpEvent()
+    {
+        isAxisF1InUse = true;
+        otherGameObject.transform.position = hangingObjectPosition.transform.position;
+        otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
+        otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
+        isPickable = false;
+        otherGameObject.transform.parent = hangingObjectPosition.transform;
 
-    private IEnumerator PickUp()
+    }
+
+    private void PickUp()
     {
        
             
             if (isPicked == false)
                 
             {
-                if (/*Input.GetAxis("Fire1") > 0*/ Input.GetButton("Fire3") && isPicked == false)
+                if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") )
                 {
+               
+                isPicked = true;
+                anim.SetTrigger("PickUp");
                     
-                    isPicked = true;
-                    anim.SetBool("Crouch", true);
-                    isAxisF1InUse = true;
-                    
-                    yield return new WaitForSeconds(.5f);
-                
-                    otherGameObject.transform.position = hangingObjectPosition.transform.position;
+                 }
 
-                    otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
-                    otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
-
-                    isPickable = false;
-                    yield return new WaitForEndOfFrame();
-                    otherGameObject.transform.eulerAngles = otherGameObject.GetComponent<PositionWhenPicked>().position;
-                    
-                    otherGameObject.transform.parent = hangingObjectPosition.transform;
-                    anim.SetBool("Crouch", true);
-                    anim.SetBool("Crouch", false);
-            }
-
-                else if (/*Input.GetAxisRaw("Fire1") == 0*/ Input.GetButtonUp("Fire3"))
-            {
+                else if (Input.GetKeyUp(KeyCode.E) && Input.GetButtonUp("Y"))
+                {
                 isAxisF1InUse = false;
-            }
+                }
                  
         }
           
@@ -293,98 +273,71 @@ public class CharacterController : Flammable {
     {
         
         isPicked = false;
-        
-        otherGameObject.transform.parent = null;
-        otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
-        
-
-        otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
-        throwStrengthX = 0;
-        throwStrengthY = 0;
-
-        
-
         //this.transform.GetComponent<CharacterController>().speed *= 3;
-
-
         
         if (otherGameObject.GetComponent<Goo>() != null)
         {
             otherGameObject.GetComponent<Goo>().isGooAble = true;
+            
         }
+        otherGameObject.transform.parent = null;
+        otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
+
+
+        otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
         isThrowing = true;
-        
+        throwStrengthX = 0;
+        throwStrengthY = 0;
 
-    }
 
-    private void Sneak()
-    {
-
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(attackPosition.transform.position, .5f);
-    }
-
-    private void Attack()
-    {
-        //if (Input.GetButtonDown("X"))
-        //{
-        //    anim.SetTrigger("Throw");
-        //    Collider[] attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
-        //    foreach(Collider hitCollider in attackCollider)
-        //    {
-        //        if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity"))
-        //        hitCollider.GetComponent<Life>().healthPoints -= .5f;
-        //    }
-        //}
-        
     }
 
     private void Throw()
     {
-       
 
-            if ( isPicked == true)
+
+        if (isPicked == true)
         {
-            if (Input.GetButtonUp("Fire1") || throwStrengthX >= 500 ||  Input.GetButtonUp("Fire3") /*Input.GetAxisRaw("Fire1") == 0*/)
+            if (Input.GetKeyUp(KeyCode.E) || throwStrengthX >= 500 || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
                 if (isAxisF1InUse == true)
                 {
                     if (throwStrengthX >= 50)
                     {
+                        isAxisF1InUse = false;
                         anim.SetTrigger("Throw");
+
 
                     }
 
                     else if (throwStrengthX < 50)
                     {
+                        isPicked = false;
+                        isAxisF1InUse = false;
                         ThrowEvent();
                     }
-
-                    Debug.Log(throwStrengthX);
-                   
+                    
                 }
-                
+
 
                 //cam.GetComponent<CameraController>().CameraDeZoomFocus();
             }
 
-           
 
-            else if (Input.GetButton("Fire1") || Input.GetButton("Fire3") /*Input.GetAxisRaw("Fire1") == 1*/ )
+
+            else if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") /*Input.GetAxisRaw("Fire1") == 1*/ )
 
             {
+                
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
                 if (isAxisF1InUse == false)
                 {
-                    
+
                     isAxisF1InUse = true;
                 }
-                
+
 
             }
 
@@ -393,9 +346,62 @@ public class CharacterController : Flammable {
 
             }
         }
-            
+
     }
 
+
+    private void Sneak()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B"))
+        {
+            if (isCrouch == false)
+            {
+                anim.SetBool("Crouch", true);
+                speed /= 2.5f;
+                isCrouch = true;
+            }
+
+            else
+            {
+                anim.SetBool("Crouch",false);
+                speed = beginSpeed;
+                isCrouch = false;
+            }
+             
+        }
+    }
+
+    void AttackEvent()
+    {
+        Collider[] attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
+        foreach (Collider hitCollider in attackCollider)
+        {
+            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
+                hitCollider.GetComponent<Life>().healthPoints -= .5f;
+        }
+    }
+    
+    private void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("X"))
+        {
+            Debug.Log("Hello");
+            anim.SetTrigger("Attack");
+            
+        }
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Input.GetKey(KeyCode.F) || Input.GetButtonDown("X"))
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
+        }
+    }
+
+    
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Pickable") && isPicked == false)

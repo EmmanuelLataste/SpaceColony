@@ -13,207 +13,81 @@ public class Goo : MonoBehaviour {
     public float timeSlow;
     public bool isGooAble;
     float timerBeforeDestroy;
-
+    int newSpeed;
     GameObject[] gooToThingObjetcs;
     MeshRenderer mr;
 
-    Rigidbody rb;
-
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        mr = GetComponent<MeshRenderer>();
-    }
 
     private void Update()
     {
-        if (isGooAble == false && Time.time >= timer)
-        {
-            isGooAble = true;
-        }
-
-        if (Time.time >= timer)
-        {
-            InTheGooEnemyControlled();
-            InTheGooEnemyNonControlled();
-            InTheGooPlayer();
-            
-
-        }
-
-        GooToThings();
         
-
     }
 
-
-    private void OnCollisionEnter(Collision collision)
+    public void GooToGround()
     {
-        if (isGooAble == true)
+        Collider[] collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
+        foreach (Collider gooCollid in collidGround)
         {
-            if (collision.gameObject.layer != LayerMask.NameToLayer("Entity"))
+            if (gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity"))
             {
-                circle = Physics.OverlapSphere(transform.position, radiusColliderGoo);
-                timer = Time.time + timeSlow;
-                timerGizmo = Time.time + .5f;
-                isBoom = true;
-                InTheGooEnemyControlled();
-                InTheGooEnemyNonControlled();
-                InTheGooPlayer();
-                isGooAble = false;
-                Destroy(mr);
-                Destroy(gameObject, timeSlow +.5f);
+                if (MindPower.currentHit != null && MindPower.currentHit.transform == gooCollid.transform || gooCollid.gameObject.tag == "Player")
+                    gooCollid.GetComponent<CharacterController>().speed = newSpeed;
+
+                else gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().speed = newSpeed;
 
             }
 
-
-
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (isBoom == true && Time.time <  timerGizmo)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(transform.position, 5f);
-        }
-
-    }
-
-    void InTheGooPlayer()
-    {
-        foreach (Collider gooCollid in circle)
-        {
-
-            if (gooCollid != null && gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && gooCollid is CapsuleCollider)
+            if (gooCollid.gameObject.tag == "Cannister")
             {
+                //for (int i = 0; i < collidGround.Length; i++)
+                //{
+                //    if (Vector3.Distance(gooCollid.transform.position, collidGround[i].transform.position) < 2
+                //        && collidGround[i].gameObject.layer == LayerMask.NameToLayer("Entity") && collidGround[i] is CapsuleCollider)
+                //    {
+                //        Debug.Log(collidGround[i].name);
 
-                if (gooCollid.gameObject.tag == "Player")
-                {
-                    if (Time.time < timer)
-                    {
-                        gooCollid.GetComponent<CharacterController>().speed = 0;
+                //        if (MindPower.currentHit != null && MindPower.currentHit.transform == collidGround[i].transform || collidGround[i].gameObject.tag == "Player")
+                //            collidGround[i].transform.parent = gooCollid.transform;
 
-                    }
+                //        else
+                //        {
+                //            collidGround[i].transform.parent.parent = gooCollid.transform;
 
-                    else
-                    {
-                        gooCollid.GetComponent<CharacterController>().speed = gooCollid.GetComponent<CharacterController>().beginSpeed;
-                        
+                //            collidGround[i].GetComponent<PositionEnemies>().enabled = false;
+                //        }
+                //        collidGround[i].GetComponent<CharacterController>().enabled = false;
 
-                    }
 
-                }
-               
-            }
-        }
-      
-    }
+                //    }
+                //}
 
-    void InTheGooEnemyControlled()
-    {
-        foreach (Collider gooCollid in circle)
-        {
-
-            if (gooCollid != null && gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && gooCollid is CapsuleCollider)
-            {
-                if (gooCollid.transform == MindPower.currentHit)
-                {
-                    if (Time.time < timer)
-                    {
-                        
-                        gooCollid.GetComponent<EnnemiController>().speed = 0;
-                    }
-
-                    else
-                    {
-                        gooCollid.GetComponent<EnnemiController>().speed = gooCollid.GetComponent<EnnemiController>().beginSpeed;
-                        
-
-                    }
-                }
-
-               
-
-            }
-        }
-    }
-
-    void InTheGooEnemyNonControlled()
-    {
-        foreach (Collider gooCollid in circle)
-        {
-
-            if (gooCollid != null && gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && gooCollid is CapsuleCollider)
-            {
-                if (gooCollid.GetComponent<NavMeshAgent>() != null && gooCollid.transform != MindPower.currentHit && gooCollid.gameObject.tag != "Player")
-                {
-                    if (Time.time < timer)
-                    {
-
-                        gooCollid.GetComponent<NavMeshAgent>().speed = 0;
-                    }
-
-                    else
-                    {
-                        gooCollid.GetComponent<NavMeshAgent>().speed = gooCollid.GetComponent<EnnemiController>().beginSpeed;
-                        
-
-                    }
-                }
-                
+                StartCoroutine(gooCollid.GetComponent<Cannister>().Fly(1, 1.3f));
             }
         }
 
+        
     }
 
-    void GooToThings()
+    public IEnumerator StopGoo()
     {
-        foreach (Collider gooCollid in circle)
+        yield return new WaitForSeconds(timeSlow);
+        Collider[] collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
+        foreach (Collider gooCollid in collidGround)
         {
-
-            if (gooCollid != null && gooCollid.CompareTag("Cannister") == true)
+            if (gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity"))
             {
-                for (int i = 0; i < circle.Length; i++)
-                {
-                    
-                    if (circle[i].gameObject.layer ==LayerMask.NameToLayer("Entity"))
-                    {
-                        
-                        if (Vector3.Distance(gooCollid.transform.position, circle[i].transform.position) <= 2)
-                        {
-                           
+                if (MindPower.currentHit != null && MindPower.currentHit.transform == gooCollid.transform || gooCollid.gameObject.tag == "Player")
+                    gooCollid.GetComponent<CharacterController>().speed = gooCollid.GetComponent<CharacterController>().beginSpeed;
 
-                            gooCollid.GetComponent<Cannister>().isFlying = true;
-                            
-                            circle[i].transform.parent.position = gooCollid.transform.position + new Vector3(1, 0, 1);
-                            circle[i].transform.parent.parent = gooCollid.transform;
-                            Rigidbody rbI = circle[i].GetComponent<Rigidbody>();
-                            rbI.useGravity = false;
-                            rbI.detectCollisions = false;
-                            rbI.constraints = RigidbodyConstraints.FreezeAll;
-                            if (circle[i].GetComponent<PositionEnemies>() == true)
-                            {
-                                Destroy(circle[i].GetComponent<PositionEnemies>());
-                            }
-
-                            //circle[i].GetComponent<Rigidbody>().detectCollisions = false;
-                            //circle[i].GetComponent<Rigidbody>().useGravity= false;
-                            //foreach (Collider collider in circle[i].GetComponents<Collider>())
-                            //{
-                            //    Destroy(collider);
-                            //}
-
-
-
-                        }
-                    }
-                }
+                else gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().speed =
+                     gooCollid.GetComponent<CharacterController>().beginSpeed;
 
             }
         }
-
+        Destroy(this.gameObject);
+        yield return null;
     }
+
+   
+
 }
