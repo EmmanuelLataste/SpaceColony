@@ -67,6 +67,7 @@ public class Explosive : MonoBehaviour {
             CameraController.cam.GetComponent<CameraController>().CameraShake(1, 1);
             littleCircle = Physics.OverlapSphere(transform.position, radiusHighDamage);
             bigCircle = Physics.OverlapSphere(transform.position, radiusLowDamage);
+
             InTheBoom();
             isBoom = true;
             timer = Time.time + timer2;
@@ -95,6 +96,7 @@ public class Explosive : MonoBehaviour {
             if (deadCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && deadCollid is CapsuleCollider)
             {
                 deadCollid.GetComponent<Life>().healthPoints -= 50;
+                deadCollid.GetComponent<Rigidbody>().AddExplosionForce(180000, transform.position, 10);
                 
             }
         }
@@ -105,6 +107,7 @@ public class Explosive : MonoBehaviour {
             {
                
                 hurtCollid.GetComponent<Life>().healthPoints -= Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10 ;
+
                 // fonction affine après calcul par rapport de la distance x de 5 à 10 et f(x) de 15 à 0.
             }
 

@@ -49,6 +49,13 @@ public class CharacterController : Flammable {
     public GameObject camZoom;
     public Camera mainCam;
 
+    [Header("Attack")]
+    [SerializeField] GameObject attackPosition;
+    [SerializeField] float attackRadius;
+    [SerializeField] float attackDamage;
+    [SerializeField] float attackOffset;
+    float attackTimer;
+
     Rigidbody rb;
     GameObject player;
     MindPower mindPower;
@@ -67,11 +74,14 @@ public class CharacterController : Flammable {
     public float lengthDetection;
     RaycastHit hitDetection;
     public float speedPush;
-
-    [SerializeField] GameObject attackPosition;
-    [SerializeField] float attackRadius;
     [SerializeField] float health;
+
     bool isCrouch;
+
+    [SerializeField] bool canSneak;
+    [SerializeField] bool canPickUp;
+    [SerializeField] bool canAttack;
+
     private void Start()
     {
         beginSpeed = speed;
@@ -133,6 +143,7 @@ public class CharacterController : Flammable {
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
                 //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
+                Debug.Log("Hello");
 
             }
 
@@ -178,7 +189,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-                    if (DetectCollisions() == true)
+                    if (DetectCollisions() == true && speed != 0)
                 {
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
@@ -242,13 +253,14 @@ public class CharacterController : Flammable {
         isPickable = false;
         otherGameObject.transform.parent = hangingObjectPosition.transform;
 
+
     }
 
     private void PickUp()
     {
        
             
-            if (isPicked == false)
+            if (isPicked == false && canAttack == true)
                 
             {
                 if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") )
@@ -256,6 +268,7 @@ public class CharacterController : Flammable {
                
                 isPicked = true;
                 anim.SetTrigger("PickUp");
+
                     
                  }
 
@@ -299,6 +312,7 @@ public class CharacterController : Flammable {
 
         if (isPicked == true)
         {
+
             if (Input.GetKeyUp(KeyCode.E) || throwStrengthX >= 500 || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
                 if (isAxisF1InUse == true)
@@ -332,43 +346,51 @@ public class CharacterController : Flammable {
                 
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
+                
+
+            }
+
+            if (Input.GetButtonDown("Fire1"))
+            {
                 if (isAxisF1InUse == false)
                 {
 
                     isAxisF1InUse = true;
                 }
 
-
-            }
-
-            if (Input.GetButtonDown("Fire1"))
-            {
-
             }
         }
 
     }
 
-
+    
     private void Sneak()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B"))
+        if (canSneak == true)
         {
-            if (isCrouch == false)
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B") )
             {
-                anim.SetBool("Crouch", true);
-                speed /= 2.5f;
-                isCrouch = true;
-            }
+                if (horizontal == 0 && vertical == 0)
+                {
+                    if (isCrouch == false)
+                    {
+                        anim.SetBool("Crouch", true);
+                        speed /= 2.5f;
+                        isCrouch = true;
+                    }
 
-            else
-            {
-                anim.SetBool("Crouch",false);
-                speed = beginSpeed;
-                isCrouch = false;
+                    else
+                    {
+                        anim.SetBool("Crouch", false);
+                        speed = beginSpeed;
+                        isCrouch = false;
+                    }
+                }
+               
+
             }
-             
         }
+    
     }
 
     void AttackEvent()
@@ -377,18 +399,26 @@ public class CharacterController : Flammable {
         foreach (Collider hitCollider in attackCollider)
         {
             if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
-                hitCollider.GetComponent<Life>().healthPoints -= .5f;
+                hitCollider.GetComponent<Life>().healthPoints -= attackDamage;
         }
     }
     
     private void Attack()
     {
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("X"))
+        if (Time.time > attackTimer) canAttack = true;
+
+        if (canAttack == true)
         {
-            Debug.Log("Hello");
-            anim.SetTrigger("Attack");
-            
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetButtonDown("X"))
+            {
+                attackTimer = Time.time + attackOffset;
+                canAttack = false;
+                Debug.Log("Hello");
+                anim.SetTrigger("Attack");
+
+            }
         }
+    
 
     }
 

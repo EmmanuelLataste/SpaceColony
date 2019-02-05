@@ -34,10 +34,12 @@ public class MindPower : MonoBehaviour {
     CharacterController controledcc;
     CameraZoomController camZC;
     CameraController camC;
-    [SerializeField] Transform followPlayer;
+    [SerializeField] public Transform followPlayer;
     [SerializeField] float radiusContactControl;
+    [SerializeField] LayerMask ignoreCollider;
     static Transform hitControlled;
     Animator anim;
+    bool isAlive;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -60,21 +62,35 @@ public class MindPower : MonoBehaviour {
 
         Control();
         ContactControl();
-        if (currentHit != null && currentHit.gameObject.activeSelf == false)
+        if (currentHit != null && currentHit.gameObject.GetComponent<Life>().isAlive == false)
         {
-            currentHit = null;
-            Debug.Log("DEADEA");
-            Transfer(false, true, transform.Find("FocusCamZoom").transform);
+
+           StartCoroutine(TransferWhenMMDied());
 
         }
+
+
     }
-    
+
+    IEnumerator TransferWhenMMDied()
+    {
+        Destroy(possParticles);
+        yield return new WaitForSeconds(4);
+        currentHit = null;
+
+        anim.SetBool("isPossessing", false);
+        camC.Follow(followPlayer);
+        normalCam.enabled = true;
+        cc.enabled = true;
+        yield return null;
+    }
+
     void Control()
     {
         if (isFire1Triggered() == true)
         {
             if (isMindManipulated == true && canMindM == true)
-                Transfer(true, false, currentHit.Find("FocusCamZoom").transform);
+                Transfer(true, false, currentHit.Find("FocusCamNormal").transform);
             else if (isMindManipulated == false && canMindM == false)
                 Transfer(false, true, followPlayer);
 
@@ -110,7 +126,7 @@ public class MindPower : MonoBehaviour {
 
     public bool isAiming2()
     {
-        if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit))
+        if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit, ignoreCollider))
 
 
         {
@@ -120,7 +136,12 @@ public class MindPower : MonoBehaviour {
                 if (isMindManipulated == false && isFire2Triggered() == true)
 
                 {
-                    if (isFire1Triggered() == true) camZC.CameraShake(forceOfShake, forceOfShake);
+                    if (isFire1Triggered() == true)
+                    {
+                        Debug.Log("aim");
+                        camZC.CameraShake(forceOfShake, forceOfShake);
+                    }
+
                     currentHit = hit.transform;
                     controledcc = currentHit.GetComponent<CharacterController>();
 
@@ -159,8 +180,9 @@ public class MindPower : MonoBehaviour {
         return false;
     }
 
-    void Transfer(bool enemyControlled, bool playerControlled, Transform followTransform)
+    public void  Transfer(bool enemyControlled, bool playerControlled, Transform followTransform)
     {
+
         anim.SetBool("isPossessing", enemyControlled);
         camC.Follow(followTransform);
         normalCam.enabled = true;
@@ -201,7 +223,7 @@ public class MindPower : MonoBehaviour {
         {
             if (isAiming2() == true && isFire2Triggered() == true)
             {
-                if (timer < Time.time && isF1InUse == false)
+                if ( isF1InUse == false)
                 {
                     Debug.Log("1");
                     timer = Time.time + timerPossess;
@@ -219,7 +241,7 @@ public class MindPower : MonoBehaviour {
                 
             }
 
-            else if (isAiming2() == false)
+            else if (isAiming2() == false && isMindManipulated == false)
             {
 
                 Debug.Log("3");
@@ -275,7 +297,9 @@ public class MindPower : MonoBehaviour {
 
             }
         }
-      
+
+       
+
 
     }
 

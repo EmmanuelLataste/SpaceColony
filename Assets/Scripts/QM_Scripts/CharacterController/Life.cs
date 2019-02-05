@@ -9,10 +9,23 @@ public class Life : MonoBehaviour
     public bool isAlive = true;
     Rigidbody rb;
     bool isGoingToDie = false;
+    Animator anim;
+    CharacterController cc;
+    PositionEnemies pe;
+    [SerializeField] GameObject player;
+    
+
 
     private void Start()
     {
+        cc = GetComponent<CharacterController>();
+        if (GetComponent<PositionEnemies>())
+        {
+            pe = GetComponent<PositionEnemies>();
+        }
+
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
     // Update is called once per frame
     void Update()
@@ -42,14 +55,24 @@ public class Life : MonoBehaviour
     {
         if (isAlive == false )
         {
+            
 
-            gameObject.SetActive(false);
+            if (GetComponent<PositionEnemies>())
+            {
+                Destroy(pe.transformPosition);
+                Destroy(pe);
+            }
 
+            anim.enabled = false;
+
+            Destroy(cc);
+            gameObject.layer = LayerMask.NameToLayer("RagDoll");
+            
         }
         if (rb.velocity.y <= -25)
         {
-            Debug.Log(rb.velocity);
-            isGoingToDie = true;
+
+           // isGoingToDie = true;
         }
 
     }

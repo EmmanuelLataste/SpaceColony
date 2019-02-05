@@ -7,6 +7,7 @@ public class Wood : Flammable {
     private GameObject particleFires;
     public Transform firePosition;
     public GameObject entity;
+    bool isPicked;
 
     private void Update()
     {
@@ -49,9 +50,11 @@ public class Wood : Flammable {
 
     void PositionWhenPicked()
     {
-        if (transform.parent == true)
+        if (transform.parent == true && isPicked == false)
         {
+            
             transform.rotation =Quaternion.Euler(new Vector3(-84, 0, 180));
+            isPicked = true;
         }
     }
 
