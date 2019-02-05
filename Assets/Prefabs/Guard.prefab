@@ -302,6 +302,11 @@ MonoBehaviour:
   isAlive: 1
   dodgeTimer: 0
   dodgePower: 0
+  maskDetection:
+    serializedVersion: 2
+    m_Bits: 0
+  lengthDetection: 0
+  speedPush: 0
 --- !u!114 &114413566885313326
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -321,7 +326,6 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4096
-  targetObject: {fileID: 0}
   visibleTargets: []
   dstToTarget: 0
   meshResolution: 1

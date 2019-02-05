@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PositionEnemies : MonoBehaviour {
 
+    
     public GameObject transformPosition;
 	// Use this for initialization
 	void Start () {
@@ -12,9 +13,17 @@ public class PositionEnemies : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (transformPosition != null)
+        if (transformPosition != null && MindPower.isMindManipulated == false)
         {
             transform.position = transformPosition.transform.position;
+            transform.rotation = transformPosition.transform.rotation;
+        }
+
+        else if (transformPosition != null && MindPower.isMindManipulated == true)
+        {
+            
+            transformPosition.transform.position = transform.position;
+            transformPosition.transform.rotation = transform.rotation;
         }
 
         else

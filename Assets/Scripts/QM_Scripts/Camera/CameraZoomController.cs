@@ -44,7 +44,7 @@ public class CameraZoomController : MonoBehaviour {
 
     private void CameraRay()
     {
-        Debug.DrawRay(player.transform.position, transform.position - player.transform.position, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
+
 
         if (Physics.Raycast(player.transform.position, /*transform.forward * 5.2f - transform.up * 1.4f*/ transform.position - player.transform.position, out hit, rayLength ))
         {

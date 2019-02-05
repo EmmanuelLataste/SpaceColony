@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wood : Flammable{
+public class Wood : Flammable {
     private bool isOtherBurning;
     private GameObject particleFires;
     public Transform firePosition;
+    public GameObject entity;
+    bool isPicked;
 
     private void Update()
     {
         Ignite();
+        if (isBurning == true)
+        {
+            gameObject.AddComponent<Ignitable>();
+            isBurning = false;
+        }
+        PositionWhenPicked();
 
     }
 
@@ -17,13 +25,11 @@ public class Wood : Flammable{
     {
         if (transform.parent != null && isBurning == false)
         {
-            if (Input.GetButtonDown ("X") && GetComponent<Ignitable>() == false)
+            if (Input.GetButtonDown ("X") || Input.GetKeyDown(KeyCode.R) && GetComponent<Ignitable>() == false)
             {
     
                 isBurning = true;
-
-                gameObject.AddComponent<Ignitable>();
-
+                
             }
         }
     }
@@ -40,6 +46,16 @@ public class Wood : Flammable{
         }
 
        
+    }
+
+    void PositionWhenPicked()
+    {
+        if (transform.parent == true && isPicked == false)
+        {
+            
+            transform.rotation =Quaternion.Euler(new Vector3(-84, 0, 180));
+            isPicked = true;
+        }
     }
 
     

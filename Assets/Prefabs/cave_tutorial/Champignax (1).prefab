@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4659209199509474}
   - component: {fileID: 33350496806377412}
   - component: {fileID: 23657865629989772}
-  m_Layer: 12
+  m_Layer: 0
   m_Name: Champignax (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

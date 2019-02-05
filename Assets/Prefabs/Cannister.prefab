@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 75634395981480296}
   m_Layer: 0
   m_Name: Cannister
-  m_TagString: Untagged
+  m_TagString: Cannister
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1553409044265966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 10.5, z: 22.666372}
+  m_LocalPosition: {x: -4.13, y: 10.72, z: 17.71}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -131,10 +131,11 @@ MonoBehaviour:
   radiusLowDamage: 10
   timer: 0
   timer2: 0.5
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 1925832842001016, guid: 3969d7dea1e005c49a53b3d35de1b84d,
+    type: 2}
   isFlying: 0
-  timerBoom: 0
-  timerFly: 0
+  timerBoom: 3
+  timerFly: 1
 --- !u!136 &136961975129499950
 CapsuleCollider:
   m_ObjectHideFlags: 1

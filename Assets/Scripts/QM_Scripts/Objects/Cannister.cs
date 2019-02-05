@@ -17,7 +17,8 @@ public class Cannister : Explosive {
     {
         if (isFlying == true)
         {
-            StartCoroutine(Fly());
+            StartCoroutine(Fly(timerFly, timerBoom));
+           
         }
     }
 
@@ -32,13 +33,13 @@ public class Cannister : Explosive {
 
     }
 
-    public IEnumerator Fly()
+    public IEnumerator Fly(float timerFLy, float timerBoom)
     {
 
         yield return new WaitForSeconds(timerFly);
-        cf.relativeForce = Vector3.Lerp( new Vector3(0, 25.5f, 0), new Vector3(0,30,0), 3);
+        cf.relativeForce = Vector3.Lerp( new Vector3(0, 0, 0), new Vector3(0,30,0), 3);
         yield return new WaitForSeconds(timerBoom);
-        Boom();
+        StartCoroutine(Boom());
         yield return null;
 
         //rb.AddForce( new Vector3(0, 1500, 0), ForceMode.Acceleration);

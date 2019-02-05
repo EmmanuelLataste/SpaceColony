@@ -24,11 +24,10 @@ GameObject:
   - component: {fileID: 54400851241795280}
   - component: {fileID: 65731753583783410}
   - component: {fileID: 64421758666857318}
-  - component: {fileID: 114322337744611722}
   - component: {fileID: 114175383126267458}
   m_Layer: 13
   m_Name: Torche_low
-  m_TagString: Untagged
+  m_TagString: Wood
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1701194987147518}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.0728, y: -0.0129, z: 0.4179}
+  m_LocalPosition: {x: -0.0692, y: -0.0129, z: 0.689}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4982550164444140}
@@ -83,7 +82,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1542372101915796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.016, y: 0, z: 0.119}
+  m_LocalPosition: {x: -0.072, y: 0, z: 0.673}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4982550164444140}
@@ -95,15 +94,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1364336297045104}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4425178, y: 10.000212, z: 23.168}
-  m_LocalScale: {x: 3, y: 3, z: 2}
+  m_LocalRotation: {x: -0, y: 0.010429587, z: 0.9999457, w: 0}
+  m_LocalPosition: {x: -2.45, y: 10.052918, z: 23.667206}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4260784332482458}
   - {fileID: 4177793617462850}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -178.805, y: 180, z: 0}
 --- !u!23 &23125784062292376
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -182,10 +181,10 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1364336297045104}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.12400278, y: 0.08376281, z: 0.80898035}
+  m_Size: {x: 0.41481858, y: 0.08376281, z: 0.9862671}
   m_Center: {x: -0.063863516, y: -0.03390519, z: 0.36167464}
 --- !u!114 &114175383126267458
 MonoBehaviour:
@@ -200,15 +199,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBurning: 0
   firePosition: {fileID: 4260784332482458}
---- !u!114 &114322337744611722
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1364336297045104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac949b2ae9775f9449224978769a3fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  position: {x: -90, y: 0, z: 180}
+  entity: {fileID: 0}

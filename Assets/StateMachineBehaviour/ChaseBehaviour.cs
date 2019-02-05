@@ -16,6 +16,9 @@ public class ChaseBehaviour : StateMachineBehaviour {
 
         entityAgent.destination = visibleTargets[0].transform.position;
         lastKnownPos = visibleTargets[0].transform;
+
+        animator.SetBool("isChasing", false);
+        animator.SetBool("targetVisible", true);
     }
 
 	
@@ -23,13 +26,19 @@ public class ChaseBehaviour : StateMachineBehaviour {
         Debug.Log(visibleTargets.Count);
         Debug.Log(lastKnownPos);
 
+        if (animator.GetComponent<FieldOfView>().visible == true) {
+            animator.SetBool("targetVisible", true);
+        } else if (animator.GetComponent<FieldOfView>().visible == false) {
+            animator.SetBool("targetVisible", false);
+        }
+
+
         if (visibleTargets.Count > 0) {
             entityAgent.destination = visibleTargets[0].transform.position;
             lastKnownPos = visibleTargets[0].transform;
         }
         else if (visibleTargets.Count == 0) {
-            entityAgent.destination = lastKnownPos.transform.position;
-            animator.SetBool("isChasing", false);
+            entityAgent.destination = lastKnownPos.transform.position;            
             Debug.Log("liste vide");
         }
 
