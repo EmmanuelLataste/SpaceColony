@@ -86,7 +86,7 @@ public class CharacterController : Flammable {
 
     private void Start()
     {
-        tp = lineRenderer.GetComponent<ThrowPrediction>();
+        //tp = lineRenderer.GetComponent<ThrowPrediction>();
         beginSpeed = speed;
         anim = GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
