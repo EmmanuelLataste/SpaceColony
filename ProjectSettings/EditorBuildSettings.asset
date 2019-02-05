@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+  - enabled: 0
+    path: Assets/Scenes/QM_Scenes/QM_MainScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/EM_Scenes/EM_TerrainTest.unity
+    guid: 1fcbf6db3eeb8d44b96f5fad80d0a69f
   m_configObjects: {}
