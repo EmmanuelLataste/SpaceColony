@@ -81,9 +81,12 @@ public class CharacterController : Flammable {
     [SerializeField] bool canSneak;
     [SerializeField] bool canPickUp;
     [SerializeField] bool canAttack;
+    [SerializeField] GameObject lineRenderer;
+    ThrowPrediction tp;
 
     private void Start()
     {
+        tp = lineRenderer.GetComponent<ThrowPrediction>();
         beginSpeed = speed;
         anim = GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
@@ -343,7 +346,7 @@ public class CharacterController : Flammable {
             else if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") /*Input.GetAxisRaw("Fire1") == 1*/ )
 
             {
-                
+                tp.velocity = throwStrengthX / 40;
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
                 
