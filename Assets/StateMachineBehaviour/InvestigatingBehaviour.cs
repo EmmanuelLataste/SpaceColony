@@ -18,8 +18,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
 
         animator.SetBool("spot", false);
         animator.SetBool("isChasing", false);
-        animator.SetBool("targetVisible", false);
-              
+        animator.SetBool("targetVisible", true);
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
@@ -27,13 +26,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
     }
 
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        if (animator.GetComponent<FieldOfView>().visible == true) {
-            animator.SetBool("isChasing", true);
-        } else if (animator.GetComponent<FieldOfView>().visible == false) {
-            animator.SetBool("isChasing", false);
-        }
-
-        entityAgent.destination = entity.transform.position;                
+         entityAgent.destination = entity.transform.position;                
     }
 
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

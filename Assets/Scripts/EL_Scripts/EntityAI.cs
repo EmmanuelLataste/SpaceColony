@@ -56,7 +56,7 @@ public class EntityAI : MonoBehaviour {
         target = GameObject.FindWithTag("Player");
         anim = gameObject.GetComponent<Animator>();
 
-        coroutine = _Investigate(1.0f, anim);
+        coroutine = _Investigate(2.0f, anim);
         
         if (typePatrol) { 
             anim.SetBool("typePatrol", true);
@@ -85,8 +85,10 @@ public class EntityAI : MonoBehaviour {
         Debug.Log("Investigate enter. Does it detect target :" + gameObject.GetComponent<FieldOfView>().visible);
         if (gameObject.GetComponent<FieldOfView>().visible == true) {
             animator.SetBool("isChasing", true);
+            animator.SetBool("targetVisible", true);
         } else {
             animator.SetBool("isChasing", false);
+            animator.SetBool("targetVisible", false);
         }
 
     }
