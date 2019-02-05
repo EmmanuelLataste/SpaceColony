@@ -131,6 +131,10 @@ MonoBehaviour:
   radiusLowDamage: 10
   timer: 0
   timer2: 0.5
+  explosionPrefab: {fileID: 0}
+  isFlying: 0
+  timerBoom: 0
+  timerFly: 0
 --- !u!136 &136961975129499950
 CapsuleCollider:
   m_ObjectHideFlags: 1
