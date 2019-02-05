@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wood : Flammable {
+public class Wood : Flammable
+{
     private bool isOtherBurning;
     private GameObject particleFires;
     public Transform firePosition;
@@ -17,7 +18,17 @@ public class Wood : Flammable {
             gameObject.AddComponent<Ignitable>();
             isBurning = false;
         }
-        PositionWhenPicked();
+        if (transform.parent == true && isPicked == false)
+        {
+
+            PositionWhenPicked();
+        }
+
+        else if (transform.parent == false && isPicked == true)
+        {
+            isPicked = false;
+        }
+
 
     }
 
@@ -25,11 +36,11 @@ public class Wood : Flammable {
     {
         if (transform.parent != null && isBurning == false)
         {
-            if (Input.GetButtonDown ("X") || Input.GetKeyDown(KeyCode.R) && GetComponent<Ignitable>() == false)
+            if (Input.GetButtonDown("X") || Input.GetKeyDown(KeyCode.R) && GetComponent<Ignitable>() == false)
             {
-    
+
                 isBurning = true;
-                
+
             }
         }
     }
@@ -45,19 +56,24 @@ public class Wood : Flammable {
             GetComponent<Rigidbody>().velocity = Vector3.zero;
         }
 
-       
+
     }
 
     void PositionWhenPicked()
     {
-        if (transform.parent == true && isPicked == false)
-        {
-            
-            transform.rotation =Quaternion.Euler(new Vector3(-84, 0, 180));
-            isPicked = true;
-        }
+
+        float x1 = -90 - transform.eulerAngles.x;
+        float y1 = 180 - transform.localEulerAngles.y;
+
+        //transform.rotation =Quaternion.Euler(new Vector3(-84, 0, 180));
+        transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(-294, 220, 0));
+        isPicked = true;
+
+
     }
+}
 
     
 
-}
+
