@@ -143,7 +143,7 @@ public class CharacterController : Flammable {
             if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
                 
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer );
                 //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
                 Debug.Log("Hello");
@@ -194,6 +194,7 @@ public class CharacterController : Flammable {
             {
                     if (DetectCollisions() == true && speed != 0)
                 {
+                    
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
                     rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
@@ -346,7 +347,7 @@ public class CharacterController : Flammable {
             else if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") /*Input.GetAxisRaw("Fire1") == 1*/ )
 
             {
-                tp.velocity = throwStrengthX / 40;
+                //tp.velocity = throwStrengthX / 40;
                 throwStrengthX += throwStrengh + Time.deltaTime;
                 throwStrengthY += throwHigh + Time.deltaTime;
                 

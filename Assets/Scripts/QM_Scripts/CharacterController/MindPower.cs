@@ -51,11 +51,11 @@ public class MindPower : MonoBehaviour {
         hitControlled = transform;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawRay(cameraMain.ScreenPointToRay(Input.mousePosition));
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.black;
+    //    Gizmos.DrawRay(cameraMain.ScreenPointToRay(Input.mousePosition));
+    //}
 
     void Update()
     {
