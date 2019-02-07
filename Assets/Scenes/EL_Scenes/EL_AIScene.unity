@@ -1491,6 +1491,11 @@ Prefab:
       propertyPath: targetMask.m_Bits
       value: 33280
       objectReference: {fileID: 0}
+    - target: {fileID: 114726748949676916, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: investigateTime
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 732b81e1d394cf0418342a268cbeaaf6, type: 2}
   m_IsPrefabAsset: 0
