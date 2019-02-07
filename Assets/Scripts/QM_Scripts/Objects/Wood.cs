@@ -6,9 +6,15 @@ public class Wood : Flammable
 {
     private bool isOtherBurning;
     private GameObject particleFires;
+    private IEnumerator coroutine;
+
     public Transform firePosition;
     public GameObject entity;
     bool isPicked;
+
+    private void Start() {
+        coroutine = SoundSource();
+    }
 
     private void Update()
     {
@@ -20,13 +26,13 @@ public class Wood : Flammable
         }
         if (transform.parent == true && isPicked == false)
         {
-
             PositionWhenPicked();
         }
 
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
+            StartCoroutine(SoundSource());
         }
 
 
@@ -45,7 +51,11 @@ public class Wood : Flammable
         }
     }
 
-
+    private IEnumerator SoundSource () {
+        gameObject.tag = "SoundSource";
+        yield return new WaitForSeconds(10f);
+        gameObject.tag = "Wood";
+    }
 
     private IEnumerator OnCollisionStay(Collision other)
     {

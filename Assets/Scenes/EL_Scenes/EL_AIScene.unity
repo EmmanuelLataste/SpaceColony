@@ -356,6 +356,7 @@ MonoBehaviour:
   canSneak: 0
   canPickUp: 0
   canAttack: 0
+  lineRenderer: {fileID: 0}
 --- !u!54 &153229176
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -617,7 +618,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1.0663137
+      value: -28.04
       objectReference: {fileID: 0}
     - target: {fileID: 4972305373454318, guid: 3c378738e9312e34e8d340f25d598cc0, type: 2}
       propertyPath: m_LocalRotation.x
@@ -801,7 +802,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -812,7 +813,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 544813266}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.22, y: -6.42, z: -18.94}
+  m_LocalPosition: {x: 13.22, y: -6.42, z: -13.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1674028754}
@@ -1484,6 +1485,11 @@ Prefab:
     - target: {fileID: 4808001254912204, guid: 732b81e1d394cf0418342a268cbeaaf6, type: 2}
       propertyPath: m_LocalPosition.y
       value: -0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 114581405516744922, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: targetMask.m_Bits
+      value: 33280
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 732b81e1d394cf0418342a268cbeaaf6, type: 2}
@@ -2920,8 +2926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4713e54c58098264bb3d13a50a8ccc70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDefaultListener: 1
-  listenerId: 0
 --- !u!114 &1570447454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2933,16 +2937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e457f3247d4b8f74f831ef5fb0a99a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_listeners:
-    initialListenerList: []
-    useDefaultListeners: 1
-  isEnvironmentAware: 0
-  isStaticObject: 0
-  m_positionOffsetData:
-    KeepMe: 0
-    positionOffset: {x: 0, y: 0, z: 0}
-  m_posOffsetData: {fileID: 0}
-  listenerMask: 1
 --- !u!1001 &1585715794
 Prefab:
   m_ObjectHideFlags: 0
@@ -2990,6 +2984,18 @@ Prefab:
         type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1364336297045104, guid: 78e11e815650a9f4bb7634102d4d2a2b, type: 2}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1701194987147518, guid: 78e11e815650a9f4bb7634102d4d2a2b, type: 2}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1364336297045104, guid: 78e11e815650a9f4bb7634102d4d2a2b, type: 2}
+      propertyPath: m_TagString
+      value: Wood
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78e11e815650a9f4bb7634102d4d2a2b, type: 2}
@@ -3402,7 +3408,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3451,22 +3457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d79bdaa5357df4bbc3370f3a9fd17f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InitializationSettings: {fileID: 11400000, guid: 39dd2fe27a89ec445ba44f646137fe84,
-    type: 2}
-  basePath: 
-  language: 
-  defaultPoolSize: 0
-  lowerPoolSize: 0
-  streamingPoolSize: 0
-  preparePoolSize: 0
-  memoryCutoffThreshold: 0
-  monitorPoolSize: 0
-  monitorQueuePoolSize: 0
-  callbackManagerBufferSize: 0
-  spatialAudioPoolSize: 0
-  maxSoundPropagationDepth: 0
-  diffractionFlags: 0
-  engineLogging: 0
 --- !u!4 &1854855906
 Transform:
   m_ObjectHideFlags: 0
@@ -3507,6 +3497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d91b60c90f53d8d4fa4bca7f72dd4d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasMenu: {fileID: 0}
 --- !u!4 &1894821426
 Transform:
   m_ObjectHideFlags: 0

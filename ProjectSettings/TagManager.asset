@@ -12,6 +12,7 @@ TagManager:
   - Big Brainless
   - Rock
   - Cannister
+  - SoundSource
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Obstacles
   - Pickable
   - RagDoll
-  - 
+  - SoundSource
   - 
   - 
   - 

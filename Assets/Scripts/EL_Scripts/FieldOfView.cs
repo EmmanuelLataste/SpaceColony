@@ -71,11 +71,17 @@ public class FieldOfView : MonoBehaviour {
                 anim.SetFloat("targetDst", dstToTarget);
 
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                    visibleTargets.Add(target);                    
+                    if (target.tag == "Player") {
+                        visibleTargets.Insert(0, target);
+                    }
+                    else if (target.tag == "SoundSource") {
+                        //visibleTargets.RemoveAt(1);
+                        visibleTargets.Add(target);
+                    }                                       
                     visible = true;
 
                 } else {
-                    visible = false;
+                    visible = false;                   
                 }
             } else {
                 visible = false;
