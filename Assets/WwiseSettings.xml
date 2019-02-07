@@ -9,5 +9,5 @@
   <SoundbankPath>Audio/GeneratedSoundBanks</SoundbankPath>
   <WwiseInstallationPathMac />
   <WwiseInstallationPathWindows>C:\Program Files (x86)\Audiokinetic\Wwise 2018.1.5.6835</WwiseInstallationPathWindows>
-  <WwiseProjectPath>../SpaceColony_WwiseProject/SpaceColony_WwiseProject.wproj</WwiseProjectPath>
+  <WwiseProjectPath>../../SpaceColony/SpaceColony_WwiseProject/SpaceColony_WwiseProject.wproj</WwiseProjectPath>
 </WwiseSettings>
