@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameManager : MonoBehaviour {
 
     // Use this for initialization
 
     [SerializeField] GameObject canvasMenu;
+    [SerializeField] string[] controller;
     public static bool isCanvasMenu;
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
         Pause();
-	}
+        DisableMouse();
+        controller = Input.GetJoystickNames();
+     
+
+    }
 
     void Pause()
     {
@@ -36,6 +42,20 @@ public class GameManager : MonoBehaviour {
             Time.timeScale = 1;
         }
 
+
+    }
+
+    void DisableMouse()
+    {
+        if (controller.Length <= 0 || controller[0] == "")
+        {
+            CameraController.isControllerConnected = false;
+        }
+
+        else
+        {
+            CameraController.isControllerConnected = true;
+        }
 
     }
 }

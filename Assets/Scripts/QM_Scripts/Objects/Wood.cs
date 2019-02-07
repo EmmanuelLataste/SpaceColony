@@ -11,6 +11,7 @@ public class Wood : Flammable
     public Transform firePosition;
     public GameObject entity;
     bool isPicked;
+    bool isStillBurning;
 
     [HideInInspector]
     public List<Transform> soundReceivers = new List<Transform>();
@@ -53,6 +54,7 @@ public class Wood : Flammable
             {
 
                 isBurning = true;
+                isStillBurning = true;
 
             }
         }
@@ -99,6 +101,25 @@ public class Wood : Flammable
         isPicked = true;
 
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false )
+        {
+            if (other.GetComponent<CharacterController>().enabled == false || other.GetComponent<CharacterController>().otherGameObject != gameObject)
+            {
+                Debug.Log("TRU");
+                other.GetComponent<CharacterController>().isBurning = true;
+                other.gameObject.AddComponent<Ignitable>();
+            }
+
+        }
+
+        if (other.gameObject.tag == "Cannister")
+        {
+            StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
+        }
     }
 }
 

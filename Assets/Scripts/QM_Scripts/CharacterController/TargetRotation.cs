@@ -54,55 +54,59 @@ public class TargetRotation : MonoBehaviour {
 
     void CameraMouse()
     {
-        if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
+        if (CameraController.isControllerConnected == false)
         {
-            initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
-
-            if (Input.GetButton("Fire2") == false)
+            if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
             {
-                transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+                initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
+
+                if (Input.GetButton("Fire2") == false)
+                {
+                    transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+
+                }
+
+                if (Input.GetButtonUp("Fire2"))
+                {
+                    player.transform.eulerAngles = new Vector3(0, initialMouseX, 0);
+
+                }
+                if (Input.GetButton("Fire2") == true)
+                {
+                    if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                    {
+
+                        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+                    }
+
+
+                    else if (transform.rotation.eulerAngles.x >= 320 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+                    {
+                        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+                    }
+
+                    else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
+                    {
+                        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+                    }
+
+
+                    else if (transform.rotation.eulerAngles.x < 320 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0)
+                    {
+
+                        initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
+
+                    }
+
+                    transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+
+                }
+
 
             }
-
-            if (Input.GetButtonUp("Fire2"))
-            {
-                player.transform.eulerAngles = new Vector3(0, initialMouseX, 0);
-
-            }
-            if (Input.GetButton("Fire2") == true)
-            {
-                if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
-                {
-
-                    initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-                }
-
-
-                else if (transform.rotation.eulerAngles.x >= 320 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
-                {
-                    initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-
-                }
-
-                else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Mouse Y") > 0)
-                {
-                    initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-                }
-
-
-                else if (transform.rotation.eulerAngles.x < 320 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Mouse Y") < 0)
-                {
-
-                    initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
-
-                }
-
-                transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
-
-            }
-
-            
         }
+      
         // Manette
         
             if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)

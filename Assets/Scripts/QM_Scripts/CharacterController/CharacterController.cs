@@ -43,7 +43,7 @@ public class CharacterController : Flammable {
     public static Animator anim;
     AnimatorStateInfo animStateInfoCrouch;
     int crouchStateHash = Animator.StringToHash("Crouch Layer.Crouch");
-
+    
     [Header("Cameras")]
     public GameObject cam;
     public GameObject camZoom;
@@ -253,7 +253,8 @@ public class CharacterController : Flammable {
         isAxisF1InUse = true;
         otherGameObject.transform.position = hangingObjectPosition.transform.position;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
-        otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
+        otherGameObject.GetComponent<MeshCollider>().isTrigger = true;
+        //otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         isPickable = false;
         otherGameObject.transform.parent = hangingObjectPosition.transform;
 
@@ -299,7 +300,7 @@ public class CharacterController : Flammable {
         }
         otherGameObject.transform.parent = null;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
-
+        otherGameObject.GetComponent<MeshCollider>().isTrigger = false;
 
         otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
