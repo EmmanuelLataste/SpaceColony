@@ -24,7 +24,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
 	
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
-        Debug.Log(Vector3.Distance(animator.transform.position, lastKnownPos));
+        
 
         if (Vector3.Distance(animator.transform.position, lastKnownPos) < 3)
         {
