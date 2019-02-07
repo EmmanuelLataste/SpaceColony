@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour {
     {
         if (Input.GetButtonDown("Escape") && isCanvasMenu == false)
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             canvasMenu.SetActive(true);
             isCanvasMenu = true;
             Time.timeScale = 0;
