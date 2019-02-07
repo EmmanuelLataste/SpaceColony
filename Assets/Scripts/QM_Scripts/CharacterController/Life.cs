@@ -9,11 +9,13 @@ public class Life : MonoBehaviour
     public bool isAlive = true;
     Rigidbody rb;
     bool isGoingToDie = false;
+    bool onceDead;
     Animator anim;
     CharacterController cc;
     PositionEnemies pe;
     [SerializeField] GameObject player;
-    
+    [SerializeField] GameObject deathPosition;
+
 
 
     private void Start()
@@ -36,6 +38,7 @@ public class Life : MonoBehaviour
         {
           
             isAlive = false;
+
         }
         
     }
@@ -53,9 +56,14 @@ public class Life : MonoBehaviour
 
     void Dead()
     {
-        if (isAlive == false )
+        if (isAlive == false && onceDead == false)
         {
-            
+            if (MindPower.currentHit == null && gameObject.tag == "Player")
+                CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
+            else if (MindPower.currentHit != null)
+                CameraController.cam.GetComponent<CameraController>().Follow(MindPower.currentHit.GetComponent<Life>().deathPosition.transform);
+
+
 
             if (GetComponent<PositionEnemies>())
             {
@@ -67,6 +75,7 @@ public class Life : MonoBehaviour
 
             Destroy(cc);
             gameObject.layer = LayerMask.NameToLayer("RagDoll");
+            onceDead = true;
             
         }
         if (rb.velocity.y <= -25)

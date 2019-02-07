@@ -75,7 +75,7 @@ public class MindPower : MonoBehaviour {
     IEnumerator TransferWhenMMDied()
     {
         Destroy(possParticles);
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(2);
         currentHit = null;
 
         anim.SetBool("isPossessing", false);
