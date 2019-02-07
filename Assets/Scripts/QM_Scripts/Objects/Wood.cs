@@ -13,6 +13,13 @@ public class Wood : Flammable
     bool isPicked;
     bool isStillBurning;
 
+    [HideInInspector]
+    public List<Transform> soundReceivers = new List<Transform>();
+
+    public LayerMask receiversMask;
+    public float soundRadius;
+
+
     private void Start() {
         coroutine = SoundSource();
     }
@@ -33,7 +40,7 @@ public class Wood : Flammable
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            StartCoroutine(SoundSource());
+            FindReceivers();            
         }
 
 
@@ -54,9 +61,20 @@ public class Wood : Flammable
     }
 
     private IEnumerator SoundSource () {
+        gameObject.layer = 15;
         gameObject.tag = "SoundSource";
         yield return new WaitForSeconds(10f);
+        gameObject.layer = 13;
         gameObject.tag = "Wood";
+    }
+
+    void FindReceivers() {
+        soundReceivers.Clear();
+        Collider[] receiversInRadius = Physics.OverlapSphere(transform.position, soundRadius, receiversMask);
+
+        if (receiversInRadius.Length > 0) {
+            StartCoroutine(SoundSource());
+        }           
     }
 
     private IEnumerator OnCollisionStay(Collision other)
