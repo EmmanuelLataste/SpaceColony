@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{397AD857-8F5E-4FFE-BAB4-B0F619033E28}" SchemaVersion="89">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{397AD857-8F5E-4FFE-BAB4-B0F619033E28}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{397AD857-8F5E-4FFE-BAB4-B0F619033E28}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="TriggerTest_Event" ID="{6F6EF818-DFB0-4010-9D05-1F58869EE89E}">
+					<ChildrenList>
+						<Action Name="" ID="{D6FA6A47-7DF8-4DCA-9505-33C42D955B0C}" ShortID="907127903">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="1"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="GrandBeat" ID="{0C0280F1-3C90-404D-9A8A-36D976858C8C}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>

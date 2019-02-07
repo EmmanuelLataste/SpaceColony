@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ValidationCache Version="1" SchemaVersion="89">
-	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Actor-Mixer Hierarchy\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
+	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Actor-Mixer Hierarchy\Default Work Unit.wwu" DateLow="1549383489" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Attenuations\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Audio Devices\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Control Surface Sessions\Default Work Unit.wwu" DateLow="1549380461" DateHigh="0"/>
@@ -9,9 +9,9 @@
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Dynamic Dialogue\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Effects\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Effects\Factory Effects.wwu" DateLow="1549380429" DateHigh="0"/>
-	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Events\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
+	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Events\Default Work Unit.wwu" DateLow="1549529734" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Game Parameters\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
-	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Interactive Music Hierarchy\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
+	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Interactive Music Hierarchy\Default Work Unit.wwu" DateLow="1549529734" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Master-Mixer Hierarchy\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Mixing Sessions\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Modulators\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
@@ -20,7 +20,8 @@
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Queries\Factory Queries.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\SoundBanks\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Soundcaster Sessions\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
-	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\SpaceColony_WwiseProject.wproj" DateLow="1549380429" DateHigh="0"/>
+	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\SpaceColony_WwiseProject.c.amendola.wsettings" DateLow="1549529734" DateHigh="0"/>
+	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\SpaceColony_WwiseProject.wproj" DateLow="1549531240" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\States\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Switches\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
 	<ValidationCacheItem File="C:\Users\c.amendola.ETU\Documents\SpaceColonyRepo\_SpaceColony\SpaceColony\SpaceColony_WwiseProject\Triggers\Default Work Unit.wwu" DateLow="1549380429" DateHigh="0"/>
