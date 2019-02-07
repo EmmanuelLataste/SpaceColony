@@ -225,7 +225,7 @@ public class MindPower : MonoBehaviour {
             {
                 if ( isF1InUse == false)
                 {
-                    Debug.Log("1");
+  
                     timer = Time.time + timerPossess;
                     camZC.CameraShake(forceOfShake, forceOfShake);
                     isF1InUse = true;
@@ -233,7 +233,7 @@ public class MindPower : MonoBehaviour {
 
                 else if (timer < Time.time && isF1InUse == true)
                 {
-                    Debug.Log("2");
+
                     camZC.CameraShake(0, 0);
                     isMindManipulated = true;
                     
@@ -244,7 +244,7 @@ public class MindPower : MonoBehaviour {
             else if (isAiming2() == false && isMindManipulated == false)
             {
 
-                Debug.Log("3");
+
                 timer = Time.time + timerPossess;
                 camZC.CameraShake(0, 0);
             }
