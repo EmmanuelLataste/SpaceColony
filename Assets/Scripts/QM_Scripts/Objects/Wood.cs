@@ -11,6 +11,14 @@ public class Wood : Flammable
     public Transform firePosition;
     public GameObject entity;
     bool isPicked;
+    bool isStillBurning;
+
+    [HideInInspector]
+    public List<Transform> soundReceivers = new List<Transform>();
+
+    public LayerMask receiversMask;
+    public float soundRadius;
+
 
     private void Start() {
         coroutine = SoundSource();
@@ -32,7 +40,7 @@ public class Wood : Flammable
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            StartCoroutine(SoundSource());
+            FindReceivers();            
         }
 
 
@@ -46,15 +54,27 @@ public class Wood : Flammable
             {
 
                 isBurning = true;
+                isStillBurning = true;
 
             }
         }
     }
 
     private IEnumerator SoundSource () {
+        gameObject.layer = 15;
         gameObject.tag = "SoundSource";
         yield return new WaitForSeconds(10f);
+        gameObject.layer = 13;
         gameObject.tag = "Wood";
+    }
+
+    void FindReceivers() {
+        soundReceivers.Clear();
+        Collider[] receiversInRadius = Physics.OverlapSphere(transform.position, soundRadius, receiversMask);
+
+        if (receiversInRadius.Length > 0) {
+            StartCoroutine(SoundSource());
+        }           
     }
 
     private IEnumerator OnCollisionStay(Collision other)
@@ -81,6 +101,25 @@ public class Wood : Flammable
         isPicked = true;
 
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false )
+        {
+            if (other.GetComponent<CharacterController>().enabled == false || other.GetComponent<CharacterController>().otherGameObject != gameObject)
+            {
+                Debug.Log("TRU");
+                other.GetComponent<CharacterController>().isBurning = true;
+                other.gameObject.AddComponent<Ignitable>();
+            }
+
+        }
+
+        if (other.gameObject.tag == "Cannister")
+        {
+            StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
+        }
     }
 }
 

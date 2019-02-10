@@ -24,6 +24,7 @@ public class EntityAI : MonoBehaviour {
 
     //Investigate behaviour
     private IEnumerator coroutine;
+    [SerializeField] float investigateTime = 1.0f;
 
     //See EditorGUI 
     public static bool typePatrol = true;
@@ -56,7 +57,7 @@ public class EntityAI : MonoBehaviour {
         target = GameObject.FindWithTag("Player");
         anim = gameObject.GetComponent<Animator>();
 
-        coroutine = _Investigate(2.0f, anim);
+        coroutine = _Investigate(investigateTime, anim);
         
         if (typePatrol) { 
             anim.SetBool("typePatrol", true);
@@ -74,7 +75,7 @@ public class EntityAI : MonoBehaviour {
     }
 
     public void Investigate() {
-        StartCoroutine(_Investigate(1.0f, anim));
+        StartCoroutine(_Investigate(investigateTime, anim));
     }
 
     IEnumerator _Investigate(float InvestigateTime, Animator animator) {
