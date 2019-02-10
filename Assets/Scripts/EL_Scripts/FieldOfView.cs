@@ -61,32 +61,43 @@ public class FieldOfView : MonoBehaviour {
     void FindVisibleTargets() {
         visibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-        
+
         for (int i = 0; i < targetsInViewRadius.Length; i++) {
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
-                float dstToTarget = Vector3.Distance(transform.position, target.position);
-                anim.SetFloat("targetDst", dstToTarget);
+            if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
+                if (target.tag == "SoundSource") {
 
-                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                    if (target.tag == "Player") {
-                        visibleTargets.Insert(0, target);
-                    }
-                    else if (target.tag == "SoundSource") {
-                        //visibleTargets.RemoveAt(1);
-                        visibleTargets.Add(target);
-                    }                                       
+                    Debug.Log("soundArea");
+
+                    //visibleTargets.RemoveAt(1);
+                    visibleTargets.Add(target);
                     visible = true;
-
-                } else {
-                    visible = false;                   
                 }
-            } else {
-                visible = false;
+
+                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
+                    float dstToTarget = Vector3.Distance(transform.position, target.position);
+                    anim.SetFloat("targetDst", dstToTarget);
+
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
+                        if (target.tag == "Player") {
+                            visibleTargets.Insert(0, target);
+                        } else if (target.tag == "SoundSource") {
+                            //visibleTargets.RemoveAt(1);
+                            visibleTargets.Add(target);
+                        }
+                        visible = true;
+
+                    } else {
+                        visible = false;
+                    }
+                } else {
+                    visible = false;
+                }
             }
         }
+
     }
 
 
