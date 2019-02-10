@@ -6,6 +6,7 @@ public class Fruits : Goo {
 
     bool canExplose;
     Rigidbody rb;
+    bool isPicked;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -21,9 +22,17 @@ public class Fruits : Goo {
 
     void PositionWhenPicked()
     {
-        if (transform.parent == true)
+        if (transform.parent == true && isPicked == false)
         {
             transform.rotation = Quaternion.Euler(new Vector3(-84, 0, 180));
+            transform.position += transform.parent.right - new Vector3(.8f,0,0) ;
+            isPicked = true;
+            
+        }
+
+        else if (transform.parent == false && isPicked == true)
+        {
+            isPicked = false;
         }
     }
 
@@ -38,6 +47,8 @@ public class Fruits : Goo {
         }
 
     }
+
+  
 }
 
 

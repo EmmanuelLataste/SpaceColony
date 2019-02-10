@@ -192,7 +192,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-                    if (DetectCollisions() == true && speed != 0)
+                    if (DetectCollisions() == true && speed != 0 )
                 {
                     
                     anim.SetBool("Run", true);
@@ -254,6 +254,7 @@ public class CharacterController : Flammable {
         otherGameObject.transform.position = hangingObjectPosition.transform.position;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
         otherGameObject.GetComponent<MeshCollider>().isTrigger = true;
+        if (otherGameObject.gameObject.tag != "Wood") otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         //otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         isPickable = false;
         otherGameObject.transform.parent = hangingObjectPosition.transform;
@@ -301,6 +302,7 @@ public class CharacterController : Flammable {
         otherGameObject.transform.parent = null;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
         otherGameObject.GetComponent<MeshCollider>().isTrigger = false;
+        if (otherGameObject.gameObject.tag != "Wood") otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
 
         otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
@@ -375,8 +377,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B") )
             {
-                if (horizontal == 0 && vertical == 0)
-                {
+               
                     if (isCrouch == false)
                     {
                         anim.SetBool("Crouch", true);
@@ -390,24 +391,35 @@ public class CharacterController : Flammable {
                         speed = beginSpeed;
                         isCrouch = false;
                     }
-                }
+                
                
 
             }
         }
     
     }
-
-    void AttackEvent()
+    void AttackEventStop()
     {
-        Collider[] attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
+        attackDuration = false;
         foreach (Collider hitCollider in attackCollider)
         {
             if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
+            {
                 hitCollider.GetComponent<Life>().healthPoints -= attackDamage;
+
+            }
+
         }
     }
-    
+
+    void AttackEvent()
+    {
+        attackDuration = true;
+        
+    }
+
+    Collider[] attackCollider;
+    bool attackDuration;
     private void Attack()
     {
         if (Time.time > attackTimer) canAttack = true;
@@ -423,16 +435,26 @@ public class CharacterController : Flammable {
 
             }
         }
-    
 
+        if (attackDuration == true)
+        {
+
+            attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
+            
+        }
+        
+        
     }
 
     private void OnDrawGizmos()
     {
-        if (Input.GetKey(KeyCode.F) || Input.GetButtonDown("X"))
+        if (Input.GetKey(KeyCode.A) || Input.GetButtonDown("X"))
         {
             Gizmos.color = Color.yellow;
+            if(otherGameObject == null)
             Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
+            else
+                Gizmos.DrawSphere(otherGameObject.transform.Find("PositionWhenPicked").transform.position, attackRadius);
         }
     }
 

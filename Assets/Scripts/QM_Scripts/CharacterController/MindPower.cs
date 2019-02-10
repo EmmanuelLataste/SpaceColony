@@ -40,6 +40,8 @@ public class MindPower : MonoBehaviour {
     static Transform hitControlled;
     Animator anim;
     bool isAlive;
+    Collider[] contactControl;
+    bool isContactControl;
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -101,16 +103,18 @@ public class MindPower : MonoBehaviour {
 
     }
 
-  
+    
 
-    void ContactControl()
+    public void ContactControlEvent()
     {
-        if (isFire1Triggered() == true && isFire2Triggered() == false && isMindManipulated == false)
+        isContactControl = true;
+        anim.SetBool("isPossessing", false);
+        if (isFire2Triggered() == false)
         {
-            Collider[] contactControl = Physics.OverlapSphere(transform.position, radiusContactControl);
-            foreach(Collider contactCol in contactControl)
+            
+            foreach (Collider contactCol in contactControl)
             {
-                if (contactCol.gameObject.layer == LayerMask.NameToLayer ("Entity") && contactCol.gameObject.CompareTag("Player") == false && isF1InUse == false)
+                if (contactCol.gameObject.layer == LayerMask.NameToLayer("Entity") && contactCol.gameObject.CompareTag("Player") == false && isF1InUse == false)
                 {
                     isF1InUse = true;
                     currentHit = contactCol.transform;
@@ -119,6 +123,16 @@ public class MindPower : MonoBehaviour {
 
                 }
             }
+        }
+    }
+
+    void ContactControl()
+    {
+        if (isFire1Triggered() == true && isFire2Triggered() == false && isMindManipulated == false)
+        {
+            contactControl = Physics.OverlapSphere(transform.position, radiusContactControl);
+            if (isContactControl == false) anim.SetBool("isPossessing", true);
+      
         }
     }
 
@@ -196,6 +210,7 @@ public class MindPower : MonoBehaviour {
             pe.transformPosition.GetComponent<FieldOfView>().enabled = playerControlled;
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
+            
         }
        
         //controledcc.GetComponent<NavMeshAgent>().enabled = playerControlled;
@@ -221,6 +236,8 @@ public class MindPower : MonoBehaviour {
 
         if (isFire1Triggered() == true && isMindManipulated == false)
         {
+            
+
             if (isAiming2() == true && isFire2Triggered() == true)
             {
                 if ( isF1InUse == false)
@@ -254,6 +271,7 @@ public class MindPower : MonoBehaviour {
         else if (isFire1Triggered() == false)
         {
             isF1InUse = false;
+            isContactControl = false;
         }
 
         else if (Input.GetButtonDown("Fire1") == true || Input.GetAxis("Fire1") > 0 && isMindManipulated == true && isF1InUse == false)

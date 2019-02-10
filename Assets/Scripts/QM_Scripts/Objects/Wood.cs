@@ -19,6 +19,8 @@ public class Wood : Flammable
     public LayerMask receiversMask;
     public float soundRadius;
 
+    [SerializeField] Transform transformObjectInHand;
+
 
     private void Start() {
         coroutine = SoundSource();
@@ -94,10 +96,12 @@ public class Wood : Flammable
 
         float x1 = -90 - transform.eulerAngles.x;
         float y1 = 180 - transform.localEulerAngles.y;
-
+        transform.position = transformObjectInHand.position;
+        transform.rotation = transformObjectInHand.rotation;
         //transform.rotation =Quaternion.Euler(new Vector3(-84, 0, 180));
-        transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-        transform.rotation = Quaternion.Euler(new Vector3(-294, 220, 0));
+
+        //transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        //transform.rotation = Quaternion.Euler(new Vector3(-294, 220, 0));
         isPicked = true;
 
 
@@ -105,7 +109,7 @@ public class Wood : Flammable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false )
+        if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false && isStillBurning == true )
         {
             if (other.GetComponent<CharacterController>().enabled == false || other.GetComponent<CharacterController>().otherGameObject != gameObject)
             {

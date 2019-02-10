@@ -56,12 +56,22 @@ public class Life : MonoBehaviour
 
     void Dead()
     {
+
+
         if (isAlive == false && onceDead == false)
         {
+            
+
             if (MindPower.currentHit == null && gameObject.tag == "Player")
                 CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
-            else if (MindPower.currentHit != null)
+            else if (MindPower.currentHit != null && gameObject.tag != "Player")
                 CameraController.cam.GetComponent<CameraController>().Follow(MindPower.currentHit.GetComponent<Life>().deathPosition.transform);
+            else if (MindPower.currentHit != null && gameObject.tag == "Player")
+            {
+                
+                CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
+            }
+               
 
 
 
