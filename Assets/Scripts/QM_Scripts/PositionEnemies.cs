@@ -6,6 +6,7 @@ public class PositionEnemies : MonoBehaviour {
 
     
     public GameObject transformPosition;
+    public GameObject focusCamNormal;
 	// Use this for initialization
 	void Start () {
 		

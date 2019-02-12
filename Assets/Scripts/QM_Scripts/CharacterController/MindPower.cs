@@ -92,7 +92,7 @@ public class MindPower : MonoBehaviour {
         if (isFire1Triggered() == true)
         {
             if (isMindManipulated == true && canMindM == true)
-                Transfer(true, false, currentHit.Find("FocusCamNormal").transform);
+                Transfer(true, false, currentHit.GetComponent<PositionEnemies>().focusCamNormal.transform);
             else if (isMindManipulated == false && canMindM == false)
                 Transfer(false, true, followPlayer);
 

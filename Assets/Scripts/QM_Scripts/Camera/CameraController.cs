@@ -49,7 +49,7 @@ public class CameraController : MonoBehaviour
     public float speedMouseX;
     public float speedMouseY;
 
-    private float initialMouseX = 0;
+    private  float initialMouseX = 0;
     private float initialMouseY = 0;
 
     private float initialHorizontal;
@@ -342,7 +342,8 @@ public class CameraController : MonoBehaviour
              lengthHits = hits.Length;
             
                 foreach (RaycastHit rh in saveColliderHits)
-                {
+            {
+                //rh.collider.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 Color32 col = rh.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
                 col.a = 255;
                 rh.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
@@ -354,11 +355,13 @@ public class CameraController : MonoBehaviour
 
             foreach (RaycastHit rh in hits)
             {
+                
+                //rh.collider.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
                 Color32 col = rh.collider.gameObject.GetComponent<MeshRenderer>().material.GetColor("_Color");
                 col.a = 70;
                 rh.collider.gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", col);
                 ChangeRenderMode(rh.collider.gameObject.GetComponent<MeshRenderer>().material, BlendMode.Transparent);
-              
+
 
             }
 

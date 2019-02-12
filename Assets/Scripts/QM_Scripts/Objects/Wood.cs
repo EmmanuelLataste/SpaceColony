@@ -120,7 +120,7 @@ public class Wood : Flammable
 
         }
 
-        if (other.gameObject.tag == "Cannister")
+        if (other.gameObject.tag == "Cannister" && isStillBurning == true)
         {
             StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
         }

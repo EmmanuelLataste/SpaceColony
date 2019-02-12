@@ -11,7 +11,7 @@ public class Ignitable : MonoBehaviour {
     float life;
     bool isOnContact;
     GameObject firePosition;
-    GameObject particleFires;
+    public GameObject particleFires;
 
 
     void Start()
@@ -76,19 +76,19 @@ public class Ignitable : MonoBehaviour {
             if (Time.time >= timer && initialTimer + 3.5f >= Time.time && isOnContact == false)
             {
                 
-                GetComponent<Life>().healthPoints -= .25f;
+                GetComponent<Life>().Damages(.25f);
                 timer = Time.time + 1f;
             }
 
             else if (Time.time >= timer && initialTimer + 3.5f < Time.time && isOnContact == false)
             {
-                GetComponent<Life>().healthPoints -= .5f;
+                GetComponent<Life>().Damages(.5f);
                 timer = Time.time + 1f;
             }
 
             else if (Time.time >= timer && isOnContact == true)
             {
-                GetComponent<Life>().healthPoints -= .75f;
+                GetComponent<Life>().Damages(.75f);
                 timer = Time.time + 1f;
             }
         }

@@ -10,9 +10,12 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField] GameObject canvasMenu;
     [SerializeField] string[] controller;
+    [SerializeField] GameObject menu;
+    [SerializeField] GameObject normalCam;
     public static bool isCanvasMenu;
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
+       
     }
 
     // Update is called once per frame
@@ -20,7 +23,9 @@ public class GameManager : MonoBehaviour {
         Pause();
         DisableMouse();
         controller = Input.GetJoystickNames();
-     
+        normalCam.GetComponent<CameraController>().speedMouseX = MenuManager.sensivity;
+        normalCam.GetComponent<CameraController>().speedMouseY = MenuManager.sensivity;
+
 
     }
 

@@ -83,6 +83,8 @@ public class CharacterController : Flammable {
     [SerializeField] bool canAttack;
     [SerializeField] GameObject lineRenderer;
     ThrowPrediction tp;
+    [SerializeField]  Collider[] attackCollider;
+    bool attackDuration;
 
     private void Start()
     {
@@ -105,6 +107,7 @@ public class CharacterController : Flammable {
         Rotation();
         Death();
         Attack();
+        StartCoroutine(Dodge());
 
         if (Time.time >= timerThrowOffset && isThrowing == true)
         {
@@ -195,8 +198,10 @@ public class CharacterController : Flammable {
                     if (DetectCollisions() == true && speed != 0 )
                 {
                     
+                   
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
+
                     rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                     smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
 
@@ -266,7 +271,7 @@ public class CharacterController : Flammable {
     {
        
             
-            if (isPicked == false && canAttack == true)
+            if (isPicked == false && canPickUp == true)
                 
             {
                 if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") )
@@ -377,7 +382,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B") )
             {
-               
+              
                     if (isCrouch == false)
                     {
                         anim.SetBool("Crouch", true);
@@ -391,9 +396,9 @@ public class CharacterController : Flammable {
                         speed = beginSpeed;
                         isCrouch = false;
                     }
-                
-               
 
+               
+               
             }
         }
     
@@ -401,15 +406,7 @@ public class CharacterController : Flammable {
     void AttackEventStop()
     {
         attackDuration = false;
-        foreach (Collider hitCollider in attackCollider)
-        {
-            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
-            {
-                hitCollider.GetComponent<Life>().healthPoints -= attackDamage;
-
-            }
-
-        }
+      
     }
 
     void AttackEvent()
@@ -418,8 +415,7 @@ public class CharacterController : Flammable {
         
     }
 
-    Collider[] attackCollider;
-    bool attackDuration;
+    
     private void Attack()
     {
         if (Time.time > attackTimer) canAttack = true;
@@ -440,7 +436,16 @@ public class CharacterController : Flammable {
         {
 
             attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
-            
+            foreach (Collider hitCollider in attackCollider)
+            {
+                if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
+                {
+                    hitCollider.GetComponent<Life>().Damages(attackDamage);
+
+                }
+
+            }
+
         }
         
         
@@ -451,10 +456,8 @@ public class CharacterController : Flammable {
         if (Input.GetKey(KeyCode.A) || Input.GetButtonDown("X"))
         {
             Gizmos.color = Color.yellow;
-            if(otherGameObject == null)
             Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
-            else
-                Gizmos.DrawSphere(otherGameObject.transform.Find("PositionWhenPicked").transform.position, attackRadius);
+           
         }
     }
 
@@ -509,14 +512,20 @@ public class CharacterController : Flammable {
 
     IEnumerator Dodge()
     {
-        if (Input.GetButtonDown("X") && MindPower.isMindManipulated == false)
+        if (Input.GetButtonDown("Jump"))
         {
             
-            rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
-            yield return new WaitForSeconds(dodgeTimer);
-            rb.velocity = new Vector3 (0,0,0);
+                rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
+                yield return new WaitForSeconds(dodgeTimer);
+                rb.velocity = new Vector3(0, 0, 0);
+                if (GetComponent<Ignitable>() == true)
+                {
+                    Destroy(GetComponent<Ignitable>().particleFires);
+                    Destroy(GetComponent<Ignitable>());
+                }
             
         }
+        yield return null;
     }
 
     public void Health(float damage)

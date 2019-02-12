@@ -119,7 +119,7 @@ public class BigBrainless : MonoBehaviour {
         {
             onceRushing = false;
             Debug.Log("colll");
-            other.gameObject.GetComponent<Life>().healthPoints -= rushDamage;
+            other.gameObject.GetComponent<Life>().Damages(rushDamage);
             other.gameObject.GetComponent<Rigidbody>().AddForce( transform.forward * Time.deltaTime * forceRush * 100000);
             isRushing = false;
         }
