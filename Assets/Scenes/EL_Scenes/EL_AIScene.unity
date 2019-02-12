@@ -802,7 +802,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint
   m_TagString: Untagged
-  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1432,6 +1432,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1674028754}
     m_Modifications:
+    - target: {fileID: 114726748949676916, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: waypoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4066278576280630, guid: 732b81e1d394cf0418342a268cbeaaf6, type: 2}
       propertyPath: m_LocalPosition.x
       value: 9.99
@@ -1496,6 +1501,26 @@ Prefab:
       propertyPath: investigateTime
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114581405516744922, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: maxSoundLength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114581405516744922, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: targetSoundMask.m_Bits
+      value: 32768
+      objectReference: {fileID: 0}
+    - target: {fileID: 114581405516744922, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: targetViewMask.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 114581405516744922, guid: 732b81e1d394cf0418342a268cbeaaf6,
+        type: 2}
+      propertyPath: nav
+      value: 
+      objectReference: {fileID: 1985061472}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 732b81e1d394cf0418342a268cbeaaf6, type: 2}
   m_IsPrefabAsset: 0
@@ -3423,7 +3448,7 @@ GameObject:
   m_Layer: 0
   m_Name: Waypoint (1)
   m_TagString: Untagged
-  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3513,6 +3538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasMenu: {fileID: 0}
+  controller: []
 --- !u!4 &1894821426
 Transform:
   m_ObjectHideFlags: 0
@@ -3692,6 +3718,11 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c2fd3714f6f04b4e80f8958945dcef7, type: 2}
   m_IsPrefabAsset: 0
+--- !u!195 &1985061472 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 195610153205104380, guid: 732b81e1d394cf0418342a268cbeaaf6,
+    type: 2}
+  m_PrefabInternal: {fileID: 858078305}
 --- !u!1 &1986831686 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1602540748608954, guid: 3c2fd3714f6f04b4e80f8958945dcef7,
