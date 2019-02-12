@@ -33,15 +33,20 @@ public class BigBrainless : MonoBehaviour {
     {
         Push();
         Rush();
-        if (Input.GetKeyDown(KeyCode.G) && MindPower.currentHit == transform && isRushing == false)
+        if (Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Fire3"))
         {
+            if (MindPower.currentHit == transform && isRushing == false)
             isRushing = true;
         }
 
-        else if(Input.GetKeyDown(KeyCode.G) && MindPower.currentHit == transform && isRushing == true)
+        else if(Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Fire3"))
         {
-            isRushing = false;
-            onceRushing = false;
+            if (MindPower.currentHit == transform && isRushing == true)
+            {
+                isRushing = false;
+                onceRushing = false;
+            }
+
         }
     }
 
@@ -114,7 +119,7 @@ public class BigBrainless : MonoBehaviour {
         {
             onceRushing = false;
             Debug.Log("colll");
-            other.gameObject.GetComponent<Life>().healthPoints -= rushDamage;
+            other.gameObject.GetComponent<Life>().Damages(rushDamage);
             other.gameObject.GetComponent<Rigidbody>().AddForce( transform.forward * Time.deltaTime * forceRush * 100000);
             isRushing = false;
         }

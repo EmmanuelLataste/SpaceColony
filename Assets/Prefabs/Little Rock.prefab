@@ -23,7 +23,8 @@ GameObject:
   - component: {fileID: 23827890504437450}
   - component: {fileID: 65474692054888732}
   - component: {fileID: 54496160449247862}
-  - component: {fileID: 65884851095229396}
+  - component: {fileID: 64870913410515340}
+  - component: {fileID: 114770848351957312}
   m_Layer: 13
   m_Name: Little Rock
   m_TagString: Untagged
@@ -38,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1216336598971948}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.622572, y: 0.65, z: 25.692198}
+  m_LocalPosition: {x: -1.73, y: 10.04, z: 22.11}
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -59,7 +60,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 10bc6d7fd1bc67042bb09dec644e52be, type: 2}
+  - {fileID: 2100000, guid: 8236b3efbd8e0c345a81b6682ed9b936, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,6 +102,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &64870913410515340
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216336598971948}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &65474692054888732
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -113,15 +128,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &65884851095229396
-BoxCollider:
+--- !u!114 &114770848351957312
+MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1216336598971948}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa822878432b1c489266dfafa1c11f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

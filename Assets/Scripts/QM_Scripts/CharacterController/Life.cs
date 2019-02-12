@@ -6,6 +6,8 @@ public class Life : MonoBehaviour
 {
 
     public float healthPoints;
+    float basicHP;
+    float startingHP;
     public bool isAlive = true;
     Rigidbody rb;
     bool isGoingToDie = false;
@@ -15,11 +17,17 @@ public class Life : MonoBehaviour
     PositionEnemies pe;
     [SerializeField] GameObject player;
     [SerializeField] GameObject deathPosition;
+    [SerializeField] float invulnerabilityTime;
+    bool isAttacked;
+    [SerializeField] float timerLifeRecovery;
+    float TLFOffset;
 
 
 
     private void Start()
     {
+        startingHP = healthPoints;
+        basicHP = healthPoints;
         cc = GetComponent<CharacterController>();
         if (GetComponent<PositionEnemies>())
         {
@@ -33,12 +41,23 @@ public class Life : MonoBehaviour
     void Update()
     {
         Dead();
+        HealthRecovery();
 
         if (healthPoints <= 0)
         {
           
             isAlive = false;
+            if (gameObject.tag == "Player")
+            {
 
+                CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
+            }
+
+        }
+
+        if (isAttacked == true)
+        {
+            StartCoroutine(InvulnerabiltyFrames());
         }
         
     }
@@ -53,15 +72,60 @@ public class Life : MonoBehaviour
        
     }
 
+    IEnumerator InvulnerabiltyFrames()
+    {
+        if (basicHP != healthPoints )
+        {
+            basicHP = healthPoints;
+            yield return new WaitForSeconds(invulnerabilityTime);
+            isAttacked = false;
+
+        }
+        yield return null;
+    }
+
+    public void Damages(float damages)
+    {
+        if (isAttacked == false)
+        {
+            healthPoints -= damages;
+            anim.SetTrigger("Hitted");
+            isAttacked = true;
+            TLFOffset = Time.time + timerLifeRecovery;
+
+        }
+
+    }
+
+    void HealthRecovery()
+    {
+        if (startingHP != healthPoints)
+        {
+            if (TLFOffset < Time.time)
+            {
+                TLFOffset = Time.time + timerLifeRecovery;
+                healthPoints = startingHP;
+
+            }
+            
+        }
+    }
+
 
     void Dead()
     {
+
+
         if (isAlive == false && onceDead == false)
         {
+            
+
             if (MindPower.currentHit == null && gameObject.tag == "Player")
                 CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
-            else if (MindPower.currentHit != null)
+            else if (MindPower.currentHit != null && gameObject.tag != "Player")
                 CameraController.cam.GetComponent<CameraController>().Follow(MindPower.currentHit.GetComponent<Life>().deathPosition.transform);
+            
+               
 
 
 

@@ -95,7 +95,7 @@ public class Explosive : MonoBehaviour {
 
             if (deadCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && deadCollid is CapsuleCollider)
             {
-                deadCollid.GetComponent<Life>().healthPoints -= 50;
+                deadCollid.GetComponent<Life>().Damages(50);
                 deadCollid.GetComponent<Rigidbody>().AddExplosionForce(180000, transform.position, 10);
                 
             }
@@ -106,7 +106,7 @@ public class Explosive : MonoBehaviour {
             if (hurtCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && hurtCollid is CapsuleCollider)
             {
                
-                hurtCollid.GetComponent<Life>().healthPoints -= Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10 ;
+                hurtCollid.GetComponent<Life>().Damages(Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10) ;
 
                 // fonction affine après calcul par rapport de la distance x de 5 à 10 et f(x) de 15 à 0.
             }

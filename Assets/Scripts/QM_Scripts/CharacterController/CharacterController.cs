@@ -83,6 +83,8 @@ public class CharacterController : Flammable {
     [SerializeField] bool canAttack;
     [SerializeField] GameObject lineRenderer;
     ThrowPrediction tp;
+    [SerializeField]  Collider[] attackCollider;
+    bool attackDuration;
 
     private void Start()
     {
@@ -105,6 +107,7 @@ public class CharacterController : Flammable {
         Rotation();
         Death();
         Attack();
+        StartCoroutine(Dodge());
 
         if (Time.time >= timerThrowOffset && isThrowing == true)
         {
@@ -192,11 +195,13 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
-                    if (DetectCollisions() == true && speed != 0)
+                    if (DetectCollisions() == true && speed != 0 )
                 {
                     
+                   
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
+
                     rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
                     smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
 
@@ -254,6 +259,7 @@ public class CharacterController : Flammable {
         otherGameObject.transform.position = hangingObjectPosition.transform.position;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
         otherGameObject.GetComponent<MeshCollider>().isTrigger = true;
+        if (otherGameObject.gameObject.tag != "Wood") otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         //otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         isPickable = false;
         otherGameObject.transform.parent = hangingObjectPosition.transform;
@@ -265,7 +271,7 @@ public class CharacterController : Flammable {
     {
        
             
-            if (isPicked == false && canAttack == true)
+            if (isPicked == false && canPickUp == true)
                 
             {
                 if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") )
@@ -301,6 +307,7 @@ public class CharacterController : Flammable {
         otherGameObject.transform.parent = null;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
         otherGameObject.GetComponent<MeshCollider>().isTrigger = false;
+        if (otherGameObject.gameObject.tag != "Wood") otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
 
         otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
@@ -375,8 +382,7 @@ public class CharacterController : Flammable {
         {
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("B") )
             {
-                if (horizontal == 0 && vertical == 0)
-                {
+              
                     if (isCrouch == false)
                     {
                         anim.SetBool("Crouch", true);
@@ -390,23 +396,25 @@ public class CharacterController : Flammable {
                         speed = beginSpeed;
                         isCrouch = false;
                     }
-                }
-               
 
+               
+               
             }
         }
     
     }
+    void AttackEventStop()
+    {
+        attackDuration = false;
+      
+    }
 
     void AttackEvent()
     {
-        Collider[] attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
-        foreach (Collider hitCollider in attackCollider)
-        {
-            if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
-                hitCollider.GetComponent<Life>().healthPoints -= attackDamage;
-        }
+        attackDuration = true;
+        
     }
+
     
     private void Attack()
     {
@@ -423,16 +431,33 @@ public class CharacterController : Flammable {
 
             }
         }
-    
 
+        if (attackDuration == true)
+        {
+
+            attackCollider = Physics.OverlapSphere(attackPosition.transform.position, attackRadius);
+            foreach (Collider hitCollider in attackCollider)
+            {
+                if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
+                {
+                    hitCollider.GetComponent<Life>().Damages(attackDamage);
+
+                }
+
+            }
+
+        }
+        
+        
     }
 
     private void OnDrawGizmos()
     {
-        if (Input.GetKey(KeyCode.F) || Input.GetButtonDown("X"))
+        if (Input.GetKey(KeyCode.A) || Input.GetButtonDown("X"))
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
+           
         }
     }
 
@@ -487,14 +512,20 @@ public class CharacterController : Flammable {
 
     IEnumerator Dodge()
     {
-        if (Input.GetButtonDown("X") && MindPower.isMindManipulated == false)
+        if (Input.GetButtonDown("Jump"))
         {
             
-            rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
-            yield return new WaitForSeconds(dodgeTimer);
-            rb.velocity = new Vector3 (0,0,0);
+                rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
+                yield return new WaitForSeconds(dodgeTimer);
+                rb.velocity = new Vector3(0, 0, 0);
+                if (GetComponent<Ignitable>() == true)
+                {
+                    Destroy(GetComponent<Ignitable>().particleFires);
+                    Destroy(GetComponent<Ignitable>());
+                }
             
         }
+        yield return null;
     }
 
     public void Health(float damage)

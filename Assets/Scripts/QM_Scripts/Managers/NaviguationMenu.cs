@@ -26,6 +26,11 @@ public class NaviguationMenu : MonoBehaviour {
 
     private void OnDisable()
     {
-        buttonSelected = true;
+        buttonSelected = false;
+    }
+
+    public void SelectedObject(GameObject newSO)
+    {
+        eventSystem.SetSelectedGameObject(newSO);
     }
 }

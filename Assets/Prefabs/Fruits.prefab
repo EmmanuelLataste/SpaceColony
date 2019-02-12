@@ -23,8 +23,8 @@ GameObject:
   - component: {fileID: 23923438801319036}
   - component: {fileID: 65878386812004984}
   - component: {fileID: 114502053980509026}
-  - component: {fileID: 65662194112683062}
   - component: {fileID: 54414588312982296}
+  - component: {fileID: 64272602547035694}
   m_Layer: 13
   m_Name: Fruits
   m_TagString: Untagged
@@ -102,18 +102,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65662194112683062
-BoxCollider:
+--- !u!64 &64272602547035694
+MeshCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1196439885671002}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!65 &65878386812004984
 BoxCollider:
   m_ObjectHideFlags: 1

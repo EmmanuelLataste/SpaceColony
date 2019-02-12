@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 
-
+    public static float sensivity = 1;
+    [SerializeField] Slider sliderSensivity;
     // Use this for initialization
     void Start () {
 		
@@ -39,4 +41,23 @@ public class MenuManager : MonoBehaviour {
     {
         SceneManager.LoadScene(0);
     }
+
+    public void Disable(GameObject disableGO)
+    {
+        
+            disableGO.SetActive(false);
+        
+    }
+
+    public void Enable(GameObject enableGO)
+    {
+            enableGO.SetActive(true);
+    }
+
+    public void SensivityChange()
+    {
+        sensivity = sliderSensivity.value;
+    }
+
+   
 }
