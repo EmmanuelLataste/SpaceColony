@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FieldOfView : MonoBehaviour {
 
@@ -11,11 +12,16 @@ public class FieldOfView : MonoBehaviour {
     [Range(0, 360)]
     public float viewAngle;
 
-    public LayerMask targetMask;
+    public float soundRadius = 360;
+
+    public LayerMask targetViewMask;
+    public LayerMask targetSoundMask;
     public LayerMask obstacleMask;
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
+    [HideInInspector]
+    public List<Transform> audibleTargets = new List<Transform>();
 
     public float dstToTarget = 0;
     public float meshResolution;
@@ -31,6 +37,8 @@ public class FieldOfView : MonoBehaviour {
 
     //VisibleState
     public bool visible;
+
+    private NavMeshAgent nav;
   
 
 
@@ -53,29 +61,22 @@ public class FieldOfView : MonoBehaviour {
     IEnumerator FindTargetsWithDelay(float delay) {
         while (true) {
             yield return new WaitForSeconds(delay);
-            FindVisibleTargets();           
+            FindVisibleTargets();
+            FindAudibleTargets();
         }
     }
 
 
     void FindVisibleTargets() {
         visibleTargets.Clear();
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
 
         for (int i = 0; i < targetsInViewRadius.Length; i++) {
             Transform target = targetsInViewRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
             if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                if (target.tag == "SoundSource") {
-
-                    Debug.Log("soundArea");
-
-                    //visibleTargets.RemoveAt(1);
-                    visibleTargets.Add(target);
-                    visible = true;
-                }
-
+                
                 if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
                     float dstToTarget = Vector3.Distance(transform.position, target.position);
                     anim.SetFloat("targetDst", dstToTarget);
@@ -98,6 +99,15 @@ public class FieldOfView : MonoBehaviour {
             }
         }
 
+    }
+
+    void FindAudibleTargets() {
+        audibleTargets.Clear();
+        Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
+
+        for (int i = 0; i < targetsInSoundRadius.Length; i++) {
+            CalculatePathLength();
+        }
     }
 
 
@@ -224,6 +234,14 @@ public class FieldOfView : MonoBehaviour {
             pointB = _pointB;
         }
 
+    }
+
+    void CalculatePathLength() {
+        NavMeshPath path = new NavMeshPath();
+
+        if (nav.enabled) {
+            //nav.CalculatePath(ADD HERE);
+        }
     }
 
 }
