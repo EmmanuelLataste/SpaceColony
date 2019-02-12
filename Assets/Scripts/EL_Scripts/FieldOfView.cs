@@ -58,7 +58,7 @@ public class FieldOfView : MonoBehaviour {
 
 
     void Update() {
-        DrawFieldOfView();
+        DrawFieldOfView();              
     }
 
 
@@ -121,6 +121,13 @@ public class FieldOfView : MonoBehaviour {
                     //visibleTargets.RemoveAt(1);
                     visibleTargets.Add(target);
                     audible = true;
+
+                    Vector2 agentPosition = gameObject.transform.position;
+                    Vector2 targetPosition = target.position;
+
+                    float angle = AngleBetweenAgentTarget(agentPosition, targetPosition);
+                    transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+
                 } else {
                     audible = false;
                 }
@@ -279,6 +286,10 @@ public class FieldOfView : MonoBehaviour {
         }
        
         return pathLength;
+    }
+
+    float AngleBetweenAgentTarget (Vector3 a, Vector3 b) {
+        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 
 }

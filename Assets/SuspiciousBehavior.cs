@@ -10,13 +10,13 @@ public class SuspiciousBehavior : StateMachineBehaviour {
             animator.SetBool("targetVisible", true);
         } else if (animator.GetComponent<FieldOfView>().visible == false) {
             animator.SetBool("targetVisible", false);
-        }
+        }       
     }
 
 	
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	
-	}
+        
+    }
 
 	
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
