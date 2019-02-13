@@ -27,6 +27,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
 
         animator.SetBool("event", false);
+        animator.SetBool("targetAudible", false);
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
@@ -39,6 +40,10 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         if (animator.GetComponent<FieldOfView>().visible == true) {
             animator.SetBool("spot", true);
             animator.SetBool("event", true);
+        }
+
+        if (animator.GetComponent<FieldOfView>().audible == true) {
+            animator.SetBool("targetAudible", true);
         }
 
         if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
