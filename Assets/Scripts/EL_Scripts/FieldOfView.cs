@@ -93,6 +93,7 @@ public class FieldOfView : MonoBehaviour {
                             visibleTargets.Add(target);
                         }
                         visible = true;
+                        anim.SetFloat("targetDst", Vector3.Distance(target.transform.position, transform.position));
 
                     } else {
                         visible = false;
