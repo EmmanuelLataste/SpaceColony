@@ -19,10 +19,11 @@ public class BigBrainless : MonoBehaviour {
     bool onceRushing;
     [SerializeField] float rushDamage;
     [SerializeField] float forceRush;
+    Animator anim;
 
     private void Start()
     {
-
+        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         beginSpeed = GetComponent<CharacterController>().beginSpeed;
         speed = GetComponent<CharacterController>().speed;
@@ -66,7 +67,7 @@ public class BigBrainless : MonoBehaviour {
     {
         if (DetectCollisions() == true && MindPower.currentHit == this.transform)
         {
-
+            anim.SetBool("Push", true);
             Vector3 hitDetectionPositionToMove = hitDetection.transform.position + transform.forward * speedPush * Time.deltaTime;
             hitDetection.collider.GetComponent<Rigidbody>().MovePosition(hitDetectionPositionToMove);
             hitDetection.collider.transform.Rotate(transform.right);
@@ -80,6 +81,7 @@ public class BigBrainless : MonoBehaviour {
         {
             if (detect == true)
             {
+                anim.SetBool("Push", false);
                 GetComponent<CharacterController>().speed = beginSpeed;
                 detect = false;
             }
