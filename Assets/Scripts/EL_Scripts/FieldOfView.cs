@@ -87,7 +87,7 @@ public class FieldOfView : MonoBehaviour {
                     float dstToTarget = Vector3.Distance(transform.position, target.position);
                     anim.SetFloat("targetDst", dstToTarget);
 
-                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget < 10) {
                         if (target.tag == "Player") {
                             visibleTargets.Insert(0, target);
                         } /* else if (target.tag == "SoundSource") {

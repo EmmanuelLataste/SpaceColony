@@ -11,6 +11,8 @@ public class AttackBehaviour : StateMachineBehaviour {
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         visibleTargets = animator.gameObject.GetComponent<FieldOfView>().visibleTargets;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
+
+        entityAgent.isStopped = true;
     }
 
 	
@@ -20,8 +22,8 @@ public class AttackBehaviour : StateMachineBehaviour {
 
 	
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	
-	}
+        entityAgent.isStopped = false;
+    }
 
 	
 }
