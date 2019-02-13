@@ -523,7 +523,7 @@ public class CharacterController : Flammable {
         {
             
                 rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
-            anim.SetTrigger("Roll");
+                anim.SetTrigger("Roll");
                 yield return new WaitForSeconds(dodgeTimer);
                 rb.velocity = new Vector3(0, 0, 0);
                 if (GetComponent<Ignitable>() == true)
