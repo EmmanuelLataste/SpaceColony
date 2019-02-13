@@ -58,7 +58,9 @@ public class FieldOfView : MonoBehaviour {
 
 
     void Update() {
-        DrawFieldOfView();              
+        DrawFieldOfView();
+        //Debug.Log("audible : " + audible);
+        //Debug.Log("pathLength : " + pathLength);
     }
 
 
@@ -66,7 +68,7 @@ public class FieldOfView : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(delay);
             FindVisibleTargets();
-            FindAudibleTargets();
+            FindAudibleTargets();            
         }
     }
 
@@ -96,7 +98,7 @@ public class FieldOfView : MonoBehaviour {
                         visible = true;
                         anim.SetFloat("targetDst", Vector3.Distance(target.transform.position, transform.position));
 
-                    } else {
+                    } else {                      
                         visible = false;
                     }
                 } else {
@@ -109,18 +111,20 @@ public class FieldOfView : MonoBehaviour {
 
     void FindAudibleTargets() {
         audibleTargets.Clear();
+  
         Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
 
         for (int i = 0; i < targetsInSoundRadius.Length; i++) {
             Transform target = targetsInSoundRadius[i].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
-
+            
             CalculatePathLength(target);
 
             if (pathLength < maxSoundLength) {
                 
+
                 if (target.tag == "SoundSource") {
-                    //visibleTargets.RemoveAt(1);
+                    Debug.Log("audible loop");
                     visibleTargets.Add(target);
                     audible = true;
                     /*
@@ -131,12 +135,15 @@ public class FieldOfView : MonoBehaviour {
                     transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
                     */
                 } else {
+                    Debug.Log("false audible");
                     audible = false;
                 }
 
             } else {
+                Debug.Log("false audible");
                 audible = false;
             }
+          
         }
     }
 
