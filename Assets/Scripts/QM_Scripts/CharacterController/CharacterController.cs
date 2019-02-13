@@ -21,7 +21,7 @@ public class CharacterController : Flammable {
     [Header("Move")]
 
     public float beginSpeed;
-    public float speed;
+    public  float speed;
     float smoothPlayerMove;
     public float smoothSpeedPlayerMove;
     Vector3 positionToMove;
@@ -86,6 +86,8 @@ public class CharacterController : Flammable {
     [SerializeField]  Collider[] attackCollider;
     bool attackDuration;
 
+    public bool isControlled;
+
     private void Start()
     {
         //tp = lineRenderer.GetComponent<ThrowPrediction>();
@@ -99,42 +101,49 @@ public class CharacterController : Flammable {
 
      public void Update()
     {
-        
-        animStateInfoCrouch = anim.GetCurrentAnimatorStateInfo(1);
-        horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
-        vertical = Input.GetAxis("Vertical");
-        Sneak();
-        Rotation();
-        Death();
-        Attack();
-        StartCoroutine(Dodge());
 
-        if (Time.time >= timerThrowOffset && isThrowing == true)
+        if (isControlled == true)
         {
-            otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
-            isThrowing = false;
+            horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
+            vertical = Input.GetAxis("Vertical");
+            Sneak();
+            Rotation();
+            Death();
+            Attack();
+            StartCoroutine(Dodge());
+
+            if (Time.time >= timerThrowOffset && isThrowing == true)
+            {
+                otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
+                isThrowing = false;
+            }
+
+            if (isPickable == true && isPicked == false)
+                PickUp();
+            if (isPicked == true && isPickable == false)
+                Throw();
+
+            Debug.DrawRay(transform.position + transform.up, transform.forward, Color.yellow);
+
+
+            anim.SetFloat("Direction", vertical);
+            anim = GetComponent<Animator>();
         }
-
-        if (isPickable == true && isPicked == false)
-            PickUp();
-        if (isPicked == true && isPickable == false)
-            Throw();
-
-        Debug.DrawRay(transform.position + transform.up, transform.forward , Color.yellow);
-        
-
-        anim.SetFloat("Direction", vertical);
-        anim = GetComponent<Animator>();
+       
 
         
     }
 
     private void FixedUpdate()
     {
-        Movements();
-        //StartCoroutine(Dodge());
-        Jump();
-    
+        if (isControlled == true)
+        {
+            Movements();
+            //StartCoroutine(Dodge());
+            Jump();
+
+        }
+
     }
 
 
@@ -149,7 +158,7 @@ public class CharacterController : Flammable {
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer );
                 //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                 isAimingRotating = false;
-                Debug.Log("Hello");
+
 
             }
 
@@ -197,8 +206,6 @@ public class CharacterController : Flammable {
             {
                     if (DetectCollisions() == true && speed != 0 )
                 {
-                    
-                   
                     anim.SetBool("Run", true);
                     positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
 

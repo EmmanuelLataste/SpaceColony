@@ -21,6 +21,7 @@ public class Life : MonoBehaviour
     bool isAttacked;
     [SerializeField] float timerLifeRecovery;
     float TLFOffset;
+    [SerializeField] LayerMask fallCollision;
 
 
 
@@ -42,6 +43,8 @@ public class Life : MonoBehaviour
     {
         Dead();
         HealthRecovery();
+        //Fall();
+
 
         if (healthPoints <= 0)
         {
@@ -65,7 +68,7 @@ public class Life : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
        
-        if (isGoingToDie == true)
+        if (isGoingToDie == true/* && collision.gameObject.layer == fallCollision*/)
         {
             isAlive = false;
         }
@@ -111,6 +114,21 @@ public class Life : MonoBehaviour
         }
     }
 
+    void Fall()
+    {
+        if (rb.velocity.y <= -25 && isGoingToDie == false)
+        {
+
+            isGoingToDie = true;
+        }
+
+        else if (rb.velocity.y > -25 && isGoingToDie == true)
+        {
+            isGoingToDie = false;
+        }
+
+    }
+
 
     void Dead()
     {
@@ -142,12 +160,7 @@ public class Life : MonoBehaviour
             onceDead = true;
             
         }
-        if (rb.velocity.y <= -25)
-        {
-
-           // isGoingToDie = true;
-        }
-
+       
     }
 }
 

@@ -200,35 +200,32 @@ public class MindPower : MonoBehaviour {
         anim.SetBool("isPossessing", enemyControlled);
         camC.Follow(followTransform);
         normalCam.enabled = true;
-        cc.enabled = playerControlled; 
+        cc.isControlled = playerControlled; 
         if (controledcc != null)
         {
-            controledcc.enabled = enemyControlled;
+            controledcc.isControlled = enemyControlled;
             controledcc.GetComponent<Rigidbody>().isKinematic = playerControlled;
             PositionEnemies pe = controledcc.GetComponent<PositionEnemies>();
             pe.transformPosition.GetComponent<NavMeshAgent>().enabled = playerControlled;
             pe.transformPosition.GetComponent<FieldOfView>().enabled = playerControlled;
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
-            
+            controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
+            controledcc.GetComponent<Animator>().SetBool("Run", enemyControlled);
+
+
+
+
         }
        
-        //controledcc.GetComponent<NavMeshAgent>().enabled = playerControlled;
-        //controledcc.GetComponent<FieldOfView>().enabled = playerControlled;
-        //controledcc.GetComponent<EntityAI>().enabled = playerControlled;
-        //controledcc.GetComponent<Animator>().enabled = playerControlled;
+
         StartCoroutine(camC.CameraShakeTiming(forceOfShake / 2, forceOfShake / 2, .25f));
         canMindM = playerControlled;
+        
 
 
     }
-    //IEnumerator MindManipulationTime()
-    //{
-    //    StartCoroutine(camZC.CameraShakeTiming(forceOfShake, forceOfShake, timerPossess));
-    //    yield return new WaitForSeconds(timerPossess);
-    //    isMindManipulated = true;
-    //    yield return null;
-    //}
+
 
     float timer;
     void Fire1()

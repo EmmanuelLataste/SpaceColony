@@ -102,7 +102,7 @@ public class BigBrainless : MonoBehaviour {
         {
             if (onceRushing == false)
             {
-                Debug.Log("STOPRush");
+
                 GetComponent<CharacterController>().speed = beginSpeed;
                 GetComponent<CharacterController>().smoothRotationPlayer = beginSmoothRotation;
                 onceRushing = true;
