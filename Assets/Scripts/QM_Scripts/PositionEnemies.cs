@@ -58,7 +58,7 @@ public class PositionEnemies : MonoBehaviour {
         {
             anim.SetBool("Walk", true);
             anim.SetBool("Run", false);
-            nma.speed = cc.beginSpeed / 4;
+            nma.speed = cc.beginSpeed / 6;
             
         }
 
