@@ -19,7 +19,7 @@ public class ObjectSound : MonoBehaviour {
     private IEnumerator SoundSource() {
         gameObject.layer = 15;
         gameObject.tag = "SoundSource";
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         gameObject.layer = 13;
         gameObject.tag = "Wood";
     }

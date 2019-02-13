@@ -121,8 +121,8 @@ public class FieldOfView : MonoBehaviour {
             CalculatePathLength(target);
 
             if (pathLength < maxSoundLength) {
-                
 
+                Debug.Log("path");
                 if (target.tag == "SoundSource") {
                     Debug.Log("audible loop");
                     visibleTargets.Add(target);

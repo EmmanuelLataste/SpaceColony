@@ -2046,7 +2046,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1907603693799094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.49, y: -10.8, z: -9.95}
+  m_LocalPosition: {x: 17.08165, y: -8.12, z: 3.9647217}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4762139854764488}
@@ -2655,7 +2655,7 @@ MonoBehaviour:
     m_Bits: 512
   targetSoundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32768
   obstacleMask:
     serializedVersion: 2
     m_Bits: 4096
@@ -2683,8 +2683,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityAgent: {fileID: 195129581861667310}
   isReversed: 0
-  waypoints: []
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   investigateTime: 0.1
+  approachTime: 3
+  suspectTime: 5
+  visibleTargets: []
   eSO: {fileID: 11400000, guid: a1d5ac623ddebb04fa7a533610f598fb, type: 2}
 --- !u!114 &114699774572714072
 MonoBehaviour:
@@ -2717,9 +2723,9 @@ MonoBehaviour:
   cam: {fileID: 0}
   camZoom: {fileID: 0}
   mainCam: {fileID: 0}
-  attackPosition: {fileID: 1638702855344394}
+  attackPosition: {fileID: 1972306243166956}
   attackRadius: 1.5
-  attackDamage: 5
+  attackDamage: 4
   attackOffset: 0.75
   isAlive: 1
   dodgeTimer: 0
@@ -2733,6 +2739,7 @@ MonoBehaviour:
   canSneak: 0
   canPickUp: 0
   canAttack: 1
+  canRoll: 0
   lineRenderer: {fileID: 0}
   attackCollider: []
   isControlled: 0
@@ -3092,7 +3099,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.017351445, y: 0.033938956, z: 0.008632816}
+  m_ConnectedAnchor: {x: -0.017351449, y: 0.03393893, z: 0.008632717}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3136,7 +3143,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000067055225, y: 0.068050265, z: -0.000000026077032}
+  m_ConnectedAnchor: {x: 0.000000052154064, y: 0.06805024, z: -0.000000063329935}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -3268,7 +3275,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000044703484, y: 0.06804812, z: 0.000000040978193}
+  m_ConnectedAnchor: {x: 0.000000011175871, y: 0.06804818, z: 0.000000115484}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -3312,7 +3319,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.010804933, y: -0.0060750595, z: 0.000120626915}
+  m_ConnectedAnchor: {x: 0.010804927, y: -0.006075069, z: 0.00012057617}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -3356,7 +3363,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.0009725053, y: 0.045439467, z: 0.0208603}
+  m_ConnectedAnchor: {x: 0.00097250706, y: 0.04543948, z: 0.02086035}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -3444,7 +3451,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.000000053085387, y: 0.029759416, z: -0.000000059604645}
+  m_ConnectedAnchor: {x: -0.000000011175871, y: 0.029759396, z: -0.00000008009374}
   serializedVersion: 2
   m_SwingAxis: {x: 1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3488,7 +3495,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.000000035314745, y: 0.010940507, z: -0.0012353203}
+  m_ConnectedAnchor: {x: 0.000000039543455, y: 0.010940516, z: -0.0012352699}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: 1}
   m_TwistLimitSpring:
@@ -3531,7 +3538,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.26
-  m_Speed: 2
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
