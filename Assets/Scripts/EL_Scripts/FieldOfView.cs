@@ -88,10 +88,11 @@ public class FieldOfView : MonoBehaviour {
                     if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
                         if (target.tag == "Player") {
                             visibleTargets.Insert(0, target);
-                        } else if (target.tag == "SoundSource") {
+                        } /* else if (target.tag == "SoundSource") {
                             //visibleTargets.RemoveAt(1);
                             visibleTargets.Add(target);
                         }
+                        */
                         visible = true;
                         anim.SetFloat("targetDst", Vector3.Distance(target.transform.position, transform.position));
 
@@ -122,13 +123,13 @@ public class FieldOfView : MonoBehaviour {
                     //visibleTargets.RemoveAt(1);
                     visibleTargets.Add(target);
                     audible = true;
-
+                    /*
                     Vector2 agentPosition = gameObject.transform.position;
                     Vector2 targetPosition = target.position;
 
                     float angle = AngleBetweenAgentTarget(agentPosition, targetPosition);
                     transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
-
+                    */
                 } else {
                     audible = false;
                 }

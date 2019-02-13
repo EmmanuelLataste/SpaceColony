@@ -43,6 +43,8 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
         if (animator.GetComponent<FieldOfView>().audible == true) {
             animator.SetBool("targetAudible", true);
+        } else {
+            animator.SetBool("targetAudible", false);
         }
 
         if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
