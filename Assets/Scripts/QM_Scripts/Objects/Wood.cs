@@ -6,25 +6,17 @@ public class Wood : Flammable
 {
     private bool isOtherBurning;
     private GameObject particleFires;
-    private IEnumerator coroutine;
 
     public Transform firePosition;
     public GameObject entity;
     bool isPicked;
     bool isStillBurning;
 
-    [HideInInspector]
-    public List<Transform> soundReceivers = new List<Transform>();
-
-    public LayerMask receiversMask;
-    public float soundRadius;
 
     [SerializeField] Transform transformObjectInHand;
 
 
-    private void Start() {
-        coroutine = SoundSource();
-    }
+    
 
     private void Update()
     {
@@ -42,7 +34,7 @@ public class Wood : Flammable
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            FindReceivers();            
+            gameObject.GetComponent<ObjectSound>().FindReceivers();            
         }
 
 
@@ -60,23 +52,6 @@ public class Wood : Flammable
 
             }
         }
-    }
-
-    private IEnumerator SoundSource () {
-        gameObject.layer = 15;
-        gameObject.tag = "SoundSource";
-        yield return new WaitForSeconds(2f);
-        gameObject.layer = 13;
-        gameObject.tag = "Wood";
-    }
-
-    void FindReceivers() {
-        soundReceivers.Clear();
-        Collider[] receiversInRadius = Physics.OverlapSphere(transform.position, soundRadius, receiversMask);
-
-        if (receiversInRadius.Length > 0) {
-            StartCoroutine(SoundSource());
-        }           
     }
 
     private IEnumerator OnCollisionStay(Collision other)
