@@ -19,11 +19,14 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         //TEST OPTI
     }
 
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         entity = animator.gameObject;
         isReversed = animator.gameObject.GetComponent<EntityAI>().isReversed;
         waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
+
+        animator.GetComponent<FieldOfView>().audible = false;
 
         animator.SetBool("event", false);
         animator.SetBool("targetAudible", false);

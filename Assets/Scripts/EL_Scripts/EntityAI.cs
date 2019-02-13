@@ -16,7 +16,8 @@ public class EntityAI : MonoBehaviour {
 
     private Transform[] targets;
     private int priorityTarget;
-    
+    private bool inSuspect = false;
+
     //Patrol behaviour
     public NavMeshAgent entityAgent;
     public bool isReversed = false;
@@ -31,6 +32,7 @@ public class EntityAI : MonoBehaviour {
     public static bool typePatrol = true;
 
     public List<Transform> visibleTargets = new List<Transform>();
+    
 
     //TEST
     private EntityClass entityT;
@@ -78,8 +80,11 @@ public class EntityAI : MonoBehaviour {
     }
 
     public void Suspect() {
-        StartCoroutine(_Approach(approachTime, anim));
-        StartCoroutine(_Suspect(suspectTime, anim));
+        if (inSuspect == false) {
+            entityAgent.destination = visibleTargets[0].transform.position;
+        }
+        
+        StartCoroutine(_Approach(approachTime, anim));       
     }
 
     public void Investigate() {
@@ -103,14 +108,23 @@ public class EntityAI : MonoBehaviour {
     }
 
     IEnumerator _Approach(float ApproachTime, Animator animator) {
-        entityAgent.destination = visibleTargets[0].transform.position;
+        Debug.Log("ApproachStart");
+
+        Debug.Log(visibleTargets[0].transform.position);
         yield return new WaitForSeconds(ApproachTime);
+        StartCoroutine(_Suspect(suspectTime, anim));       
     }
 
     IEnumerator _Suspect(float SuspectTime, Animator animator) {
+        Debug.Log("SuspectStart");
+
+        inSuspect = true;
         entityAgent.isStopped = true;
         yield return new WaitForSeconds(SuspectTime);
         entityAgent.isStopped = false;
+
+        animator.SetBool("targetAudible", false);
+        Debug.Log("SuspectEnd");
     }
 
 
