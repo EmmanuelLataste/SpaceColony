@@ -6232,20 +6232,6 @@ Prefab:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3e62938e8dfa03f4ab9eb76e3d1419ce, type: 2}
-    - target: {fileID: 23080266567592484, guid: df2d9e16db701474dba5382373f4a7be,
-        type: 2}
-      propertyPath: m_CastShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1119227594657768, guid: df2d9e16db701474dba5382373f4a7be, type: 2}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 23080266567592484, guid: df2d9e16db701474dba5382373f4a7be,
-        type: 2}
-      propertyPath: m_ReceiveShadows
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df2d9e16db701474dba5382373f4a7be, type: 2}
   m_IsPrefabAsset: 0

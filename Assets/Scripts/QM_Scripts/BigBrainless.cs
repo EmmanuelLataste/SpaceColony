@@ -72,7 +72,7 @@ public class BigBrainless : MonoBehaviour {
             hitDetection.collider.GetComponent<Rigidbody>().MovePosition(hitDetectionPositionToMove);
             hitDetection.collider.transform.Rotate(transform.right);
             //rb.MovePosition(hitDetectionPositionToMove);
-            GetComponent<CharacterController>().speed = 2;
+            speed = 2;
             detect = true;
 
         }
@@ -82,7 +82,7 @@ public class BigBrainless : MonoBehaviour {
             if (detect == true)
             {
                 anim.SetBool("Push", false);
-                GetComponent<CharacterController>().speed = beginSpeed;
+                speed = beginSpeed;
                 detect = false;
             }
         }
@@ -95,6 +95,7 @@ public class BigBrainless : MonoBehaviour {
         if (isRushing == true)
         {
             Debug.Log("Rush");
+            anim.SetBool("Rush", true);
             rb.MovePosition(transform.position + Time.deltaTime * 20 * transform.forward);
             GetComponent<CharacterController>().speed = 0;
             GetComponent<CharacterController>().smoothRotationPlayer = 0.005f;
@@ -104,7 +105,7 @@ public class BigBrainless : MonoBehaviour {
         {
             if (onceRushing == false)
             {
-
+                anim.SetBool("Rush", false);
                 GetComponent<CharacterController>().speed = beginSpeed;
                 GetComponent<CharacterController>().smoothRotationPlayer = beginSmoothRotation;
                 onceRushing = true;
@@ -123,7 +124,8 @@ public class BigBrainless : MonoBehaviour {
             Debug.Log("colll");
             other.gameObject.GetComponent<Life>().Damages(rushDamage);
             other.gameObject.GetComponent<Rigidbody>().AddForce( transform.forward * Time.deltaTime * forceRush * 100000);
-            //isRushing = false;
+            isRushing = false;
+            anim.SetBool("Rush", true);
         }
     }
 }
