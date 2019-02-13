@@ -433,7 +433,6 @@ public class CharacterController : Flammable {
             {
                 attackTimer = Time.time + attackOffset;
                 canAttack = false;
-                Debug.Log("Hello");
                 anim.SetTrigger("Attack");
 
             }
