@@ -26,7 +26,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
 
         
 
-        if (Vector3.Distance(animator.transform.position, lastKnownPos) < 3)
+        if (Vector3.Distance(animator.transform.position, lastKnownPos) < 3 && animator.GetFloat("targetDst") > 5f)
         {
             Debug.Log("out of chase");
             animator.SetBool("targetVisible", false);
@@ -35,7 +35,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
             entityAgent.destination = visibleTargets[0].transform.position;
             lastKnownPos = visibleTargets[0].transform.position;
         }
-        else if (visibleTargets.Count == 0) {
+        else if (visibleTargets.Count == 0 && animator.GetFloat("targetDst")>10) {
             entityAgent.destination = lastKnownPos;            
             Debug.Log("liste vide");
         }
