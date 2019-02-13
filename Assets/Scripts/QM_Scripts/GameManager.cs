@@ -9,19 +9,28 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
 
     [SerializeField] GameObject canvasMenu;
+    [SerializeField] GameObject panelDeath;
     [SerializeField] string[] controller;
-    [SerializeField] GameObject menu;
     [SerializeField] GameObject normalCam;
+    [SerializeField] GameObject player;
+    Life lifePlayer;
     public static bool isCanvasMenu;
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
-       
+        lifePlayer = player.GetComponent<Life>();
     }
 
     // Update is called once per frame
     void Update() {
-        Pause();
+        if (lifePlayer.isAlive == true)
+        {
+            Pause();
+        }
+
+        else StartCoroutine(Dead());
+
         DisableMouse();
+      
         controller = Input.GetJoystickNames();
         normalCam.GetComponent<CameraController>().speedMouseX = MenuManager.sensivity;
         normalCam.GetComponent<CameraController>().speedMouseY = MenuManager.sensivity;
@@ -62,5 +71,11 @@ public class GameManager : MonoBehaviour {
             CameraController.isControllerConnected = true;
         }
 
+    }
+
+     IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(2.5f);
+        panelDeath.SetActive(true);
     }
 }

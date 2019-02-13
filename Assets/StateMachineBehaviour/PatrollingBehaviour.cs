@@ -19,6 +19,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         //TEST OPTI
     }
 
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         entity = animator.gameObject;
         isReversed = animator.gameObject.GetComponent<EntityAI>().isReversed;

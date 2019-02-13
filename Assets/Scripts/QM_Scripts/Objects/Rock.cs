@@ -82,7 +82,7 @@ public class Rock : MonoBehaviour {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Entity") && Crush() == true)
         {
             Debug.Log(rb.velocity.y);
-            collision.transform.gameObject.SetActive(false);
+            collision.gameObject.GetComponent<Life>().isAlive = false;
         }
     }
 

@@ -21,13 +21,13 @@ GameObject:
   - component: {fileID: 4029671680273926}
   - component: {fileID: 33826013980874064}
   - component: {fileID: 23980763954055676}
-  - component: {fileID: 65405845952503378}
+  - component: {fileID: 64252074717623244}
   m_Layer: 12
   m_Name: rock1_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4029671680273926
 Transform:
@@ -84,8 +84,8 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1783969327374514}
   m_Mesh: {fileID: 4300000, guid: 9f592abd101dfe04c876b5cba9abb5d1, type: 3}
---- !u!65 &65405845952503378
-BoxCollider:
+--- !u!64 &64252074717623244
+MeshCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -93,6 +93,8 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.04623879, y: 0.047893986, z: 0.036479812}
-  m_Center: {x: -0.00034949929, y: 0.01116503, z: 0.002080664}
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 9f592abd101dfe04c876b5cba9abb5d1, type: 3}
