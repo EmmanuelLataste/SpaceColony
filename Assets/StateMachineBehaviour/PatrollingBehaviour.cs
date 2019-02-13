@@ -26,6 +26,8 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
 
+        animator.GetComponent<FieldOfView>().audible = false;
+
         animator.SetBool("event", false);
         animator.SetBool("targetAudible", false);
 
