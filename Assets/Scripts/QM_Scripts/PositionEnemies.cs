@@ -43,8 +43,11 @@ public class PositionEnemies : MonoBehaviour {
             Destroy(gameObject);
             Destroy(gameObject.transform.parent.gameObject);
         }
+        if (cc.isControlled == false)
+        {
+            AIAnimation();
+        }
 
-        AIAnimation();
 	}
 
     void AIAnimation()
@@ -54,6 +57,7 @@ public class PositionEnemies : MonoBehaviour {
         if (nmAnim.GetCurrentAnimatorStateInfo(0).IsName("Patrolling"))
         {
             anim.SetBool("Walk", true);
+            anim.SetBool("Run", false);
             nma.speed = cc.beginSpeed / 4;
             
         }
@@ -64,6 +68,7 @@ public class PositionEnemies : MonoBehaviour {
         if (nmAnim.GetCurrentAnimatorStateInfo(0).IsName("Chase"))
         {
             anim.SetBool("Run", true);
+            anim.SetBool("Walk", false);
             nma.speed = cc.beginSpeed;
         }
 
@@ -71,6 +76,12 @@ public class PositionEnemies : MonoBehaviour {
         if (nmAnim.GetCurrentAnimatorStateInfo(0).IsName("Investigating"))
         {
             anim.SetTrigger("Spot");
+        }
+
+        if (nmAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            anim.SetTrigger("Attack");
+            nma.speed = cc.beginSpeed / 1.2f;
         }
 
 

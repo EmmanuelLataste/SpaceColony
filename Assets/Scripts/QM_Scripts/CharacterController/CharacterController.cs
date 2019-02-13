@@ -101,7 +101,7 @@ public class CharacterController : Flammable {
 
      public void Update()
     {
-
+        Attack();
         if (isControlled == true)
         {
             horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
@@ -109,7 +109,7 @@ public class CharacterController : Flammable {
             Sneak();
             Rotation();
             Death();
-            Attack();
+            
             StartCoroutine(Dodge());
 
             if (Time.time >= timerThrowOffset && isThrowing == true)

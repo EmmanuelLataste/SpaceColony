@@ -158,6 +158,7 @@ public class Life : MonoBehaviour
             Destroy(cc);
             gameObject.layer = LayerMask.NameToLayer("RagDoll");
             onceDead = true;
+            rb.velocity = Vector3.zero ;
             
         }
        
