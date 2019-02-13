@@ -81,6 +81,7 @@ public class CharacterController : Flammable {
     [SerializeField] bool canSneak;
     [SerializeField] bool canPickUp;
     [SerializeField] bool canAttack;
+    [SerializeField] bool canRoll;
     [SerializeField] GameObject lineRenderer;
     ThrowPrediction tp;
     [SerializeField]  Collider[] attackCollider;
@@ -433,7 +434,6 @@ public class CharacterController : Flammable {
             {
                 attackTimer = Time.time + attackOffset;
                 canAttack = false;
-                Debug.Log("Hello");
                 anim.SetTrigger("Attack");
 
             }
@@ -519,10 +519,11 @@ public class CharacterController : Flammable {
 
     IEnumerator Dodge()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && canRoll == true)
         {
             
                 rb.velocity += targetRotationCam.transform.forward * 100 * dodgePower * Time.deltaTime;
+            anim.SetTrigger("Roll");
                 yield return new WaitForSeconds(dodgeTimer);
                 rb.velocity = new Vector3(0, 0, 0);
                 if (GetComponent<Ignitable>() == true)

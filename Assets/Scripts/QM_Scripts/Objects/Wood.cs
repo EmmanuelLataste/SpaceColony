@@ -65,7 +65,7 @@ public class Wood : Flammable
     private IEnumerator SoundSource () {
         gameObject.layer = 15;
         gameObject.tag = "SoundSource";
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(2f);
         gameObject.layer = 13;
         gameObject.tag = "Wood";
     }
