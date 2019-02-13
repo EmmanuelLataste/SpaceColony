@@ -21,13 +21,13 @@ GameObject:
   - component: {fileID: 4820196603232292}
   - component: {fileID: 33434327435084244}
   - component: {fileID: 23538671196795492}
-  - component: {fileID: 65076731890322328}
+  - component: {fileID: 64531033261114550}
   m_Layer: 12
   m_Name: Rock2_low
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 1
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &4820196603232292
 Transform:
@@ -84,8 +84,8 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1191387524423430}
   m_Mesh: {fileID: 4300000, guid: 39a43890ccbfcae4ebfc811bd0cadb09, type: 3}
---- !u!65 &65076731890322328
-BoxCollider:
+--- !u!64 &64531033261114550
+MeshCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -93,6 +93,8 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.027522536, y: 0.02914771, z: 0.026740044}
-  m_Center: {x: -0.0018798104, y: 0.0050538126, z: -0.0035987138}
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 39a43890ccbfcae4ebfc811bd0cadb09, type: 3}

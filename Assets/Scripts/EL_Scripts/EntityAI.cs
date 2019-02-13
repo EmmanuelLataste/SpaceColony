@@ -25,11 +25,13 @@ public class EntityAI : MonoBehaviour {
     //Investigate behaviour
     private IEnumerator coroutine;
     [SerializeField] float investigateTime = 1.0f;
-
+    [SerializeField] float approachTime = 3.0f;
+    [SerializeField] float suspectTime = 5.0f;
     //See EditorGUI 
     public static bool typePatrol = true;
 
-    
+    public List<Transform> visibleTargets = new List<Transform>();
+
     //TEST
     private EntityClass entityT;
     [SerializeField] EntitySO eSO;
@@ -56,6 +58,7 @@ public class EntityAI : MonoBehaviour {
     void Start() {
         target = GameObject.FindWithTag("Player");
         anim = gameObject.GetComponent<Animator>();
+        visibleTargets = gameObject.GetComponent<FieldOfView>().visibleTargets;
 
         coroutine = _Investigate(investigateTime, anim);
         
@@ -72,6 +75,11 @@ public class EntityAI : MonoBehaviour {
 
     void Update() {
                 
+    }
+
+    public void Suspect() {
+        StartCoroutine(_Approach(approachTime, anim));
+        StartCoroutine(_Suspect(suspectTime, anim));
     }
 
     public void Investigate() {
@@ -92,6 +100,17 @@ public class EntityAI : MonoBehaviour {
             animator.SetBool("targetVisible", false);
         }
 
+    }
+
+    IEnumerator _Approach(float ApproachTime, Animator animator) {
+        entityAgent.destination = visibleTargets[0].transform.position;
+        yield return new WaitForSeconds(ApproachTime);
+    }
+
+    IEnumerator _Suspect(float SuspectTime, Animator animator) {
+        entityAgent.isStopped = true;
+        yield return new WaitForSeconds(SuspectTime);
+        entityAgent.isStopped = false;
     }
 
 
