@@ -81,7 +81,7 @@ public class PositionEnemies : MonoBehaviour {
         if (nmAnim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
         {
             anim.SetTrigger("Attack");
-            nma.speed = cc.beginSpeed / 1.2f;
+            nma.speed = 6;
         }
 
 

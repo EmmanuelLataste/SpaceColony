@@ -109,7 +109,7 @@ public class MindPower : MonoBehaviour {
     {
         isContactControl = true;
         anim.SetBool("isPossessing", false);
-        if (isFire2Triggered() == false)
+        if (isFire2Triggered() == false && contactControl.Length != 0)
         {
             
             foreach (Collider contactCol in contactControl)

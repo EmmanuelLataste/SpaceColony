@@ -1586,7 +1586,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1151845311097892}
   m_LocalRotation: {x: -0.4258033, y: -0.5645277, z: -0.5645277, w: 0.4258033}
-  m_LocalPosition: {x: -0.039836407, y: 1.579634, z: -0.01043129}
+  m_LocalPosition: {x: -10.31, y: 1.58, z: -2.95}
   m_LocalScale: {x: 9.25, y: 9.25, z: 9.25}
   m_Children: []
   m_Father: {fileID: 4935148152410260}
@@ -2626,7 +2626,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38cb0901e091b7f4a9190094b5f98b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthPoints: 3
+  healthPoints: 5
   isAlive: 1
   player: {fileID: 0}
   deathPosition: {fileID: 1056358301797584}
@@ -2646,10 +2646,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4bf58120704d641bdeb34ff2321754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 30
+  viewRadius: 15
   viewAngle: 90
   soundRadius: 360
-  maxSoundLength: 0
+  maxSoundLength: 100
   targetViewMask:
     serializedVersion: 2
     m_Bits: 512
@@ -2669,7 +2669,7 @@ MonoBehaviour:
   anim: {fileID: 95036048333099586}
   visible: 0
   audible: 0
-  nav: {fileID: 0}
+  nav: {fileID: 195129581861667310}
 --- !u!114 &114624426489577920
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2684,7 +2684,6 @@ MonoBehaviour:
   entityAgent: {fileID: 195129581861667310}
   isReversed: 0
   waypoints:
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   investigateTime: 0.1
@@ -2725,7 +2724,7 @@ MonoBehaviour:
   mainCam: {fileID: 0}
   attackPosition: {fileID: 1972306243166956}
   attackRadius: 1.5
-  attackDamage: 4
+  attackDamage: 1
   attackOffset: 0.75
   isAlive: 1
   dodgeTimer: 0
