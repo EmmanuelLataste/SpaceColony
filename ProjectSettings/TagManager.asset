@@ -13,6 +13,7 @@ TagManager:
   - Rock
   - Cannister
   - SoundSource
+  - KeyCard
   layers:
   - Default
   - TransparentFX
