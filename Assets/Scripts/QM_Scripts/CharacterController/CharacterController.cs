@@ -205,7 +205,7 @@ public class CharacterController : Flammable {
 
     void Movements()
     {
-        if (isPicking == false && canMove == true)
+        if (isPicking == false && canMove == true )
         {
             if (Input.GetAxis("Fire2") == 0 && Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
             {
@@ -237,17 +237,19 @@ public class CharacterController : Flammable {
                 }
             }
 
-            else if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2") == true)
+            else if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2") == true  )
             {
                 if (MindPower.isMindManipulated == false)
                 {
-
+                    Debug.Log("F1");
                     anim.SetBool("Run", false);
                     transform.rotation = Quaternion.Euler(new Vector3(0, camZoom.transform.rotation.eulerAngles.y, 0));
                     positionToMove = transform.position;
                 }
 
             }
+
+            
         }
 
         
@@ -421,10 +423,16 @@ public class CharacterController : Flammable {
         }
     
     }
+    void AttackAnimStop()
+    {
+        anim.SetBool("Attack", false);
+        Debug.Log("Hello");
+    }
+
     void AttackEventStop()
     {
         attackDuration = false;
-      
+        
     }
 
     void AttackEvent()
@@ -443,7 +451,7 @@ public class CharacterController : Flammable {
             {
                 attackTimer = Time.time + attackOffset;
                 canAttack = false;
-                anim.SetTrigger("Attack");
+                anim.SetBool("Attack",true);
 
             }
         }
@@ -469,7 +477,7 @@ public class CharacterController : Flammable {
 
     private void OnDrawGizmos()
     {
-        if (Input.GetKey(KeyCode.A) || Input.GetButtonDown("X"))
+        if (attackDuration == true)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
@@ -519,6 +527,7 @@ public class CharacterController : Flammable {
         if (Physics.Raycast(transform.position, -transform.up, out hit, groundDistance))
         // Si un rayon de 2f partant la position du player, allant vers le sol( groundDistance) touche un objet ayant le calque " ground "...
         {
+            
             return true; //Alors on renvoit Vrai
         }
         return false;

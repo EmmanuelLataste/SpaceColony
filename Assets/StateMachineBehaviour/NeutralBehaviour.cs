@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class NeutralBehaviour : StateMachineBehaviour {
 
-    
 
-	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
+    Transform[] waypoints;
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        
-	}
+        waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
+    }
 
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) 
     {
-        
-	}
+        if (waypoints[0] == null)
+        {
+            EntityAI.typePatrol = false;
+        }
+
+        else EntityAI.typePatrol = true;
+    }
 
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 	

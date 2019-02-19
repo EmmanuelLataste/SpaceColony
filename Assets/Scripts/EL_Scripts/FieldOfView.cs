@@ -19,8 +19,9 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask targetViewMask;
     public LayerMask targetSoundMask;
     public LayerMask obstacleMask;
+    public GameObject target;
 
-    [HideInInspector]
+    
     public List<Transform> visibleTargets = new List<Transform>();
     [HideInInspector]
     public List<Transform> audibleTargets = new List<Transform>();
@@ -43,22 +44,45 @@ public class FieldOfView : MonoBehaviour {
 
     public NavMeshAgent nav;
     private float pathLength = 0f;
-      
+
+    public Collider[] targetsInViewRadius;
+    public float beginSpeed;
+    CharacterController cc;
+    NavMeshAgent entityAgent;
+    [SerializeField] GameObject characterControllerObject;
 
 
     void Start() {
         anim = GetComponent<Animator>();
-
+        cc = characterControllerObject.GetComponent<CharacterController>();
+        beginSpeed = cc.speed;
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
+        entityAgent = GetComponent<EntityAI>().entityAgent;
 
-        StartCoroutine("FindTargetsWithDelay", .2f);
+        //StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
-
+    bool chaseReset = true;
     void Update() {
         DrawFieldOfView();
+
+        if (target != null && anim.GetBool("isInvestigating") == false)
+        transform.LookAt(target.transform);
+
+        if (visibleTargets.Count != 0)
+        {
+            dstToTarget = Vector3.Distance(transform.position, visibleTargets[0].transform.position);
+        }
+
+        targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
+
+        if (targetsInViewRadius.Length != 0)
+        FindVisibleTargets();
+
+        anim.SetFloat("targetDst", dstToTarget);
+        
         //Debug.Log("audible : " + audible);
         //Debug.Log("pathLength : " + pathLength);
     }
@@ -74,38 +98,54 @@ public class FieldOfView : MonoBehaviour {
 
 
     void FindVisibleTargets() {
-        visibleTargets.Clear();
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
 
-        for (int i = 0; i < targetsInViewRadius.Length; i++) {
-            Transform target = targetsInViewRadius[i].transform;
+        //visibleTargets.Clear();
+        
+        //for (int i = 0; i < targetsInViewRadius.Length; i++) {
+            Transform target = targetsInViewRadius[0].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
-            if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                
-                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
+            if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+            {
+
+                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+                {
+      
                     float dstToTarget = Vector3.Distance(transform.position, target.position);
                     anim.SetFloat("targetDst", dstToTarget);
 
-                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget < 10) {
-                        if (target.tag == "Player") {
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget < viewRadius)
+                {
+            
+                    if (target.tag == "Player" && !visibleTargets.Contains(target))
+                        {
                             visibleTargets.Insert(0, target);
-                        } /* else if (target.tag == "SoundSource") {
-                            //visibleTargets.RemoveAt(1);
-                            visibleTargets.Add(target);
-                        }
-                        */
+                        } 
                         visible = true;
                         anim.SetFloat("targetDst", Vector3.Distance(target.transform.position, transform.position));
 
-                    } else {                      
-                        visible = false;
                     }
-                } else {
+                    else
+                    {
+                        visible = false;
+                        visibleTargets.Clear();
+                    }
+                }
+                else
+                {
                     visible = false;
+                    visibleTargets.Clear();
                 }
             }
+
+        if (Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget > viewRadius)
+        {
+            Debug.Log("Bed");
+            visible = false;
+            //visibleTargets.Clear();
         }
+
+        //}
 
     }
 

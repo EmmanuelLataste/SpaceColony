@@ -89,12 +89,27 @@ public class MindPower : MonoBehaviour {
 
     void Control()
     {
+        if (anim.GetCurrentAnimatorStateInfo(2).IsName("Empty") == false && anim.GetCurrentAnimatorStateInfo(2).IsName("Throw") == false)
+        {
+            cc.canMove = false;
+        }
+
+        else cc.canMove = true;
+
         if (isFire1Triggered() == true)
         {
             if (isMindManipulated == true && canMindM == true)
+            {
+               
                 Transfer(true, false, currentHit.GetComponent<PositionEnemies>().focusCamNormal.transform);
+            }
+               
             else if (isMindManipulated == false && canMindM == false)
+            {
+
                 Transfer(false, true, followPlayer);
+            }
+    
 
         }
 
@@ -186,11 +201,17 @@ public class MindPower : MonoBehaviour {
     {
         if (Input.GetAxis("Fire1") > 0 || Input.GetButton("Fire1"))
         {
+            
 
             return true;
         }
 
-        else camZC.CameraShake(0, 0);
+        else
+        {
+
+            camZC.CameraShake(0, 0);
+        }
+            
         return false;
     }
 
@@ -212,10 +233,14 @@ public class MindPower : MonoBehaviour {
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
             controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
             controledcc.GetComponent<Animator>().SetBool("Run", enemyControlled);
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("spot", playerControlled);
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("event", playerControlled);
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isChasing", false);
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isInvestigating", false);
 
-
-
-
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = null;
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visibleTargets.Clear();
+            
         }
        
 

@@ -14,31 +14,42 @@ public class PatrollingBehaviour : StateMachineBehaviour {
     public NavMeshAgent entityAgent;
     public bool isReversed;
 
+    Animator animLinkedEntity;
+
 
     private void Awake() {
         //TEST OPTI
     }
 
-
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animLinkedEntity = animator.GetComponent<EntityAI>().linkedEntity.GetComponent<Animator>();
         entity = animator.gameObject;
         isReversed = animator.gameObject.GetComponent<EntityAI>().isReversed;
         waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
-
+        animator.gameObject.GetComponent<FieldOfView>().target = null;
         animator.GetComponent<FieldOfView>().audible = false;
 
         animator.SetBool("event", false);
         animator.SetBool("targetAudible", false);
 
+        animLinkedEntity.Rebind();
+        animLinkedEntity.SetBool("Walk", true);
+
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
-
+        
         ToNextWaypoint();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {     
-        
+        if (waypoints[0] == null)
+        {
+            EntityAI.typePatrol = false;
+        }
+
+        else EntityAI.typePatrol = true;
+
         if (animator.GetComponent<FieldOfView>().visible == true) {
             animator.SetBool("spot", true);
             animator.SetBool("event", true);
@@ -57,7 +68,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
+        animLinkedEntity.SetBool("Walk", false);
     }
 
     public void ToNextWaypoint() {
