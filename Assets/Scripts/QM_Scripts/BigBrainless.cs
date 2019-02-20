@@ -19,10 +19,12 @@ public class BigBrainless : MonoBehaviour {
     bool onceRushing;
     [SerializeField] float rushDamage;
     [SerializeField] float forceRush;
+    CharacterController cc;
     Animator anim;
 
     private void Start()
     {
+        cc = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         beginSpeed = GetComponent<CharacterController>().beginSpeed;
@@ -32,6 +34,7 @@ public class BigBrainless : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        Debug.Log(speed);
         Push();
         Rush();
         if (Input.GetKeyDown(KeyCode.G) || Input.GetButtonDown("Fire3"))
@@ -69,10 +72,11 @@ public class BigBrainless : MonoBehaviour {
         {
             anim.SetBool("Push", true);
             Vector3 hitDetectionPositionToMove = hitDetection.transform.position + transform.forward * speedPush * Time.deltaTime;
+            Vector3 PositionToMove = transform.position + transform.forward * speedPush * Time.deltaTime;
             hitDetection.collider.GetComponent<Rigidbody>().MovePosition(hitDetectionPositionToMove);
             hitDetection.collider.transform.Rotate(transform.right);
-            //rb.MovePosition(hitDetectionPositionToMove);
-            speed = 2;
+            rb.MovePosition(PositionToMove);
+            cc.canMove = false;
             detect = true;
 
         }
@@ -81,8 +85,8 @@ public class BigBrainless : MonoBehaviour {
         {
             if (detect == true)
             {
+                cc.canMove = true;
                 anim.SetBool("Push", false);
-                speed = beginSpeed;
                 detect = false;
             }
         }

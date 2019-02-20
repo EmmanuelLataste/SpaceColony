@@ -82,12 +82,17 @@ public class CharacterController : Flammable {
     [SerializeField] bool canPickUp;
     [SerializeField] bool canAttack;
     [SerializeField] bool canRoll;
+    [SerializeField] public bool canMove = true;
+
+
     [SerializeField] GameObject lineRenderer;
     ThrowPrediction tp;
     [SerializeField]  Collider[] attackCollider;
     bool attackDuration;
 
     public bool isControlled;
+
+    bool isPicking;
 
     private void Start()
     {
@@ -200,48 +205,52 @@ public class CharacterController : Flammable {
 
     void Movements()
     {
-
-        if (Input.GetAxis("Fire2") == 0 && Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
+        if (isPicking == false && canMove == true)
         {
-            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+            if (Input.GetAxis("Fire2") == 0 && Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
             {
-                    if (DetectCollisions() == true && speed != 0 )
+                if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
                 {
-                    anim.SetBool("Run", true);
-                    positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
+                    if (DetectCollisions() == true && speed != 0)
+                    {
+                        anim.SetBool("Run", true);
+                        positionToMove = transform.position + transform.forward * speed * Time.deltaTime;
 
-                    rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
-                    smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
+                        rb.MovePosition(Vector3.Lerp(transform.position, positionToMove, smoothPlayerMove));
+                        smoothPlayerMove += smoothSpeedPlayerMove * Time.deltaTime;
 
 
-                }
+                    }
                     else if (DetectCollisions() == false)
-                {
-                    anim.SetBool("Run", false);
-                }
-                  
-            }
+                    {
+                        anim.SetBool("Run", false);
+                    }
 
-            else
-            {
-               
+                }
+
+                else
+                {
+
                     anim.SetBool("Run", false);
                     smoothPlayerMove = 0;
-                
+
+                }
+            }
+
+            else if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2") == true)
+            {
+                if (MindPower.isMindManipulated == false)
+                {
+
+                    anim.SetBool("Run", false);
+                    transform.rotation = Quaternion.Euler(new Vector3(0, camZoom.transform.rotation.eulerAngles.y, 0));
+                    positionToMove = transform.position;
+                }
+
             }
         }
 
-        else if (Input.GetAxis("Fire2") > 0 || Input.GetButton("Fire2") == true)
-        {
-            if (MindPower.isMindManipulated == false)
-            {
-               
-                anim.SetBool("Run", false);
-                transform.rotation =Quaternion.Euler(new Vector3( 0, camZoom.transform.rotation.eulerAngles.y, 0));
-                positionToMove = transform.position;
-            }
-           
-        }
+        
             
                 
     }
@@ -263,6 +272,7 @@ public class CharacterController : Flammable {
     }
     void PickUpEvent()
     {
+        
         isAxisF1InUse = true;
         otherGameObject.transform.position = hangingObjectPosition.transform.position;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -271,6 +281,7 @@ public class CharacterController : Flammable {
         //otherGameObject.GetComponent<Rigidbody>().detectCollisions = false;
         isPickable = false;
         otherGameObject.transform.parent = hangingObjectPosition.transform;
+        isPicking = false;
 
 
     }
@@ -284,7 +295,7 @@ public class CharacterController : Flammable {
             {
                 if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") )
                 {
-               
+                isPicking = true;
                 isPicked = true;
                 anim.SetTrigger("PickUp");
 
@@ -382,7 +393,6 @@ public class CharacterController : Flammable {
         }
 
     }
-
     
     private void Sneak()
     {
@@ -422,7 +432,6 @@ public class CharacterController : Flammable {
         attackDuration = true;
         
     }
-
     
     private void Attack()
     {

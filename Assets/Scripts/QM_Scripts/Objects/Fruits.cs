@@ -7,6 +7,7 @@ public class Fruits : Goo {
     bool canExplose;
     Rigidbody rb;
     bool isPicked;
+    [SerializeField] Transform transformObjectInHand;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,8 +25,9 @@ public class Fruits : Goo {
     {
         if (transform.parent == true && isPicked == false)
         {
-            transform.rotation = Quaternion.Euler(new Vector3(-84, 0, 180));
-            transform.position += transform.parent.right - new Vector3(.8f,0,0) ;
+
+            transform.position = transformObjectInHand.position;
+            transform.rotation = transformObjectInHand.rotation;
             isPicked = true;
             
         }

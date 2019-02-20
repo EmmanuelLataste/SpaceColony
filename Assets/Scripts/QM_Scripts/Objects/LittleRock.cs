@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LittleRock : MonoBehaviour {
     bool isPicked;
+    [SerializeField] Transform transformObjectInHand;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -20,7 +21,8 @@ public class LittleRock : MonoBehaviour {
         if (transform.parent == true && isPicked == false)
         {
 
-
+            transform.position = transformObjectInHand.position;
+            transform.rotation = transformObjectInHand.rotation;
             isPicked = true;
 
         }
