@@ -95,6 +95,8 @@ public class Wood : Flammable
             StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
         }
     }
+
+    
 }
 
     

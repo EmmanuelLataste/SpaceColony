@@ -33,7 +33,7 @@ public class EntityAI : MonoBehaviour {
     public static bool typePatrol;
 
     public List<Transform> visibleTargets = new List<Transform>();
-    
+
 
     //TEST
     private EntityClass entityT;
@@ -132,18 +132,20 @@ public class EntityAI : MonoBehaviour {
     }
 
     IEnumerator _Suspect(float SuspectTime, Animator animator, bool investigate) {
-        Debug.Log("SuspectStart");
 
+        
         inSuspect = true;
-        entityAgent.isStopped = true;
+       entityAgent.isStopped = true;
         yield return new WaitForSeconds(SuspectTime);
+        Debug.Log("suspi2");
+       
         entityAgent.isStopped = false;
         animator.SetBool("isInvestigating", investigate);
         animator.SetBool("targetVisible", false);
         animator.SetBool("targetAudible", false);
         animator.SetBool("isChecking", !investigate);
 
-        Debug.Log("SuspectEnd");
+
         yield return null;
     }
 

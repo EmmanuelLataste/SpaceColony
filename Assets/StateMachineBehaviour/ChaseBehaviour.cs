@@ -27,7 +27,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
         }
 
 
-
+        animator.gameObject.GetComponent<FieldOfView>().audibleTargets.Clear();
         animator.SetBool("isChasing", false);
         animator.SetBool("targetVisible", true);
         animLinkedEntity.Rebind();
@@ -36,7 +36,6 @@ public class ChaseBehaviour : StateMachineBehaviour {
 
 	
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
         
 
         if (Vector3.Distance(animator.transform.position, lastKnownPos) < 3 && animator.GetFloat("targetDst") > 5f)
@@ -47,11 +46,11 @@ public class ChaseBehaviour : StateMachineBehaviour {
         }
         else if (visibleTargets.Count > 0 ) {
 
-            entityAgent.destination = visibleTargets[0].transform.position;
-            lastKnownPos = visibleTargets[0].transform.position;
+            entityAgent.destination = fov.target.transform.position;
+            lastKnownPos = fov.target.transform.position;
             entityAgent.transform.LookAt(fov.target.transform);
             entityAgent.speed = fov.beginSpeed;
-            
+            Debug.Log("RUUUUN");
 
 
         }

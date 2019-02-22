@@ -23,7 +23,6 @@ public class FieldOfView : MonoBehaviour {
 
     
     public List<Transform> visibleTargets = new List<Transform>();
-    [HideInInspector]
     public List<Transform> audibleTargets = new List<Transform>();
 
     public float dstToTarget = 0;
@@ -46,11 +45,12 @@ public class FieldOfView : MonoBehaviour {
     private float pathLength = 0f;
 
     public Collider[] targetsInViewRadius;
+    public Collider[] targetsInSoundRadius;
     public float beginSpeed;
     CharacterController cc;
     NavMeshAgent entityAgent;
     [SerializeField] GameObject characterControllerObject;
-
+    bool onceTarget;
 
     void Start() {
         anim = GetComponent<Animator>();
@@ -66,6 +66,7 @@ public class FieldOfView : MonoBehaviour {
 
     bool chaseReset = true;
     void Update() {
+
         DrawFieldOfView();
 
         if (target != null && anim.GetBool("isInvestigating") == false)
@@ -74,15 +75,34 @@ public class FieldOfView : MonoBehaviour {
         if (visibleTargets.Count != 0)
         {
             dstToTarget = Vector3.Distance(transform.position, visibleTargets[0].transform.position);
+            target = visibleTargets[0].gameObject;
+        }
+
+        else if (audibleTargets.Count != 0)
+        {
+            target = audibleTargets[0].gameObject;
         }
 
         targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
+        targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
 
         if (targetsInViewRadius.Length != 0)
         FindVisibleTargets();
 
+        if (targetsInSoundRadius.Length != 0)
+            FindAudibleTargets();
         anim.SetFloat("targetDst", dstToTarget);
         
+       if (onceTarget == false && target != null)
+        {
+            if (target.GetComponent<Life>() == true)
+            {
+                if (target.GetComponent<Life>().isAlive == false)
+                {
+                    target = null;
+                }
+            }
+        }
         //Debug.Log("audible : " + audible);
         //Debug.Log("pathLength : " + pathLength);
     }
@@ -97,7 +117,7 @@ public class FieldOfView : MonoBehaviour {
     }
 
 
-    void FindVisibleTargets() {
+    public void FindVisibleTargets() {
 
         //visibleTargets.Clear();
         
@@ -140,7 +160,7 @@ public class FieldOfView : MonoBehaviour {
 
         if (Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget > viewRadius)
         {
-            Debug.Log("Bed");
+
             visible = false;
             //visibleTargets.Clear();
         }
@@ -150,20 +170,20 @@ public class FieldOfView : MonoBehaviour {
     }
 
     void FindAudibleTargets() {
-        audibleTargets.Clear();
+        //audibleTargets.Clear();
   
-        Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
+        //Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
 
-        for (int i = 0; i < targetsInSoundRadius.Length; i++) {
-            Transform target = targetsInSoundRadius[i].transform;
+        //for (int i = 0; i < targetsInSoundRadius.Length; i++) {
+            Transform target = targetsInSoundRadius[0].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
             
             CalculatePathLength(target);
 
             if (pathLength < maxSoundLength) {
 
-                Debug.Log("path");
-                if (target.tag == "SoundSource") {
+
+                if (target.tag == "SoundSource" && !visibleTargets.Contains(target)) {
                     Debug.Log("audible loop");
                     visibleTargets.Add(target);
                     audible = true;
@@ -175,16 +195,16 @@ public class FieldOfView : MonoBehaviour {
                     transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
                     */
                 } else {
-                    Debug.Log("false audible");
+
                     audible = false;
                 }
 
             } else {
-                Debug.Log("false audible");
+
                 audible = false;
             }
           
-        }
+        //}
     }
 
 

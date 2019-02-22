@@ -44,7 +44,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
 
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         //entityAgent.destination = entity.transform.position;
-        if (fov.visible == false)
+        if (fov.visible == false )
         {
             if (timer > Time.time)
             {
@@ -57,15 +57,54 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
             else
             {
                 animator.SetBool("targetVisible", false);
-               
+                animator.SetBool("targetFalse", false);
+                target = null;
+                fov.audibleTargets.Clear();
+              
             }
 
         }
 
         else
         {
-            animator.SetBool("isChasing", true);
-          
+            if (fov.visibleTargets.Count != 0)
+            {
+                animator.SetBool("isChasing", true);
+
+            }
+
+            else if (fov.audibleTargets.Count != 0 && fov.visibleTargets.Count == 0)
+            {
+                animator.SetBool("targetVisible", false);
+            }
+
+            else if (fov.target != null && fov.visibleTargets.Count == 0 && fov.audibleTargets.Count == 0)
+            {
+                
+               
+                if (timer < Time.time)
+                {
+                    animator.SetBool("targetVisible", false);
+                    target = null;
+                    
+                }
+
+                else
+                {
+                    animLinkedEntity.SetBool("Walk", false);
+                    animLinkedEntity.SetBool("Run", false);
+                    animLinkedEntity.SetBool("Attack", true);
+                    animator.transform.LookAt(fov.target.transform);
+                    entityAgent.destination = target.transform.position;
+                    entityAgent.isStopped = false;
+                }
+            }
+
+            else
+            {
+                animator.SetBool("targetVisible", false);
+            }
+
         }
 
         animator.SetBool("event", false);

@@ -13,7 +13,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
     public NavMeshAgent entityAgent;
     public bool isReversed;
-
+    EntityAI entityAI;
     Animator animLinkedEntity;
 
 
@@ -29,12 +29,18 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
         animator.gameObject.GetComponent<FieldOfView>().target = null;
         animator.GetComponent<FieldOfView>().audible = false;
-
+        entityAI = animator.gameObject.GetComponent<EntityAI>();
         animator.SetBool("event", false);
+        animator.SetBool("spot", false);
         animator.SetBool("targetAudible", false);
-
+        
         animLinkedEntity.Rebind();
         animLinkedEntity.SetBool("Walk", true);
+
+        animator.GetComponent<FieldOfView>().audibleTargets.Clear();
+
+        animator.GetComponent<FieldOfView>().visible = false;
+        animator.GetComponent<FieldOfView>().audible = false;
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
@@ -42,15 +48,12 @@ public class PatrollingBehaviour : StateMachineBehaviour {
         ToNextWaypoint();
     }
 
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {     
-        if (waypoints[0] == null)
-        {
-            EntityAI.typePatrol = false;
-        }
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        entityAgent.isStopped = false;
 
-        else EntityAI.typePatrol = true;
+        animLinkedEntity.SetBool("Walk", true);
+        if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true) {
 
-        if (animator.GetComponent<FieldOfView>().visible == true) {
             animator.SetBool("spot", true);
             animator.SetBool("event", true);
         }
@@ -63,7 +66,11 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
         if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
             ToNextWaypoint();
+            
         }
+
+
+        entityAgent.speed = entityAI.beginAISpeed;
         
     }
 
@@ -73,6 +80,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
     public void ToNextWaypoint() {
         //In case of no attribuated waypoint : return
+
         if (waypoints.Length == 0) {
             return;
         }

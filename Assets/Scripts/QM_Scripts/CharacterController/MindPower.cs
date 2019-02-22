@@ -25,6 +25,8 @@ public class MindPower : MonoBehaviour {
     public Camera cameraMain;
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera zoomCam;
+    GameObject normalCamGO;
+    GameObject zoomCamGO;
     private bool isZoom = false;
     bool canMindM = true;
     bool isPossessionParticles;
@@ -44,6 +46,8 @@ public class MindPower : MonoBehaviour {
     bool isContactControl;
     private void Start()
     {
+        normalCamGO = normalCam.gameObject;
+        zoomCamGO = zoomCam.gameObject;
         anim = GetComponent<Animator>();
         camC = normalCam.GetComponent<CameraController>();
         camZC = zoomCam.GetComponent<CameraZoomController>();
@@ -61,9 +65,11 @@ public class MindPower : MonoBehaviour {
 
     void Update()
     {
+        
 
         Control();
         ContactControl();
+        
         if (currentHit != null && currentHit.gameObject.GetComponent<Life>().isAlive == false)
         {
 
@@ -71,6 +77,10 @@ public class MindPower : MonoBehaviour {
 
         }
 
+        if (isMindManipulated == true)
+        {
+            anim.SetBool("Run", false);
+        }
 
     }
 
@@ -82,19 +92,19 @@ public class MindPower : MonoBehaviour {
 
         anim.SetBool("isPossessing", false);
         camC.Follow(followPlayer);
-        normalCam.enabled = true;
+        normalCamGO.SetActive(true);
         cc.enabled = true;
         yield return null;
     }
 
     void Control()
     {
-        if (anim.GetCurrentAnimatorStateInfo(2).IsName("Empty") == false && anim.GetCurrentAnimatorStateInfo(2).IsName("Throw") == false)
-        {
-            cc.canMove = false;
-        }
+        //if (anim.GetCurrentAnimatorStateInfo(2).IsName("Empty") == false && anim.GetCurrentAnimatorStateInfo(2).IsName("Throw") == false)
+        //{
+        //    cc.canMove = false;
+        //}
 
-        else cc.canMove = true;
+        //else cc.canMove = true;
 
         if (isFire1Triggered() == true)
         {
@@ -124,7 +134,7 @@ public class MindPower : MonoBehaviour {
     {
         isContactControl = true;
         anim.SetBool("isPossessing", false);
-        if (isFire2Triggered() == false && contactControl.Length != 0)
+        if (isFire2Triggered() == false && contactControl != null && contactControl.Length != 0)
         {
             
             foreach (Collider contactCol in contactControl)
@@ -167,7 +177,7 @@ public class MindPower : MonoBehaviour {
                 {
                     if (isFire1Triggered() == true)
                     {
-                        Debug.Log("aim");
+
                         camZC.CameraShake(forceOfShake, forceOfShake);
                     }
 
@@ -217,32 +227,35 @@ public class MindPower : MonoBehaviour {
 
     public void  Transfer(bool enemyControlled, bool playerControlled, Transform followTransform)
     {
-
+        
         anim.SetBool("isPossessing", enemyControlled);
         camC.Follow(followTransform);
-        normalCam.enabled = true;
-        cc.isControlled = playerControlled; 
+        normalCamGO.SetActive(true);
+        cc.isControlled = playerControlled;
         if (controledcc != null)
         {
             controledcc.isControlled = enemyControlled;
             controledcc.GetComponent<Rigidbody>().isKinematic = playerControlled;
             PositionEnemies pe = controledcc.GetComponent<PositionEnemies>();
-            pe.transformPosition.GetComponent<NavMeshAgent>().enabled = playerControlled;
+            //pe.transformPosition.GetComponent<NavMeshAgent>().enabled = playerControlled;
             pe.transformPosition.GetComponent<FieldOfView>().enabled = playerControlled;
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
             controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
             controledcc.GetComponent<Animator>().SetBool("Run", enemyControlled);
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("spot", playerControlled);
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("event", playerControlled);
+            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().Rebind();
+            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visible = enemyControlled;
+
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("spot",false);
+            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("event", false);
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isChasing", false);
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isInvestigating", false);
 
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = null;
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visibleTargets.Clear();
-            
+
         }
-       
+
 
         StartCoroutine(camC.CameraShakeTiming(forceOfShake / 2, forceOfShake / 2, .25f));
         canMindM = playerControlled;
@@ -313,7 +326,7 @@ public class MindPower : MonoBehaviour {
                 anim.SetBool("isPossessing", true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Locked;
-                normalCam.enabled = false;
+                normalCamGO.SetActive(false);
                 if (isAiming2() == true && possParticles == null)
                 {
                     possParticles = Instantiate(Resources.Load("ParticlePossession"), currentHit.transform.position, Quaternion.identity) as GameObject;
@@ -332,7 +345,7 @@ public class MindPower : MonoBehaviour {
                 anim.SetBool("isPossessing", false);
                 Cursor.visible = false;
                 //Cursor.lockState = CursorLockMode.None;
-                normalCam.enabled = true;
+                normalCamGO.SetActive(true);
 
 
             }

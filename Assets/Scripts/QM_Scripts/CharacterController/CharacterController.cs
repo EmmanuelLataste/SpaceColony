@@ -16,7 +16,12 @@ public class CharacterController : Flammable {
     [Header("Jump")]
     [ SerializeField]
     float jump;
+    [SerializeField] float groundRadius;
+    [SerializeField] Vector3 groundPosition;
     public float groundDistance;
+    [SerializeField] LayerMask groundMask;
+    [SerializeField] Collider[] checkGround;
+    bool groundIsChecked;
 
     [Header("Move")]
 
@@ -76,7 +81,7 @@ public class CharacterController : Flammable {
     public float speedPush;
     [SerializeField] float health;
 
-    bool isCrouch;
+    public bool isCrouch;
 
     [SerializeField] bool canSneak;
     [SerializeField] bool canPickUp;
@@ -107,8 +112,9 @@ public class CharacterController : Flammable {
 
      public void Update()
     {
+        isGrounded();
         Attack();
-        if (isControlled == true)
+        if (isControlled == true && groundIsChecked == true)
         {
             horizontal = Input.GetAxis("Horizontal"); // On stocke les valeurs du joystick gauche dans deux variables ( valeurs entre -1 et 1)
             vertical = Input.GetAxis("Vertical");
@@ -205,7 +211,7 @@ public class CharacterController : Flammable {
 
     void Movements()
     {
-        if (isPicking == false && canMove == true )
+        if ( canMove == true)
         {
             if (Input.GetAxis("Fire2") == 0 && Input.GetButton("Fire2") == false || MindPower.isMindManipulated == true)
             {
@@ -241,7 +247,7 @@ public class CharacterController : Flammable {
             {
                 if (MindPower.isMindManipulated == false)
                 {
-                    Debug.Log("F1");
+
                     anim.SetBool("Run", false);
                     transform.rotation = Quaternion.Euler(new Vector3(0, camZoom.transform.rotation.eulerAngles.y, 0));
                     positionToMove = transform.position;
@@ -259,7 +265,7 @@ public class CharacterController : Flammable {
     
     void Jump()
     {
-        if (isGrounded() == true) // Si la méthode en dessous est vrai, donc si le rayon touche le sol
+        if (groundIsChecked == true) // Si la méthode en dessous est vrai, donc si le rayon touche le sol
         {
             if (Input.GetButtonDown("Jump")) // Si on appuit sur Jump
             {
@@ -426,7 +432,7 @@ public class CharacterController : Flammable {
     void AttackAnimStop()
     {
         anim.SetBool("Attack", false);
-        Debug.Log("Hello");
+
     }
 
     void AttackEventStop()
@@ -465,7 +471,12 @@ public class CharacterController : Flammable {
                 if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
                 {
                     hitCollider.GetComponent<Life>().Damages(attackDamage);
-
+                    if (hitCollider.GetComponent<PositionEnemies>() != null && hitCollider.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target == null)
+                    {
+                        hitCollider.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = gameObject;
+                        hitCollider.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visible = true;
+                    }
+                    
                 }
 
             }
@@ -483,6 +494,8 @@ public class CharacterController : Flammable {
             Gizmos.DrawSphere(attackPosition.transform.position, attackRadius);
            
         }
+
+       // Gizmos.DrawSphere(transform.position + groundPosition, groundRadius);
     }
 
     
@@ -519,18 +532,27 @@ public class CharacterController : Flammable {
         return true;
     }
 
-    bool isGrounded() // Une méthode renvoyant un booléan.
+    void isGrounded() // Une méthode renvoyant un booléan.
     {
 
-        RaycastHit hit;
-        Debug.DrawRay(transform.position, -transform.up * groundDistance, Color.red); // Permet de voir le ray dans la scène lorsque c'est lancé.
-        if (Physics.Raycast(transform.position, -transform.up, out hit, groundDistance))
-        // Si un rayon de 2f partant la position du player, allant vers le sol( groundDistance) touche un objet ayant le calque " ground "...
+        checkGround = Physics.OverlapSphere(transform.position +  groundPosition, groundRadius, groundMask);
+        if (checkGround.Length != 0)
+
+        {
+            groundIsChecked = true;
+            
+        }
+
+
+        else
         {
             
-            return true; //Alors on renvoit Vrai
+            anim.Rebind();
+            groundIsChecked = false;
         }
-        return false;
+
+        
+
 
     }
 

@@ -93,7 +93,7 @@ AnimatorController:
     m_Mask: {fileID: 31900000, guid: 5640f4f56eeacee42a4963f613bd1012, type: 2}
     m_Motions: []
     m_Behaviours: []
-    m_BlendingMode: 0
+    m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 1
     m_IKPass: 0
@@ -105,7 +105,7 @@ AnimatorController:
     m_Mask: {fileID: 31900000, guid: 5640f4f56eeacee42a4963f613bd1012, type: 2}
     m_Motions: []
     m_Behaviours: []
-    m_BlendingMode: 0
+    m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 1
     m_IKPass: 0
@@ -114,10 +114,10 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Attack Layer
     m_StateMachine: {fileID: 1107589935288446482}
-    m_Mask: {fileID: 31900000, guid: 5640f4f56eeacee42a4963f613bd1012, type: 2}
+    m_Mask: {fileID: 31900000, guid: d23e81fe016218841beb9d96b646b677, type: 2}
     m_Motions: []
     m_Behaviours: []
-    m_BlendingMode: 1
+    m_BlendingMode: 0
     m_SyncedLayerIndex: -1
     m_DefaultWeight: 1
     m_IKPass: 0
