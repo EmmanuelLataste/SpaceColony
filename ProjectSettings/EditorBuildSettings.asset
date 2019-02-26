@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/QM_Scenes/QM_Menu.unity
     guid: ed723da37532ffd4aa8f75f2939f3012
   - enabled: 1
-    path: Assets/Scenes/Tutorial Scene Finale.unity
-    guid: aea3da740ed5b9d4f80c836c8a89d551
+    path: Assets/Scenes/QM_Scenes/QM_MainScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}

@@ -20,24 +20,26 @@ public class EntityAI : MonoBehaviour {
 
     //Patrol behaviour
     public NavMeshAgent entityAgent;
+    public float beginAISpeed;
     public bool isReversed = false;
     public Transform[] waypoints;
 
     //Investigate behaviour
     private IEnumerator coroutine;
-    [SerializeField] float investigateTime = 1.0f;
-    [SerializeField] float approachTime = 3.0f;
-    [SerializeField] float suspectTime = 5.0f;
+    [SerializeField] float investigateTime;
+    [SerializeField] float approachTime;
+    [SerializeField] float suspectTime;
     //See EditorGUI 
-    public static bool typePatrol = true;
+    public bool typePatrol;
+    public bool isMoving = true;
 
     public List<Transform> visibleTargets = new List<Transform>();
-    
+
 
     //TEST
     private EntityClass entityT;
     [SerializeField] EntitySO eSO;
-    
+    [SerializeField] public GameObject linkedEntity;
 
     //See how to implement scrolling menu to choose the type of entity, check these instructions: https://docs.unity3d.com/ScriptReference/EditorGUILayout.Toggle.html
     void OnInspectorGUI() {
@@ -61,14 +63,10 @@ public class EntityAI : MonoBehaviour {
         target = GameObject.FindWithTag("Player");
         anim = gameObject.GetComponent<Animator>();
         visibleTargets = gameObject.GetComponent<FieldOfView>().visibleTargets;
-
-        coroutine = _Investigate(investigateTime, anim);
         
-        if (typePatrol) { 
-            anim.SetBool("typePatrol", true);
-        } else if (!typePatrol) {
-            anim.SetBool("typePatrol", false);
-        }
+        coroutine = _Investigate(investigateTime, anim);
+        beginAISpeed = entityAgent.speed;
+        
 
         //TEST
         //entityT = new EntityClass(eSO.typeName, eSO.isPatrolling, eSO.isBig);
@@ -76,7 +74,22 @@ public class EntityAI : MonoBehaviour {
 
 
     void Update() {
-                
+        if (typePatrol)
+        {
+            anim.SetBool("typePatrol", true);
+        }
+        else if (!typePatrol)
+        {
+            anim.SetBool("typePatrol", false);
+        }
+
+        if (isMoving == false)
+        {
+            entityAgent.speed = 0;
+
+        }
+
+       
     }
 
     public void Suspect() {
@@ -85,6 +98,16 @@ public class EntityAI : MonoBehaviour {
         }
         
         StartCoroutine(_Approach(approachTime, anim));       
+    }
+
+    public void Suspicious2()
+    {
+        StartCoroutine(_Suspect(suspectTime, anim, false));
+    }
+
+    public void Suspicious()
+    {
+        StartCoroutine(_Suspect(suspectTime, anim, true));
     }
 
     public void Investigate() {
@@ -112,19 +135,25 @@ public class EntityAI : MonoBehaviour {
 
         Debug.Log(visibleTargets[0].transform.position);
         yield return new WaitForSeconds(ApproachTime);
-        StartCoroutine(_Suspect(suspectTime, anim));       
+        StartCoroutine(_Suspect(suspectTime, anim, true));       
     }
 
-    IEnumerator _Suspect(float SuspectTime, Animator animator) {
-        Debug.Log("SuspectStart");
+    IEnumerator _Suspect(float SuspectTime, Animator animator, bool investigate) {
 
+        
         inSuspect = true;
-        entityAgent.isStopped = true;
+       entityAgent.isStopped = true;
         yield return new WaitForSeconds(SuspectTime);
+        Debug.Log("suspi2");
+       
         entityAgent.isStopped = false;
-
+        animator.SetBool("isInvestigating", investigate);
+        animator.SetBool("targetVisible", false);
         animator.SetBool("targetAudible", false);
-        Debug.Log("SuspectEnd");
+        animator.SetBool("isChecking", !investigate);
+
+
+        yield return null;
     }
 
 

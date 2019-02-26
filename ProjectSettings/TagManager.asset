@@ -13,6 +13,7 @@ TagManager:
   - Rock
   - Cannister
   - SoundSource
+  - Insect
   layers:
   - Default
   - TransparentFX
@@ -30,8 +31,8 @@ TagManager:
   - Pickable
   - RagDoll
   - SoundSource
-  - 
-  - 
+  - Pushable
+  - Explosive
   - 
   - 
   - 
