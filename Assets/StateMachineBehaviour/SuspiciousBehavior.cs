@@ -61,20 +61,20 @@ public class SuspiciousBehavior : StateMachineBehaviour {
         animator.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
         if (visibleTargets.Count != 0 && animator.GetBool("event") == true )
         {
-            animator.transform.LookAt(visibleTargets[0].gameObject.transform);
+            //animator.transform.LookAt(visibleTargets[0].gameObject.transform);
             animator.gameObject.GetComponent<FieldOfView>().target = visibleTargets[0].gameObject;
 
         }
 
         else if (audibleTargets.Count != 0 && visibleTargets.Count == 0 && animator.GetBool("event") == true)
         {
-            animator.transform.LookAt(audibleTargets[0].gameObject.transform);
+            //animator.transform.LookAt(audibleTargets[0].gameObject.transform);
             animator.gameObject.GetComponent<FieldOfView>().target = audibleTargets[0].gameObject;
         }
 
         else if (fov.target == true && animator.GetBool("event") == true)
         {
-            animator.transform.LookAt(fov.target.gameObject.transform);
+            //animator.transform.LookAt(fov.target.gameObject.transform);
         }
        
     }

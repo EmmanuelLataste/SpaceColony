@@ -30,7 +30,8 @@ public class EntityAI : MonoBehaviour {
     [SerializeField] float approachTime;
     [SerializeField] float suspectTime;
     //See EditorGUI 
-    public static bool typePatrol;
+    public bool typePatrol;
+    public bool isMoving = true;
 
     public List<Transform> visibleTargets = new List<Transform>();
 
@@ -80,6 +81,12 @@ public class EntityAI : MonoBehaviour {
         else if (!typePatrol)
         {
             anim.SetBool("typePatrol", false);
+        }
+
+        if (isMoving == false)
+        {
+            entityAgent.speed = 0;
+
         }
 
        

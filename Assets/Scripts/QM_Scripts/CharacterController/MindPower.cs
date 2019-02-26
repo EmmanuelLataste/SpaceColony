@@ -44,8 +44,10 @@ public class MindPower : MonoBehaviour {
     bool isAlive;
     Collider[] contactControl;
     bool isContactControl;
+    Rippleeffect re;
     private void Start()
     {
+        re = cameraMain.GetComponent<Rippleeffect>();
         normalCamGO = normalCam.gameObject;
         zoomCamGO = zoomCam.gameObject;
         anim = GetComponent<Animator>();
@@ -65,8 +67,8 @@ public class MindPower : MonoBehaviour {
 
     void Update()
     {
-        
 
+       
         Control();
         ContactControl();
         
@@ -259,7 +261,7 @@ public class MindPower : MonoBehaviour {
 
         StartCoroutine(camC.CameraShakeTiming(forceOfShake / 2, forceOfShake / 2, .25f));
         canMindM = playerControlled;
-        
+        re.RippleEff(transform, 10, .9f);
 
 
     }
@@ -275,11 +277,13 @@ public class MindPower : MonoBehaviour {
 
             if (isAiming2() == true && isFire2Triggered() == true)
             {
+                RippleEffect();
                 if ( isF1InUse == false)
                 {
   
                     timer = Time.time + timerPossess;
                     camZC.CameraShake(forceOfShake, forceOfShake);
+                    
                     isF1InUse = true;
                 }
 
@@ -296,7 +300,7 @@ public class MindPower : MonoBehaviour {
             else if (isAiming2() == false && isMindManipulated == false)
             {
 
-
+                
                 timer = Time.time + timerPossess;
                 camZC.CameraShake(0, 0);
             }
@@ -307,6 +311,7 @@ public class MindPower : MonoBehaviour {
         {
             isF1InUse = false;
             isContactControl = false;
+            timerRipple = 0;
         }
 
         else if (Input.GetButtonDown("Fire1") == true || Input.GetAxis("Fire1") > 0 && isMindManipulated == true && isF1InUse == false)
@@ -317,6 +322,13 @@ public class MindPower : MonoBehaviour {
             
     }
 
+    float timerRipple = 0;
+    void RippleEffect()
+    {
+        
+        timerRipple += Time.deltaTime * 5;
+        re.RippleEff(transform, timerRipple, .9f);
+    }
     void Fire2()
     {
         if (isMindManipulated == false)
@@ -364,6 +376,7 @@ public class MindPower : MonoBehaviour {
             return true;
 
         }
+
         return false;
     }
 

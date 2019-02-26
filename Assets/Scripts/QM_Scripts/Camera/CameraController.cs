@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     }
     public static CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
+    CinemachineFramingTransposer camTranspo;
     public Camera camNonVirtual;
 
     private float horizontal2;
@@ -57,15 +58,27 @@ public class CameraController : MonoBehaviour
 
     Transform followMM;
 
-
+    [SerializeField] float smooth;
+    Vector3 dollyDir;
+    [SerializeField] float maxDist;
+    [SerializeField] float minDist;
+    [SerializeField] float distance;
+    [SerializeField] LayerMask camFrontMask;
     public LayerMask layerMask;
 
     public static bool isControllerConnected;
+    private void Awake()
+    {
+        dollyDir = transform.localPosition.normalized;
+        distance = transform.localPosition.magnitude;
+    }
+
     private void Start()
     {
         saveColliderHits = hits;
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        camTranspo = cam.GetCinemachineComponent<CinemachineFramingTransposer>();
         transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
         followMM = player.transform;
     }
@@ -78,7 +91,8 @@ public class CameraController : MonoBehaviour
         //RotationCam2();
         RotationCam();
         //StartCoroutine(ReturnBehindPlayer());
-        CameraRay2();
+        //CameraRay2();
+        CameraFrontObjects();
         CameraMouse();
 
 
@@ -323,6 +337,65 @@ public class CameraController : MonoBehaviour
         camNoise.m_FrequencyGain = 0;
         yield return null;
     }
+    [SerializeField] CinemachineVirtualCamera secondCamNormal;
+    [SerializeField] bool isActivatedCam;
+    bool isClampCam;
+    Vector3 posCamBeforeClamp;
+    void CameraFrontObjects()
+    {
+
+
+        if (isActivatedCam == true)
+        {
+            Debug.DrawLine(transform.position, cam.m_Follow.transform.position);
+            Vector3 desiredPos = transform.TransformPoint(dollyDir * maxDist);
+
+            if (Physics.Linecast(secondCamNormal.transform.position, cam.m_Follow.transform.position, out hit, camFrontMask))
+            {
+                if (isClampCam == false)
+                {
+                    posCamBeforeClamp = transform.position;
+                    isClampCam = true;
+
+                }
+                Debug.Log(hit.collider.name);
+                distance = Mathf.Clamp(hit.distance, minDist, maxDist);
+
+            }
+
+            else
+            {
+                distance = maxDist;
+            }
+            //else if (Physics.Linecast(transform.position, posCamBeforeClamp, out hit, camFrontMask) && !Physics.Linecast(transform.position, cam.m_Follow.transform.position, out hit, camFrontMask))
+            //{
+            //    distance = maxDist;
+            //}
+            camTranspo.m_CameraDistance = Mathf.Lerp(camTranspo.m_CameraDistance, distance, Time.deltaTime * smooth);
+        }
+        
+    }
+
+
+    //void CameraFrontObjects()
+    //{
+    //    Debug.DrawLine(transform.position, player.transform.position);
+    //    Vector3 desiredPos = transform.TransformPoint(dollyDir * maxDist);
+
+    //    if(Physics.Linecast(transform.position, cam.m_Follow.transform.position, out hit, camFrontMask ))
+    //    {
+    //        Debug.Log(hit.collider.name);
+    //        distance = Mathf.Clamp(hit.distance, minDist, maxDist);
+
+    //    }
+
+    //    else
+    //    {
+    //        distance = Mathf.Lerp(camTranspo.m_CameraDistance, maxDist, Time.deltaTime * smooth) ;
+    //    }
+    //    camTranspo.m_CameraDistance = Mathf.Lerp(camTranspo.m_CameraDistance, distance, Time.deltaTime * smooth);
+    //}
+
     Collider currentHit;
     bool isSaveColliderHits;
    

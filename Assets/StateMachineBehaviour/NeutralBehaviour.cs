@@ -51,15 +51,21 @@ public class NeutralBehaviour : StateMachineBehaviour {
         //ToNextWaypoint();
         if (waypoints.Length == 0)
         {
-            EntityAI.typePatrol = false;
+
+            entityAI.typePatrol = false;
         }
 
-        else EntityAI.typePatrol = true;
+        else if (waypoints.Length != 0)
+        {
+
+            entityAI.typePatrol = true;
+        }
+
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-     
+       
 
         if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true)
         {

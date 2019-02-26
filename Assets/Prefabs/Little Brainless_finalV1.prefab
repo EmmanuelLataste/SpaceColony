@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 95036048333099586}
   - component: {fileID: 33346259176033498}
   - component: {fileID: 65566697799789954}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: NM_SB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1076,7 +1076,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4862824274661882}
-  m_Layer: 11
+  m_Layer: 15
   m_Name: Little Brainless_finalV1
   m_TagString: Little Brainless
   m_Icon: {fileID: 0}
@@ -1326,7 +1326,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4910969004936114}
-  - {fileID: 4672684368930110}
   m_Father: {fileID: 4080488447887834}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 8.988882, y: -0.75628394, z: 0.47309986}
@@ -1773,12 +1772,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1326756793277334}
-  m_LocalRotation: {x: 0.031444896, y: 0.92310655, z: -0.38324055, w: 0.0034858803}
-  m_LocalPosition: {x: -0.0074, y: 0.0191, z: 0.0177}
-  m_LocalScale: {x: 0.051892, y: 0.07783783, z: 0.051891997}
+  m_LocalRotation: {x: 0.002278361, y: 0.7078455, z: 0.0030327993, w: 0.70635724}
+  m_LocalPosition: {x: -0.077, y: 1.329, z: -0.266}
+  m_LocalScale: {x: 0.48000148, y: 0.7199999, z: 0.48000157}
   m_Children: []
-  m_Father: {fileID: 4150411016411970}
-  m_RootOrder: 1
+  m_Father: {fileID: 4935148152410260}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4682061139672532
 Transform:
@@ -2140,6 +2139,7 @@ Transform:
   - {fileID: 4242065054397590}
   - {fileID: 4495675522643134}
   - {fileID: 4487065323445584}
+  - {fileID: 4672684368930110}
   m_Father: {fileID: 4862824274661882}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2701,12 +2701,15 @@ MonoBehaviour:
   entityAgent: {fileID: 195129581861667310}
   beginAISpeed: 0
   isReversed: 0
-  waypoints: []
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
   investigateTime: 2.5
   approachTime: 3
   suspectTime: 1.5
-  visibleTargets:
-  - {fileID: 0}
+  typePatrol: 0
+  isMoving: 1
+  visibleTargets: []
   eSO: {fileID: 11400000, guid: a1d5ac623ddebb04fa7a533610f598fb, type: 2}
   linkedEntity: {fileID: 1748508989558330}
 --- !u!114 &114699774572714072
@@ -2734,8 +2737,9 @@ MonoBehaviour:
     m_Bits: 46391
   checkGround: []
   beginSpeed: 8.5
-  speed: 6
+  speed: 5
   smoothSpeedPlayerMove: 0.8
+  beginAcceleration: 0
   isPicked: 0
   hangingObjectPosition: {fileID: 1972306243166956}
   otherGameObject: {fileID: 0}
@@ -2750,6 +2754,7 @@ MonoBehaviour:
   attackRadius: 0.5
   attackDamage: 1
   attackOffset: 0.75
+  forceShakeAttack: 2
   isAlive: 1
   dodgeTimer: 0
   dodgePower: 0
@@ -2759,6 +2764,7 @@ MonoBehaviour:
   lengthDetection: 1
   speedPush: 1
   health: 10
+  isCrouch: 0
   canSneak: 0
   canPickUp: 0
   canAttack: 1
@@ -2767,6 +2773,12 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   attackCollider: []
   isControlled: 0
+  throwCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!135 &135797036190338878
 SphereCollider:
   m_ObjectHideFlags: 1

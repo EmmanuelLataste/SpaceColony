@@ -91,10 +91,10 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
 
                 else
                 {
-                    animLinkedEntity.SetBool("Walk", false);
+                    animLinkedEntity.SetBool("Walk", true);
                     animLinkedEntity.SetBool("Run", false);
                     animLinkedEntity.SetBool("Attack", true);
-                    animator.transform.LookAt(fov.target.transform);
+                    //animator.transform.LookAt(fov.target.transform);
                     entityAgent.destination = target.transform.position;
                     entityAgent.isStopped = false;
                 }

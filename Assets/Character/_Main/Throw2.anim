@@ -63690,7 +63690,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0.93333334
+  - time: 0.76666665
     functionName: ThrowEvent
     data: 
     objectReferenceParameter: {fileID: 1364336297045104, guid: 78e11e815650a9f4bb7634102d4d2a2b,

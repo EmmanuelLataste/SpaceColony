@@ -51,6 +51,8 @@ public class FieldOfView : MonoBehaviour {
     NavMeshAgent entityAgent;
     [SerializeField] GameObject characterControllerObject;
     bool onceTarget;
+    Vector3 lookPos;
+    Quaternion rotation;
 
     void Start() {
         anim = GetComponent<Animator>();
@@ -70,7 +72,14 @@ public class FieldOfView : MonoBehaviour {
         DrawFieldOfView();
 
         if (target != null && anim.GetBool("isInvestigating") == false)
-        transform.LookAt(target.transform);
+        {
+            lookPos = target.transform.position - transform.position;
+            lookPos.y = 0;
+            rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 1000);
+
+        }
+        //transform.LookAt(target.transform);
 
         if (visibleTargets.Count != 0)
         {

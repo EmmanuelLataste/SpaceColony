@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 54868529193714938}
   - component: {fileID: 114076766800191136}
   - component: {fileID: 75634395981480296}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Cannister
   m_TagString: Cannister
   m_Icon: {fileID: 0}
@@ -133,6 +133,9 @@ MonoBehaviour:
   timer2: 0.5
   explosionPrefab: {fileID: 1925832842001016, guid: 3969d7dea1e005c49a53b3d35de1b84d,
     type: 2}
+  maskExplosive:
+    serializedVersion: 2
+    m_Bits: 2048
   isFlying: 0
   timerBoom: 3
   timerFly: 1

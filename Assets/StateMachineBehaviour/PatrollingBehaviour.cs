@@ -49,28 +49,37 @@ public class PatrollingBehaviour : StateMachineBehaviour {
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        entityAgent.isStopped = false;
+        if (entityAI.isMoving == true)
+        {
+            entityAgent.isStopped = false;
 
-        animLinkedEntity.SetBool("Walk", true);
-        if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true) {
+            animLinkedEntity.SetBool("Walk", true);
+            if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true)
+            {
 
-            animator.SetBool("spot", true);
-            animator.SetBool("event", true);
+                animator.SetBool("spot", true);
+                animator.SetBool("event", true);
+            }
+
+            if (animator.GetComponent<FieldOfView>().audible == true)
+            {
+                animator.SetBool("targetAudible", true);
+            }
+            else
+            {
+                animator.SetBool("targetAudible", false);
+            }
+
+            if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f)
+            {
+                ToNextWaypoint();
+
+            }
+
+
+            entityAgent.speed = entityAI.beginAISpeed;
         }
-
-        if (animator.GetComponent<FieldOfView>().audible == true) {
-            animator.SetBool("targetAudible", true);
-        } else {
-            animator.SetBool("targetAudible", false);
-        }
-
-        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
-            ToNextWaypoint();
-            
-        }
-
-
-        entityAgent.speed = entityAI.beginAISpeed;
+    
         
     }
 

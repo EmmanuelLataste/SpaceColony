@@ -1,6 +1,7 @@
 ﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 
 public class CharacterController : Flammable {
@@ -30,6 +31,7 @@ public class CharacterController : Flammable {
     float smoothPlayerMove;
     public float smoothSpeedPlayerMove;
     Vector3 positionToMove;
+    public float beginAcceleration;
 
     [Header("PickObjects")]
     bool isPickable = false;
@@ -59,6 +61,7 @@ public class CharacterController : Flammable {
     [SerializeField] float attackRadius;
     [SerializeField] float attackDamage;
     [SerializeField] float attackOffset;
+    [SerializeField] float forceShakeAttack;
     float attackTimer;
 
     Rigidbody rb;
@@ -99,19 +102,28 @@ public class CharacterController : Flammable {
 
     bool isPicking;
 
+    [SerializeField] AnimationCurve throwCurve;
+    CameraController camController;
+
+
     private void Start()
     {
         //tp = lineRenderer.GetComponent<ThrowPrediction>();
+ 
         beginSpeed = speed;
+        if (gameObject.tag != "Player")
+        beginAcceleration = GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().acceleration;
         anim = GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
+        camController = cam.GetComponent<CameraController>();
     }
 
      public void Update()
     {
+   
         isGrounded();
         Attack();
         if (isControlled == true && groundIsChecked == true)
@@ -280,7 +292,7 @@ public class CharacterController : Flammable {
     }
     void PickUpEvent()
     {
-        
+        otherGameObject.GetComponent<ObjectSound>().enabled = true;
         isAxisF1InUse = true;
         otherGameObject.transform.position = hangingObjectPosition.transform.position;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -322,10 +334,10 @@ public class CharacterController : Flammable {
     void ThrowEvent()
 
     {
-        
+     
         isPicked = false;
         //this.transform.GetComponent<CharacterController>().speed *= 3;
-        
+
         if (otherGameObject.GetComponent<Goo>() != null)
         {
             otherGameObject.GetComponent<Goo>().isGooAble = true;
@@ -334,15 +346,24 @@ public class CharacterController : Flammable {
         otherGameObject.transform.parent = null;
         otherGameObject.GetComponent<Rigidbody>().isKinematic = false;
         otherGameObject.GetComponent<MeshCollider>().isTrigger = false;
-        if (otherGameObject.gameObject.tag != "Wood") otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
+        //if (otherGameObject.gameObject.tag != "Wood")
+            
 
         otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
         isThrowing = true;
         throwStrengthX = 0;
         throwStrengthY = 0;
+        StartCoroutine(ThrowDelay());
 
 
+    }
+
+    IEnumerator ThrowDelay()
+    {
+        yield return new WaitForSeconds(.5f);
+        otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
+        yield return null;
     }
 
     private void Throw()
@@ -354,6 +375,7 @@ public class CharacterController : Flammable {
 
             if (Input.GetKeyUp(KeyCode.E) || throwStrengthX >= 500 || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
+                
                 if (isAxisF1InUse == true)
                 {
                     if (throwStrengthX >= 50)
@@ -444,6 +466,7 @@ public class CharacterController : Flammable {
     void AttackEvent()
     {
         attackDuration = true;
+
         
     }
     
@@ -471,6 +494,7 @@ public class CharacterController : Flammable {
                 if (hitCollider.gameObject.layer == LayerMask.NameToLayer("Entity") && hitCollider.gameObject != this.gameObject && hitCollider is CapsuleCollider)
                 {
                     hitCollider.GetComponent<Life>().Damages(attackDamage);
+                    StartCoroutine(camController.CameraShakeTiming(forceShakeAttack, .25f, .15f));
                     if (hitCollider.GetComponent<PositionEnemies>() != null && hitCollider.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target == null)
                     {
                         hitCollider.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = gameObject;
@@ -568,6 +592,7 @@ public class CharacterController : Flammable {
                 rb.velocity = new Vector3(0, 0, 0);
                 if (GetComponent<Ignitable>() == true)
                 {
+                    isBurning = false;
                     Destroy(GetComponent<Ignitable>().particleFires);
                     Destroy(GetComponent<Ignitable>());
                 }

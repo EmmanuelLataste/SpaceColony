@@ -16,6 +16,7 @@ public class Explosive : MonoBehaviour {
     public float timer2 = .5f;
     public GameObject explosionPrefab;
     CameraController camController;
+    [SerializeField] LayerMask maskExplosive;
 
     private void Start()
     {
@@ -65,8 +66,8 @@ public class Explosive : MonoBehaviour {
         if (isBoom == false)
         {
             CameraController.cam.GetComponent<CameraController>().CameraShake(1, 1);
-            littleCircle = Physics.OverlapSphere(transform.position, radiusHighDamage);
-            bigCircle = Physics.OverlapSphere(transform.position, radiusLowDamage);
+            littleCircle = Physics.OverlapSphere(transform.position, radiusHighDamage, maskExplosive );
+            bigCircle = Physics.OverlapSphere(transform.position, radiusLowDamage, maskExplosive);
 
             InTheBoom();
             isBoom = true;
@@ -80,6 +81,7 @@ public class Explosive : MonoBehaviour {
      
         yield return new WaitForSeconds(1f);
         CameraController.cam.GetComponent<CameraController>().CameraShake(0, 0);
+        if (gameObject != null)
         Destroy(gameObject);
         yield return null;
        
@@ -93,7 +95,7 @@ public class Explosive : MonoBehaviour {
        foreach(Collider deadCollid in littleCircle)
         {
 
-            if (deadCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && deadCollid is CapsuleCollider)
+            if (deadCollid is CapsuleCollider)
             {
                 deadCollid.GetComponent<Life>().Damages(50);
                 deadCollid.GetComponent<Rigidbody>().AddExplosionForce(180000, transform.position, 10);
@@ -103,7 +105,7 @@ public class Explosive : MonoBehaviour {
 
         foreach (Collider hurtCollid in bigCircle)
         {
-            if (hurtCollid.gameObject.layer == LayerMask.NameToLayer("Entity") && hurtCollid is CapsuleCollider)
+            if ( hurtCollid is CapsuleCollider)
             {
                
                 hurtCollid.GetComponent<Life>().Damages(Mathf.Round((-3 * Vector3.Distance(transform.position, hurtCollid.transform.position) + 30) * 10) / 10) ;

@@ -88,6 +88,7 @@ public class BigBrainless : MonoBehaviour {
                 
                 isPushing = true;
                 distance =  Vector3.Distance(pushCollider[0].transform.position, transform.position);
+                pushCollider[0].transform.Find("Rock_Renderer").transform.rotation = transform.rotation;
             }
            
            
@@ -95,8 +96,8 @@ public class BigBrainless : MonoBehaviour {
                 hitDetectionPositionToMove = pushCollider[0].transform.position + transform.forward * speedPush * Time.deltaTime;
                 positionToMove = transform.position + transform.forward * speedPush * Time.deltaTime;
                 pushCollider[0].GetComponent<Rigidbody>().MovePosition(hitDetectionPositionToMove);
-                pushCollider[0].transform.Find("Rock_Renderer").transform.Rotate(Vector3.forward, Space.Self);
-
+               
+            pushCollider[0].transform.Find("Rock_Renderer").transform.Rotate(-transform.forward);
 
             //rb.MovePosition(positionToMove);
             //pushCollider[0].transform.(transform.forward);

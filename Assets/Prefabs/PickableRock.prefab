@@ -28,7 +28,7 @@ GameObject:
   - component: {fileID: 114730009325115146}
   m_Layer: 13
   m_Name: PickableRock
-  m_TagString: SoundSource
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,9 +39,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1982943923529792}
-  m_LocalRotation: {x: 0.5990239, y: -0, z: -0, w: 0.8007311}
-  m_LocalPosition: {x: 0.21181536, y: 9.946156, z: 18.302626}
-  m_LocalScale: {x: 22.545498, y: 22.545498, z: 22.545498}
+  m_LocalRotation: {x: 0.59902394, y: -0, z: -0, w: 0.8007312}
+  m_LocalPosition: {x: -6.579778, y: -2.7040465, z: -24.238247}
+  m_LocalScale: {x: 22.545498, y: 22.545494, z: 22.545494}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -140,19 +140,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa822878432b1c489266dfafa1c11f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transformObjectInHand: {fileID: 0}
 --- !u!114 &114730009325115146
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1982943923529792}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e8dc7f7f5a8cab45ae726f3d1203bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   receiversMask:
     serializedVersion: 2
-    m_Bits: 2048
-  soundRadius: 15
+    m_Bits: 32768
+  soundRadius: 10
+  littleSoundRadius: 0
+  bigSoundRadius: 0
   soundReceivers: []
+  soundTransmitter: []
+  isObject: 1
+  isControlledEntity: 0

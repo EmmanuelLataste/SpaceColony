@@ -43,7 +43,8 @@ public class ObjectSound : MonoBehaviour {
                 {
                 collider.GetComponent<FieldOfView>().audibleTargets.Add(transform);
                 collider.GetComponent<FieldOfView>().audible= true;
-                    Debug.Log("TOUYIP");
+                StartCoroutine(WaitDisableComponent());
+                Debug.Log("TOUYIP");
                 }
 
 
@@ -56,9 +57,19 @@ public class ObjectSound : MonoBehaviour {
             soundTransmitter = Physics.OverlapSphere(transform.position, soundRadius, receiversMask);
 
             isTransmitting = false;
+ 
+            
+            
         }
 
         else soundTransmitter = new Collider[0];
+    }
+
+    IEnumerator WaitDisableComponent()
+    {
+        yield return new WaitForSeconds(1.5f);
+        this.GetComponent<ObjectSound>().enabled = false;
+        yield return null;
     }
 
 
@@ -67,8 +78,8 @@ public class ObjectSound : MonoBehaviour {
     {
         if (isTransmitting == false && isObject == true)
         {
-            
 
+            
             isTransmitting = true;
         }
 
@@ -78,7 +89,7 @@ public class ObjectSound : MonoBehaviour {
     {
         foreach (Collider collider in soundTransmitter)
         {
-            if (collider.gameObject != null && collider.gameObject.GetComponent<FieldOfView>() != null && !collider.GetComponent<FieldOfView>().audibleTargets.Contains(transform))
+            if (collider != null && collider.gameObject.GetComponent<FieldOfView>() != null && !collider.GetComponent<FieldOfView>().audibleTargets.Contains(transform))
             {
                 collider.GetComponent<FieldOfView>().audibleTargets.Add(transform);
                 collider.GetComponent<FieldOfView>().audible = true;
@@ -124,7 +135,8 @@ public class ObjectSound : MonoBehaviour {
     //{
     //    Gizmos.DrawSphere(transform.position, soundRadius);
     //}
-    //private IEnumerator SoundSource() {
+    //private IEnumerator SoundSource()
+    //{
     //    gameObject.layer = 15;
     //    gameObject.tag = "SoundSource";
     //    yield return new WaitForSeconds(4f);
@@ -132,11 +144,13 @@ public class ObjectSound : MonoBehaviour {
     //    gameObject.tag = "Wood";
     //}
 
-    //public void FindReceivers() {
+    //public void FindReceivers()
+    //{
     //    soundReceivers.Clear();
     //    Collider[] receiversInRadius = Physics.OverlapSphere(transform.position, soundRadius, receiversMask);
 
-    //    if (receiversInRadius.Length > 0) {
+    //    if (receiversInRadius.Length > 0)
+    //    {
     //        StartCoroutine(SoundSource());
     //    }
     //}
