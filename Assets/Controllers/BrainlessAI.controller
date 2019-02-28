@@ -349,7 +349,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: targetDst
-    m_EventTreshold: 15
+    m_EventTreshold: 30
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102750037466580324}
   m_Solo: 0

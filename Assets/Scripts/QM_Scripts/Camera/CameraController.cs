@@ -89,6 +89,7 @@ public class CameraController : MonoBehaviour
         vertical2 = Input.GetAxis("Vertical2");
         rotationX = transform.rotation.x;
         //RotationCam2();
+
         RotationCam();
         //StartCoroutine(ReturnBehindPlayer());
         //CameraRay2();
@@ -347,6 +348,8 @@ public class CameraController : MonoBehaviour
 
         if (isActivatedCam == true)
         {
+            //secondCamNormal.transform.position = transform.position;
+            secondCamNormal.m_Follow = cam.m_Follow;
             Debug.DrawLine(transform.position, cam.m_Follow.transform.position);
             Vector3 desiredPos = transform.TransformPoint(dollyDir * maxDist);
 

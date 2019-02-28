@@ -42,6 +42,8 @@ public class BigBrainless : MonoBehaviour {
         beginSmoothRotation = GetComponent<CharacterController>().smoothRotationPlayer;
     }
 
+  
+
     private void FixedUpdate()
     {
 
@@ -107,7 +109,7 @@ public class BigBrainless : MonoBehaviour {
             
         }
 
-        else if (distance >= 4 || isPushing == true && Input.GetAxisRaw("Vertical") == 0)
+        else if (distance >= 7 || isPushing == true && Input.GetAxisRaw("Vertical") == 0)
         {
                 pushedGO = null;
                 Destroy(fj);

@@ -76,14 +76,20 @@ public class FieldOfView : MonoBehaviour {
             lookPos = target.transform.position - transform.position;
             lookPos.y = 0;
             rotation = Quaternion.LookRotation(lookPos);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 1000);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, .08f);
+
+        }
+
+        if (target != null )
+        {
+            dstToTarget = Vector3.Distance(transform.position, target.transform.position);
 
         }
         //transform.LookAt(target.transform);
 
         if (visibleTargets.Count != 0)
         {
-            dstToTarget = Vector3.Distance(transform.position, visibleTargets[0].transform.position);
+
             target = visibleTargets[0].gameObject;
         }
 

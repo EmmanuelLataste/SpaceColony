@@ -31,7 +31,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
         animator.SetBool("targetAudible", false);
 
         animLinkedEntity.Rebind();
-        animLinkedEntity.SetBool("Walk", true);
+        
         //animator.gameObject.GetComponent<FieldOfView>().visible = false;
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
@@ -46,15 +46,16 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
         //entityAgent.destination = entity.transform.position;
         if (fov.visible == false )
         {
-            if (timer > Time.time)
+            if (timer > Time.time && fov.dstToTarget > 1)
             {
+                animLinkedEntity.SetBool("Walk", true);
                 entityAgent.destination = lastKnownPos;
                
                // entityAgent.transform.LookAt(lastKnownPos);
 
             }
 
-            else
+            else if (timer <= Time.time || fov.dstToTarget <= 1)
             {
                 animator.SetBool("targetVisible", false);
                 animator.SetBool("targetFalse", false);
@@ -67,7 +68,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
 
         else
         {
-            if (fov.visibleTargets.Count != 0)
+            if (fov.visibleTargets.Count != 0 )
             {
                 animator.SetBool("isChasing", true);
 

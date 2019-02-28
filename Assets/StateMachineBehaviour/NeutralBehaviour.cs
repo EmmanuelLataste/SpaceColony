@@ -65,7 +65,7 @@ public class NeutralBehaviour : StateMachineBehaviour {
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       
+        animLinkedEntity.SetBool("Run", false);
 
         if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true)
         {
