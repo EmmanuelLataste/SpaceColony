@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4370199225270452}
   - component: {fileID: 33933264710246058}
   - component: {fileID: 23080266567592484}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rock_Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1119227594657768}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1

@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class BBTurnBackTutorial : MonoBehaviour {
 
-    [SerializeField] GameObject bigBrainless;
+    [SerializeField] GameObject player;
 
-	
+    private void Start()
+    {
+        
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
-        {
-            bigBrainless.transform.LookAt(other.transform);
-        }
+        StartCoroutine(SoundIncrease());
+
+    }
+
+    IEnumerator SoundIncrease()
+    {
+        player.GetComponent<ObjectSound>().soundRadius = 20;
+        yield return new WaitForEndOfFrame();
+        player.GetComponent<ObjectSound>().soundRadius = 0;
+        Destroy(gameObject);
     }
 }

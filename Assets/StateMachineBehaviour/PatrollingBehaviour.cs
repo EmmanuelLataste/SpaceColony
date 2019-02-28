@@ -49,6 +49,7 @@ public class PatrollingBehaviour : StateMachineBehaviour {
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animLinkedEntity.SetBool("Run", false);
         if (entityAI.isMoving == true)
         {
             entityAgent.isStopped = false;

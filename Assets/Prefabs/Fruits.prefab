@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114502053980509026}
   - component: {fileID: 54414588312982296}
   - component: {fileID: 64272602547035694}
+  - component: {fileID: 114846376670826322}
   m_Layer: 13
   m_Name: Fruits
   m_TagString: Untagged
@@ -40,7 +41,7 @@ Transform:
   m_GameObject: {fileID: 1196439885671002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.35, y: 10.1, z: 21.17}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -123,10 +124,10 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1196439885671002}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114502053980509026
 MonoBehaviour:
@@ -143,3 +144,33 @@ MonoBehaviour:
   radiusColliderGoo: 5
   timeSlow: 3
   isGooAble: 0
+  collidGround: []
+  transformObjectInHand: {fileID: 0}
+  maskGround:
+  - serializedVersion: 2
+    m_Bits: 4096
+  - serializedVersion: 2
+    m_Bits: 1
+  - serializedVersion: 2
+    m_Bits: 1024
+--- !u!114 &114846376670826322
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1196439885671002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8dc7f7f5a8cab45ae726f3d1203bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  receiversMask:
+    serializedVersion: 2
+    m_Bits: 0
+  soundRadius: 0
+  littleSoundRadius: 0
+  bigSoundRadius: 0
+  soundReceivers: []
+  soundTransmitter: []
+  isObject: 0
+  isControlledEntity: 0

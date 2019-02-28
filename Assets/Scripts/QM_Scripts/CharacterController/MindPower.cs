@@ -45,6 +45,9 @@ public class MindPower : MonoBehaviour {
     Collider[] contactControl;
     bool isContactControl;
     Rippleeffect re;
+    [SerializeField] float rangeManip;
+    float distance;
+    bool soFar;
     private void Start()
     {
         re = cameraMain.GetComponent<Rippleeffect>();
@@ -71,7 +74,25 @@ public class MindPower : MonoBehaviour {
        
         Control();
         ContactControl();
-        
+
+
+
+        Debug.Log(currentHit);
+
+        if (currentHit != null)
+        {
+            distance = Vector3.Distance(transform.position, currentHit.transform.position);
+            if (distance > rangeManip + 5)
+            {
+                soFar = true;
+                distance = 0;
+                camC.CameraShake(0, 0);
+                
+            }
+
+            else if (distance < rangeManip ) soFar = false;
+        }
+
         if (currentHit != null && currentHit.gameObject.GetComponent<Life>().isAlive == false)
         {
 
@@ -83,8 +104,28 @@ public class MindPower : MonoBehaviour {
         {
             anim.SetBool("Run", false);
         }
+        ShakeDistance();
+       
 
     }
+    float timerRipple = 0;
+    void RippleEffect()
+    {
+
+        timerRipple += Time.deltaTime * 2;
+        re.RippleEff(transform, timerRipple, .9f);
+    }
+
+    float shakeUpgrade;
+    void ShakeDistance()
+    {
+        if (distance >= rangeManip && isMindManipulated == true)
+        {
+            camC.CameraShake((1.4f / 5) * distance - 6.9f, 1f);
+
+        }
+    }
+
 
     IEnumerator TransferWhenMMDied()
     {
@@ -108,7 +149,7 @@ public class MindPower : MonoBehaviour {
 
         //else cc.canMove = true;
 
-        if (isFire1Triggered() == true)
+        if (isFire1Triggered() == true || soFar == true)
         {
             if (isMindManipulated == true && canMindM == true)
             {
@@ -118,12 +159,13 @@ public class MindPower : MonoBehaviour {
                
             else if (isMindManipulated == false && canMindM == false)
             {
-
+                currentHit = null;
                 Transfer(false, true, followPlayer);
             }
     
 
         }
+
 
         Fire1();
         Fire2();
@@ -177,7 +219,7 @@ public class MindPower : MonoBehaviour {
                 if (isMindManipulated == false && isFire2Triggered() == true)
 
                 {
-                    if (isFire1Triggered() == true)
+                    if (isFire1Triggered() == true && soFar == false)
                     {
 
                         camZC.CameraShake(forceOfShake, forceOfShake);
@@ -229,11 +271,6 @@ public class MindPower : MonoBehaviour {
 
     public void  Transfer(bool enemyControlled, bool playerControlled, Transform followTransform)
     {
-        
-        anim.SetBool("isPossessing", enemyControlled);
-        camC.Follow(followTransform);
-        normalCamGO.SetActive(true);
-        cc.isControlled = playerControlled;
         if (controledcc != null)
         {
             controledcc.isControlled = enemyControlled;
@@ -244,9 +281,13 @@ public class MindPower : MonoBehaviour {
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
             controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
-            controledcc.GetComponent<Animator>().SetBool("Run", enemyControlled);
+            controledcc.GetComponent<Animator>().SetBool("Run", false);
+
             controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().Rebind();
             controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visible = enemyControlled;
+            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = null;
+            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().targetsInViewRadius = null;
+            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visibleTargets.Clear();
 
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("spot",false);
             //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("event", false);
@@ -258,11 +299,17 @@ public class MindPower : MonoBehaviour {
 
         }
 
+        anim.SetBool("isPossessing", enemyControlled);
+        camC.Follow(followTransform);
+        normalCamGO.SetActive(true);
+        cc.isControlled = playerControlled;
 
+
+     
         StartCoroutine(camC.CameraShakeTiming(forceOfShake / 2, forceOfShake / 2, .25f));
         canMindM = playerControlled;
         re.RippleEff(transform, 10, .9f);
-
+    
 
     }
 
@@ -271,7 +318,7 @@ public class MindPower : MonoBehaviour {
     void Fire1()
     {
 
-        if (isFire1Triggered() == true && isMindManipulated == false)
+        if (isFire1Triggered() == true && isMindManipulated == false && soFar == false)
         {
             
 
@@ -319,16 +366,13 @@ public class MindPower : MonoBehaviour {
 
             isMindManipulated = false;
         }
+
+        if (soFar == true) isMindManipulated = false;
             
     }
 
-    float timerRipple = 0;
-    void RippleEffect()
-    {
-        
-        timerRipple += Time.deltaTime * 5;
-        re.RippleEff(transform, timerRipple, .9f);
-    }
+  
+
     void Fire2()
     {
         if (isMindManipulated == false)
@@ -339,7 +383,7 @@ public class MindPower : MonoBehaviour {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 normalCamGO.SetActive(false);
-                if (isAiming2() == true && possParticles == null)
+                if (isAiming2() == true && possParticles == null && soFar == false)
                 {
                     possParticles = Instantiate(Resources.Load("ParticlePossession"), currentHit.transform.position, Quaternion.identity) as GameObject;
                     possParticles.transform.parent = currentHit.transform;
