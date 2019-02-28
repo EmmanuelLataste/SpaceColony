@@ -8,6 +8,8 @@ public class Ignitable : MonoBehaviour {
     public bool isBurnable = true;
     float timer;
     float initialTimer;
+    float timerStopFire = 6;
+    float timerSF;
     float life;
     bool isOnContact;
     GameObject firePosition;
@@ -63,14 +65,14 @@ public class Ignitable : MonoBehaviour {
     {
         if (isBurnable == true)
         {
-            
+            timerSF = Time.time + timerStopFire;
             timer = Time.time + 1f;
             initialTimer = Time.time;
             isBurnable = false;
 
         }
 
-        if ( isBurnable == false && GetComponent<Life>() == true)
+        else if ( isBurnable == false && GetComponent<Life>() == true && timerSF > Time.time)
         {
 
             if (Time.time >= timer && initialTimer + 3.5f >= Time.time && isOnContact == false)
@@ -91,6 +93,14 @@ public class Ignitable : MonoBehaviour {
                 GetComponent<Life>().Damages(.75f);
                 timer = Time.time + 1f;
             }
+        }
+
+        else if (timerSF <= Time.time && isBurning == true && gameObject.tag != "Wood")
+        {
+            GetComponent<Flammable>().isBurning = false;
+            Destroy(GetComponent<Ignitable>());
+            Destroy(particleFires);
+            isBurnable = true;
         }
     }
 

@@ -5,9 +5,11 @@ using UnityEngine;
 public class Fruits : Goo {
 
     bool canExplose;
+    bool canExplose2;
     Rigidbody rb;
     bool isPicked;
     [SerializeField] Transform transformObjectInHand;
+    [SerializeField] LayerMask[] maskGround;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -40,12 +42,15 @@ public class Fruits : Goo {
 
     private void OnCollisionEnter(Collision collision)
     {
-
-            if (canExplose == true)
+        
+        if (canExplose == true && collision.gameObject.layer != LayerMask.NameToLayer("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Entity") && collision.gameObject.layer != LayerMask.NameToLayer("RagDoll"))
         {
+           
             GooToGround();
             StartCoroutine(StopGoo());
-            
+            Debug.Log("collision");
+            canExplose = false;
+                
         }
 
     }

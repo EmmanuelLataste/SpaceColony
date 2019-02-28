@@ -30,7 +30,7 @@ public class LittleRock : MonoBehaviour {
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            gameObject.GetComponent<ObjectSound>().FindReceivers();
+            //gameObject.GetComponent<ObjectSound>().FindReceivers();
         }
     }
 }

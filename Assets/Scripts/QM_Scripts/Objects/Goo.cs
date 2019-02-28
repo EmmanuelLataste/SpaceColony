@@ -16,7 +16,7 @@ public class Goo : MonoBehaviour {
     int newSpeed;
     GameObject[] gooToThingObjetcs;
     MeshRenderer mr;
-
+    [SerializeField] Collider[] collidGround;
 
     private void Update()
     {
@@ -25,15 +25,22 @@ public class Goo : MonoBehaviour {
 
     public void GooToGround()
     {
-        Collider[] collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
+        gameObject.layer = LayerMask.NameToLayer("Default");
+        collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
         foreach (Collider gooCollid in collidGround)
         {
-            if (gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity"))
+            if (gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity") )
             {
                 if (MindPower.currentHit != null && MindPower.currentHit.transform == gooCollid.transform || gooCollid.gameObject.tag == "Player")
                     gooCollid.GetComponent<CharacterController>().speed = newSpeed;
 
-                else gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().speed = newSpeed;
+                else
+
+                {
+                    gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<EntityAI>().isMoving = false;
+                    gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().Rebind();
+
+                }
 
             }
 
@@ -65,13 +72,14 @@ public class Goo : MonoBehaviour {
             }
         }
 
-        
+        Destroy(this.GetComponent<MeshRenderer>());
+
     }
 
     public IEnumerator StopGoo()
     {
         yield return new WaitForSeconds(timeSlow);
-        Collider[] collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
+        //Collider[] collidGround = Physics.OverlapSphere(transform.position, radiusColliderGoo);
         foreach (Collider gooCollid in collidGround)
         {
             if (gooCollid.gameObject.layer == LayerMask.NameToLayer("Entity"))
@@ -79,8 +87,7 @@ public class Goo : MonoBehaviour {
                 if (MindPower.currentHit != null && MindPower.currentHit.transform == gooCollid.transform || gooCollid.gameObject.tag == "Player")
                     gooCollid.GetComponent<CharacterController>().speed = gooCollid.GetComponent<CharacterController>().beginSpeed;
 
-                else gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().speed =
-                     gooCollid.GetComponent<CharacterController>().beginSpeed;
+                else gooCollid.GetComponent<PositionEnemies>().transformPosition.GetComponent<EntityAI>().isMoving = true;
 
             }
         }
