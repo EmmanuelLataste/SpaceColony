@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseCursor : MonoBehaviour {
+public class MouseCursorbitecoin : MonoBehaviour {
 
     Vector3 cursorPost;
 	// Use this for initialization
