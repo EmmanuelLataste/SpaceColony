@@ -18,7 +18,7 @@ public class LittleRock : MonoBehaviour {
 
     void PositionWhenPicked()
     {
-        if (transform.parent == true && isPicked == false)
+        if (transform.parent != null && transform.parent.gameObject.tag == "Player" && isPicked == false)
         {
 
             transform.position = transformObjectInHand.position;

@@ -52,3 +52,58 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
+  - m_From: Cam_Control
+    m_To: Cam_Normal
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.75
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: Cam_Normal
+    m_To: Cam_Control
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.752
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: Cam_Zoom
+    m_To: Cam_Control
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.75
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: Cam_Control
+    m_To: Cam_Zoom
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.75
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: '**ANY CAMERA**'
+    m_To: Cam_Normal
+    m_Blend:
+      m_Style: 1
+      m_Time: 0.75
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0

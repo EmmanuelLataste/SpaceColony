@@ -25,6 +25,8 @@ public class MindPower : MonoBehaviour {
     public Camera cameraMain;
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera zoomCam;
+    [SerializeField] TargetRotation targetRotation;
+
     GameObject normalCamGO;
     GameObject zoomCamGO;
     private bool isZoom = false;
@@ -45,11 +47,26 @@ public class MindPower : MonoBehaviour {
     Collider[] contactControl;
     bool isContactControl;
     Rippleeffect re;
-    [SerializeField] float rangeManip;
-    float distance;
+    [SerializeField]public float rangeManip;
+    public float distance;
     bool soFar;
+    [SerializeField] GameObject lineMM;
+    LineRenderer lineRendererMM;
+    [SerializeField] GameObject playerLayerAI;
+    [SerializeField] public CinemachineVirtualCamera camControl;
+    bool currentHitisAlive;
+    [SerializeField] LayerMask possessMask;
+    [SerializeField] public Collider[] rangeFeedback;
+    public Collider[] rangeFeedbackMemories;
+    bool onceRangeFeedback;
+    Transform currentHitPositionTransform;
+
+
+
     private void Start()
     {
+
+        lineRendererMM = lineMM.GetComponent<LineRenderer>();
         re = cameraMain.GetComponent<Rippleeffect>();
         normalCamGO = normalCam.gameObject;
         zoomCamGO = zoomCam.gameObject;
@@ -65,49 +82,98 @@ public class MindPower : MonoBehaviour {
     //private void OnDrawGizmos()
     //{
     //    Gizmos.color = Color.black;
-    //    Gizmos.DrawRay(cameraMain.ScreenPointToRay(Input.mousePosition));
+    //    Gizmos.DrawRay(cameraMain.ScreenPointToRay(Input.mousePosition * 100));
     //}
 
     void Update()
     {
-
-       
+        
+        isAiming2();
         Control();
         ContactControl();
-
-
-
-        Debug.Log(currentHit);
+        DiedTransfer();
 
         if (currentHit != null)
         {
-            distance = Vector3.Distance(transform.position, currentHit.transform.position);
-            if (distance > rangeManip + 5)
+            currentHitisAlive = currentHit.GetComponent<Life>().isAlive;
+            camControl.m_Follow = currentHit.Find("PositionWhenPicked").transform;
+            if (isMindManipulated == true)
             {
+                lineMM.SetActive(true);
+                lineRendererMM.SetPosition(0, transform.position + new Vector3(0, 1.5f, 0));
+                lineRendererMM.SetPosition(1, currentHit.transform.position + new Vector3(0, 1.5f, 0));
+                lineRendererMM.startWidth = 1 /distance * 2;
+                lineRendererMM.endWidth = 1 /distance * 2;
+            }
+
+
+            distance = Vector3.Distance(transform.position, currentHit.transform.position);
+            if (distance > rangeManip + 25)
+            {
+                Debug.Log("WTF");
                 soFar = true;
                 distance = 0;
                 camC.CameraShake(0, 0);
+                Transfer(false, true, followPlayer);
+                isMindManipulated = false;
                 
             }
 
             else if (distance < rangeManip ) soFar = false;
+
+
         }
 
-        if (currentHit != null && currentHit.gameObject.GetComponent<Life>().isAlive == false)
+        
+
+        else
         {
-
-           StartCoroutine(TransferWhenMMDied());
-
+            lineMM.SetActive(false);
         }
+
 
         if (isMindManipulated == true)
         {
             anim.SetBool("Run", false);
         }
-        ShakeDistance();
-       
 
+        else
+        {
+            lineMM.SetActive(false);
+        }
+        ShakeDistance();
+        RangeFeedback();
+        
     }
+
+    void RangeFeedback()
+    {
+        rangeFeedback = Physics.OverlapSphere(transform.position, rangeManip - 2.9f, possessMask);
+        if (rangeFeedbackMemories != rangeFeedback)
+        {
+            foreach(Collider collid in rangeFeedbackMemories)
+            {
+                collid.GetComponent<CharacterController>().inMMRange = false;
+            }
+
+            rangeFeedbackMemories = rangeFeedback;
+            onceRangeFeedback = true;
+            
+        }
+
+        if (onceRangeFeedback == true)
+        {
+            foreach (Collider collid in rangeFeedback)
+            {
+                collid.GetComponent<CharacterController>().inMMRange = true;
+            }
+            onceRangeFeedback = false;
+        }
+
+
+        
+    }
+
     float timerRipple = 0;
     void RippleEffect()
     {
@@ -119,24 +185,38 @@ public class MindPower : MonoBehaviour {
     float shakeUpgrade;
     void ShakeDistance()
     {
-        if (distance >= rangeManip && isMindManipulated == true)
+        if (distance >= rangeManip + 20 && isMindManipulated == true)
         {
-            camC.CameraShake((1.4f / 5) * distance - 6.9f, 1f);
+            camC.CameraShake(.015f * distance, 1f);
 
+        }
+    }
+
+   void DiedTransfer()
+    {   if (controledcc != null) currentHitisAlive = controledcc.gameObject.GetComponent<Life>().isAlive;
+
+        if (currentHitisAlive == false && canMindM == false)
+        {
+            StartCoroutine(TransferWhenMMDied());
         }
     }
 
 
     IEnumerator TransferWhenMMDied()
     {
+        anim.Rebind();
+        isMindManipulated = false;
         Destroy(possParticles);
         yield return new WaitForSeconds(2);
-        currentHit = null;
+        Transfer(false, true, followPlayer);
 
-        anim.SetBool("isPossessing", false);
-        camC.Follow(followPlayer);
-        normalCamGO.SetActive(true);
-        cc.enabled = true;
+        //currentHit = null;
+        Debug.Log("WTF");
+        
+        //anim.SetBool("isPossessing", false);
+        //camC.Follow(followPlayer);
+        //camControl.m_Priority = 8; 
+        //cc.isControlled = true;
         yield return null;
     }
 
@@ -149,17 +229,17 @@ public class MindPower : MonoBehaviour {
 
         //else cc.canMove = true;
 
-        if (isFire1Triggered() == true || soFar == true)
+        if (isFire1Triggered() == true || soFar == true )
         {
-            if (isMindManipulated == true && canMindM == true)
+            if (isMindManipulated == true && canMindM == true && currentHit != null)
             {
-               
-                Transfer(true, false, currentHit.GetComponent<PositionEnemies>().focusCamNormal.transform);
+              
+                Transfer(true, false, currentHit.Find("PositionWhenPicked").transform);
             }
                
             else if (isMindManipulated == false && canMindM == false)
             {
-                currentHit = null;
+                //currentHit = null;
                 Transfer(false, true, followPlayer);
             }
     
@@ -177,7 +257,8 @@ public class MindPower : MonoBehaviour {
     public void ContactControlEvent()
     {
         isContactControl = true;
-        anim.SetBool("isPossessing", false);
+        //anim.SetTrigger("EndPossess");
+        //anim.SetBool("isPossessing", false);
         if (isFire2Triggered() == false && contactControl != null && contactControl.Length != 0)
         {
             
@@ -200,21 +281,22 @@ public class MindPower : MonoBehaviour {
         if (isFire1Triggered() == true && isFire2Triggered() == false && isMindManipulated == false)
         {
             contactControl = Physics.OverlapSphere(transform.position, radiusContactControl);
-            if (isContactControl == false) anim.SetBool("isPossessing", true);
-      
+            if (isContactControl == false) /*anim.SetBool("isPossessing", true);*/anim.SetTrigger("StartPossess");
+
         }
     }
 
-   
-
-    public bool isAiming2()
+    bool lockAim;
+    Vector3 lookPos;
+    Quaternion rotation;
+    public void isAiming2()
     {
-        if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit, ignoreCollider))
+        if (Physics.Raycast(cameraMain.ScreenPointToRay(Input.mousePosition), out hit, rangeManip, possessMask))
 
 
         {
 
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Entity") && hit.transform.gameObject.CompareTag("Player") == false)
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Entity") && hit.collider.gameObject.CompareTag("Player") == false)
             {
                 if (isMindManipulated == false && isFire2Triggered() == true)
 
@@ -225,30 +307,65 @@ public class MindPower : MonoBehaviour {
                         camZC.CameraShake(forceOfShake, forceOfShake);
                     }
 
+
+                    
                     currentHit = hit.transform;
                     controledcc = currentHit.GetComponent<CharacterController>();
 
+                    if (Input.GetAxis("Mouse Y") < 1f && Input.GetAxis("Mouse X") < 1f && lockAim == false)
+                    {
+                        if (isFire1Triggered() == true)
+                        {
+                            currentHitPositionTransform = currentHit.Find("PositionWhenPicked").transform;
+                            normalCam.gameObject.GetComponent<CameraController>().speedMouseX = 0;
+                            normalCam.gameObject.GetComponent<CameraController>().speedMouseY = 0;
+                            zoomCam.gameObject.transform.LookAt(currentHitPositionTransform);
+                        }
+                     
+
+                    }
+
+                    else
+                    {
+                        lockAim = true;
+                        normalCam.gameObject.GetComponent<CameraController>().speedMouseX = 1;
+                        normalCam.gameObject.GetComponent<CameraController>().speedMouseY = 1;
+                    }
+
                 }
 
-                return true;
             }
             else
             {
+                if (isMindManipulated == false)
+                {
 
-                currentHit = null;
-                camZC.CameraShake(0, 0);
-               
+                    Debug.Log("fjdi");
+                    currentHit = null;
+                    camZC.CameraShake(0, 0);
+
+
+                }
 
             }
-            
+
 
         }
 
-        
+        else
+        {
+            lockAim = false;
+            currentHit = null;
+
+        } 
+
+
+
 
         // ... else it's false
-        return false;
+
     }
+
 
 
     bool isFire1Triggered()
@@ -276,32 +393,61 @@ public class MindPower : MonoBehaviour {
             controledcc.isControlled = enemyControlled;
             controledcc.GetComponent<Rigidbody>().isKinematic = playerControlled;
             PositionEnemies pe = controledcc.GetComponent<PositionEnemies>();
-            //pe.transformPosition.GetComponent<NavMeshAgent>().enabled = playerControlled;
-            pe.transformPosition.GetComponent<FieldOfView>().enabled = playerControlled;
+            FieldOfView fov = pe.transformPosition.GetComponent<FieldOfView>();
+            fov.enabled = playerControlled;
+            fov.visible = enemyControlled;
+            fov.target = null;
+            fov.targetsInViewRadius = null;
+            fov.visibleTargets.Clear();
+
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
             controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
             controledcc.GetComponent<Animator>().SetBool("Run", false);
+            pe.transformPosition.GetComponent<Animator>().Rebind();
+            controledcc.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            if (playerControlled == true)
+            {
 
-            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().Rebind();
-            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visible = enemyControlled;
-            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = null;
-            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().targetsInViewRadius = null;
-            controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visibleTargets.Clear();
-
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("spot",false);
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("event", false);
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isChasing", false);
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<Animator>().SetBool("isInvestigating", false);
-
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().target = null;
-            //controledcc.GetComponent<PositionEnemies>().transformPosition.GetComponent<FieldOfView>().visibleTargets.Clear();
+                if (pe.transformPosition.GetComponent<EntityAI>().waypoints == null)
+                {
+                    pe.transformPosition.GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                }
+            }
 
         }
 
+    
         anim.SetBool("isPossessing", enemyControlled);
         camC.Follow(followTransform);
-        normalCamGO.SetActive(true);
+        
+        targetRotation.enabled = true;
+        normalCam.gameObject.SetActive(true);
+        if (playerControlled == true)
+        {
+            camControl.m_Priority = 8;
+            
+            if (controledcc != null)
+                
+            controledcc.isControlChangeColor = false;
+            controledcc.canChangeColor = false;
+            Destroy(controledcc.gameObject.GetComponent<AudioListener>());
+            gameObject.AddComponent<AudioListener>();
+         
+        }
+        else
+        {
+            camControl.m_Priority = 20;
+            controledcc.isControlChangeColor = true;
+            controledcc.canChangeColor = true;
+
+
+            Destroy(GetComponent<AudioListener>());
+            currentHit.gameObject.AddComponent<AudioListener>();
+        }
+
+
+        //zoomCam.enabled = playerControlled;
         cc.isControlled = playerControlled;
 
 
@@ -322,7 +468,7 @@ public class MindPower : MonoBehaviour {
         {
             
 
-            if (isAiming2() == true && isFire2Triggered() == true)
+            if (isFire2Triggered() == true && currentHit != null)
             {
                 RippleEffect();
                 if ( isF1InUse == false)
@@ -330,7 +476,6 @@ public class MindPower : MonoBehaviour {
   
                     timer = Time.time + timerPossess;
                     camZC.CameraShake(forceOfShake, forceOfShake);
-                    
                     isF1InUse = true;
                 }
 
@@ -344,7 +489,7 @@ public class MindPower : MonoBehaviour {
                 
             }
 
-            else if (isAiming2() == false && isMindManipulated == false)
+            else if (currentHit == null && isMindManipulated == false)
             {
 
                 
@@ -379,29 +524,41 @@ public class MindPower : MonoBehaviour {
         {
             if (isFire2Triggered() == true)
             {
-                anim.SetBool("isPossessing", true);
+               
+                anim.SetTrigger("StartPossess");
+                //anim.SetBool("isPossessing", true);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.Locked;
-                normalCamGO.SetActive(false);
-                if (isAiming2() == true && possParticles == null && soFar == false)
+                normalCam.gameObject.SetActive(false);
+                targetRotation.enabled = false;
+                if ( currentHit == true && possParticles == null && soFar == false)
                 {
                     possParticles = Instantiate(Resources.Load("ParticlePossession"), currentHit.transform.position, Quaternion.identity) as GameObject;
                     possParticles.transform.parent = currentHit.transform;
                 }
 
-                else if (isAiming2() == false  && possParticles == true) Destroy(possParticles);
+                else if (currentHit == null  && possParticles == true) Destroy(possParticles);
 
             }
 
 
             else
             {
+
+               
                 //currentHit = null;
                 if (possParticles == true) Destroy(possParticles);
-                anim.SetBool("isPossessing", false);
+                if (anim.GetCurrentAnimatorStateInfo(4).IsName("controlIDLE"))
+                {
+                    anim.SetTrigger("EndPossess");
+                    anim.ResetTrigger("StartPossess");
+                }
+
+                //anim.SetBool("isPossessing", false);
                 Cursor.visible = false;
                 //Cursor.lockState = CursorLockMode.None;
-                normalCamGO.SetActive(true);
+                normalCam.gameObject.SetActive(true);
+                targetRotation.enabled = true;
 
 
             }

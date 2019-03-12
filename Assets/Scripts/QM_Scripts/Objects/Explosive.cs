@@ -31,10 +31,10 @@ public class Explosive : MonoBehaviour {
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<Ignitable>() == true && isBoom == false)
-        {
-            StartCoroutine(Boom());
-        }
+        //if (collision.gameObject.GetComponent<Flammable>().isStillBurning == true && isBoom == false)
+        //{
+        //    StartCoroutine(Boom());
+        //}
     }
 
     public void OnDrawGizmos()

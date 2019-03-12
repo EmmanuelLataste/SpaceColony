@@ -12,7 +12,16 @@ public class ChaseBehaviour : StateMachineBehaviour {
     FieldOfView fov;
     Animator animLinkedEntity;
     EntityAI entityAI;
+    Material crystalMat;
+    Color chasingColor;
+    Color suspiciousColor;
+    float timerLerp;
+    [SerializeField] float timerLerpOffset = 1;
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        crystalMat = animator.gameObject.GetComponent<EntityAI>().crystalMat;
+        chasingColor = animator.gameObject.GetComponent<EntityAI>().chasingColor;
+        suspiciousColor = animator.gameObject.GetComponent<EntityAI>().suspiciousColor;
         animLinkedEntity = animator.GetComponent<EntityAI>().linkedEntity.GetComponent<Animator>();
         entityAI = animator.gameObject.GetComponent<EntityAI>();
         fov = animator.gameObject.GetComponent<FieldOfView>();
@@ -36,7 +45,9 @@ public class ChaseBehaviour : StateMachineBehaviour {
 
 	
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        
+
+        crystalMat.SetVector("_EmissionColor", Vector4.Lerp(suspiciousColor * 1.75f, chasingColor * 1.75f, timerLerp));
+        timerLerp += timerLerpOffset * Time.deltaTime;
         if (entityAI.isMoving == true)
         {
             if (Vector3.Distance(animator.transform.position, lastKnownPos) < 3 && animator.GetFloat("targetDst") > 5f)
@@ -52,7 +63,7 @@ public class ChaseBehaviour : StateMachineBehaviour {
                 lastKnownPos = fov.target.transform.position;
                 //entityAgent.transform.LookAt(fov.target.transform);
                 entityAgent.speed = fov.beginSpeed;
-                Debug.Log("RUUUUN");
+
 
 
             }

@@ -38,6 +38,7 @@ public class CharacterController : Flammable {
     public bool isPicked = false;
     public GameObject hangingObjectPosition;
     public GameObject otherGameObject;
+    public GameObject gameObjectPicked;
     bool isHolding = false;
 
     [Header("ThrowObjects")]
@@ -105,11 +106,49 @@ public class CharacterController : Flammable {
     [SerializeField] AnimationCurve throwCurve;
     CameraController camController;
 
+    [Header("Audio")]
+
+    [SerializeField] AudioSource[] audioSources;
+
+    [SerializeField] AudioManager am;
+
+    [SerializeField] public Material crystalMat;
+
+    [SerializeField] Renderer crystal;
+    bool aimStopMove;
+    float rangeFeedbackLerp;
+    float rangeFeedTimer = 1.5f;
+
+    public bool inMMRange;
+    bool inMMRangeOnce;
+    bool onceRangeFeedback;
+    Vector4 initialColorMat;
+    CapsuleCollider capsuleC;
+    public bool canChangeColor = true;
+    public bool isControlChangeColor;
+    bool onceColorControl;
+    [SerializeField] Color controlColor;
+    Color currentColor;
+    [SerializeField] float controlColorIntensity;
+    private void Awake()
+    {
+        if (gameObject.tag != "Player")
+        {
+           
+            crystalMat = new Material(crystalMat);
+            crystal.material = crystalMat;
+
+           
+
+        }
+
+    }
 
     private void Start()
     {
         //tp = lineRenderer.GetComponent<ThrowPrediction>();
- 
+        //aS = GetComponent<AudioSource>();
+        initialColorMat = crystalMat.GetVector("_EmissionColor");
         beginSpeed = speed;
         if (gameObject.tag != "Player")
         beginAcceleration = GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().acceleration;
@@ -119,11 +158,14 @@ public class CharacterController : Flammable {
         player = GameObject.FindGameObjectWithTag("Player");
         rb = GetComponent<Rigidbody>();
         camController = cam.GetComponent<CameraController>();
+        capsuleC = GetComponent<CapsuleCollider>();
     }
 
-     public void Update()
+    public void Update()
     {
-   
+        
+        RangeMMFeedback();
+        OnFire();
         isGrounded();
         Attack();
         if (isControlled == true && groundIsChecked == true)
@@ -133,7 +175,7 @@ public class CharacterController : Flammable {
             Sneak();
             Rotation();
             Death();
-            
+
             StartCoroutine(Dodge());
 
             if (Time.time >= timerThrowOffset && isThrowing == true)
@@ -153,9 +195,29 @@ public class CharacterController : Flammable {
             anim.SetFloat("Direction", vertical);
             anim = GetComponent<Animator>();
         }
-       
 
-        
+        if (Input.GetButton("Fire2") || Input.GetAxis("Fire2") > 0)
+        {
+            if (MindPower.isMindManipulated == false)
+            {
+                canMove = false;
+            }
+
+        }
+
+        else
+        {
+            canMove = true;
+        }
+
+        if (isPicked == true)
+        {
+            gameObjectPicked = otherGameObject;
+        }
+
+        else gameObjectPicked = null;
+
+        currentColor = crystalMat.color;
     }
 
     private void FixedUpdate()
@@ -163,63 +225,109 @@ public class CharacterController : Flammable {
         if (isControlled == true)
         {
             Movements();
-            //StartCoroutine(Dodge());
-            Jump();
-
+            
         }
 
     }
 
-
-    void Rotation()
+    private void OnDisable()
     {
+        crystalMat.SetVector("_EmissionColor", Color.white );
+    }
 
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+    void RangeMMFeedback()
+    {
+        
+       if (canChangeColor == true && isControlChangeColor == false)
         {
-            if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
+            if (inMMRange == true)
             {
-                
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer );
-                //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
-                isAimingRotating = false;
+                if (inMMRangeOnce == false)
+                {
+                    rangeFeedbackLerp = 0;
+                    inMMRangeOnce = true;
+                    onceColorControl = false;
+                }
 
+                crystalMat.SetVector("_EmissionColor", Vector4.Lerp(currentColor, Color.white * 2.25f, rangeFeedbackLerp));
+                rangeFeedbackLerp += rangeFeedTimer * Time.deltaTime;
 
             }
 
-            
-            //else if (Input.GetAxis("Fire2") > 0 && player.GetComponent<MindPower>().isMindManipulated == false)
-            //{
-              
-            //     if (Input.GetAxis("Horizontal") > 0)
-            //     {
-                     
-            //           transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
-                     
-            //     }
+            else
+            {
+                if (inMMRangeOnce == true)
+                {
+                    rangeFeedbackLerp = 0;
+                    inMMRangeOnce = false;
+                    onceColorControl = false;
+                }
+                crystalMat.SetVector("_EmissionColor", Vector4.Lerp(currentColor * 2.25f, initialColorMat, rangeFeedbackLerp));
+                rangeFeedbackLerp += rangeFeedTimer * Time.deltaTime;
 
-            //     else if (Input.GetAxis("Horizontal") < 0)
-            //     {
-                    
-            //            transform.Rotate(-Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
-                    
-            //     }
-
-            //     if (Input.GetAxis("Vertical2") > 0)
-            //    {
-            //        transform.Rotate(Vector3.up * rotationAiming * Time.deltaTime, Space.Self);
-            //    }
-
-            //} ( MANETTE CONTROLLER )
-
+            }
         }
 
-        else if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+      else if (canChangeColor == true && isControlChangeColor == true)
         {
-            //smoothRotationPlayer = 0;
+            if (onceColorControl == false)
+            {
+                rangeFeedbackLerp = 0;
+                onceColorControl = true;
+            }
+            controlColorIntensity = (-0.0875f * ( Vector3.Distance(transform.position, player.transform.position)) + 4.5f);
+            //controlColor = controlColor * controlColorIntensity;
+            //crystalMat.SetVector("_EmissionColor", Vector4.Lerp(currentColor * 2.25f, controlColor * controlColorIntensity, rangeFeedbackLerp));
+            crystalMat.SetVector("_EmissionColor",  controlColor * controlColorIntensity);
+            rangeFeedbackLerp += rangeFeedTimer * Time.deltaTime;
+
         }
 
-       
+
+
+        //else if (inMMRange == false)
+        //{
+
+        //    crystalMat.SetVector("_EmissionColor", Vector4.Lerp(Color.white, Color.white / 5, rangeFeedbackLerp));
+        //    rangeFeedbackLerp += rangeFeedTimer * Time.deltaTime;
+        //}
     }
+
+    void StepSoundEvent()
+    {
+        int randomSound = Random.Range(0, am.steps.Length);
+        audioSources[0].PlayOneShot(am.steps[randomSound], .05f);
+    }
+
+    void Rotation()
+    {
+        if (canMove == true)
+        {
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+            {
+                if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
+                {
+
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
+                    //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
+                    isAimingRotating = false;
+
+
+                }
+                
+            }
+
+            else if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
+            {
+                //smoothRotationPlayer = 0;
+            }
+
+        }
+
+
+    }
+
+
 
     void Movements()
     {
@@ -275,21 +383,7 @@ public class CharacterController : Flammable {
                 
     }
     
-    void Jump()
-    {
-        if (groundIsChecked == true) // Si la méthode en dessous est vrai, donc si le rayon touche le sol
-        {
-            if (Input.GetButtonDown("Jump")) // Si on appuit sur Jump
-            {
-                
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, jump * 1000, 0));
-                //GetComponent<Rigidbody>().AddForce(new Vector3(horizontal, jump, vertical), ForceMode.Impulse);
-                // Alors on ajout une force sur Y pour sauter.
-            }
-           
-        }
-
-    }
+   
     void PickUpEvent()
     {
         otherGameObject.GetComponent<ObjectSound>().enabled = true;
@@ -335,7 +429,7 @@ public class CharacterController : Flammable {
 
     {
      
-        isPicked = false;
+        
         //this.transform.GetComponent<CharacterController>().speed *= 3;
 
         if (otherGameObject.GetComponent<Goo>() != null)
@@ -352,8 +446,6 @@ public class CharacterController : Flammable {
         otherGameObject.GetComponent<Rigidbody>().AddForce((transform.forward * throwStrengthX) + (transform.up * throwStrengthY));
         timerThrowOffset = Time.time + timerThrow;
         isThrowing = true;
-        throwStrengthX = 0;
-        throwStrengthY = 0;
         StartCoroutine(ThrowDelay());
 
 
@@ -361,38 +453,33 @@ public class CharacterController : Flammable {
 
     IEnumerator ThrowDelay()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.25f);
         otherGameObject.GetComponent<Rigidbody>().detectCollisions = true;
+        yield return new WaitForSeconds(.5f);
+        isPicked = false;
         yield return null;
     }
-
     private void Throw()
     {
-
+        if (cam.transform.eulerAngles.x > 0 && cam.transform.eulerAngles.x < 40)
+        {
+            throwStrengthY = (-8.75f * cam.transform.eulerAngles.x) + 350;
+        }
 
         if (isPicked == true)
         {
 
-            if (Input.GetKeyUp(KeyCode.E) || throwStrengthX >= 500 || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
+            if (Input.GetKeyUp(KeyCode.E) || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
             {
-                
+
                 if (isAxisF1InUse == true)
                 {
-                    if (throwStrengthX >= 50)
-                    {
+                   
+                        //isPicked = false;
                         isAxisF1InUse = false;
                         anim.SetTrigger("Throw");
-
-
-                    }
-
-                    else if (throwStrengthX < 50)
-                    {
-                        isPicked = false;
-                        isAxisF1InUse = false;
-                        ThrowEvent();
-                    }
                     
+
                 }
 
 
@@ -400,30 +487,70 @@ public class CharacterController : Flammable {
             }
 
 
-
-            else if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") /*Input.GetAxisRaw("Fire1") == 1*/ )
-
-            {
-                //tp.velocity = throwStrengthX / 40;
-                throwStrengthX += throwStrengh + Time.deltaTime;
-                throwStrengthY += throwHigh + Time.deltaTime;
-                
-
-            }
-
-            if (Input.GetButtonDown("Fire1"))
-            {
-                if (isAxisF1InUse == false)
-                {
-
-                    isAxisF1InUse = true;
-                }
-
-            }
+            
         }
 
     }
-    
+
+
+    //private void Throw()
+    //{
+
+
+    //    if (isPicked == true)
+    //    {
+
+    //        if (Input.GetKeyUp(KeyCode.E) || throwStrengthX >= 500 || Input.GetButtonUp("Y") /*Input.GetAxisRaw("Fire1") == 0*/)
+    //        {
+
+    //            if (isAxisF1InUse == true)
+    //            {
+    //                if (throwStrengthX >= 50)
+    //                {
+    //                    isAxisF1InUse = false;
+    //                    anim.SetTrigger("Throw");
+
+
+    //                }
+
+    //                else if (throwStrengthX < 50)
+    //                {
+    //                    isPicked = false;
+    //                    isAxisF1InUse = false;
+    //                    ThrowEvent();
+    //                }
+
+    //            }
+
+
+    //            //cam.GetComponent<CameraController>().CameraDeZoomFocus();
+    //        }
+
+
+
+    //        else if (Input.GetKey(KeyCode.E) || Input.GetButton("Y") /*Input.GetAxisRaw("Fire1") == 1*/ )
+
+    //        {
+    //            //tp.velocity = throwStrengthX / 40;
+    //            throwStrengthX += throwStrengh + Time.deltaTime;
+    //            throwStrengthY += throwHigh + Time.deltaTime;
+
+
+    //        }
+
+    //        if (Input.GetButtonDown("Fire1"))
+    //        {
+    //            if (isAxisF1InUse == false)
+    //            {
+
+    //                isAxisF1InUse = true;
+    //            }
+
+    //        }
+    //    }
+
+    //}
+
     private void Sneak()
     {
         if (canSneak == true)
@@ -590,13 +717,7 @@ public class CharacterController : Flammable {
                 anim.SetTrigger("Roll");
                 yield return new WaitForSeconds(dodgeTimer);
                 rb.velocity = new Vector3(0, 0, 0);
-                if (GetComponent<Ignitable>() == true)
-                {
-                    isBurning = false;
-                    Destroy(GetComponent<Ignitable>().particleFires);
-                    Destroy(GetComponent<Ignitable>());
-                }
-            
+                StopFire();
         }
         yield return null;
     }

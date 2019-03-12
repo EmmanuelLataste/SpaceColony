@@ -12,16 +12,23 @@ public class GameManager : MonoBehaviour {
     [SerializeField] GameObject panelDeath;
     [SerializeField] string[] controller;
     [SerializeField] GameObject normalCam;
+    [SerializeField] Texture2D cursorTexture;
     [SerializeField] GameObject player;
+    [SerializeField] CharacterController playerController;
     Life lifePlayer;
     public static bool isCanvasMenu;
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
+       
         lifePlayer = player.GetComponent<Life>();
+        Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
     }
 
     // Update is called once per frame
     void Update() {
+        Save();
+        Load();
+
         if (lifePlayer.isAlive == true)
         {
             Pause();
@@ -77,5 +84,29 @@ public class GameManager : MonoBehaviour {
     {
         yield return new WaitForSeconds(2.5f);
         panelDeath.SetActive(true);
+    }
+
+    public void Save()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SaveSystem.SaveData(playerController);
+        }
+
+    }
+
+    public void Load()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            DataSave data = SaveSystem.LoadData();
+
+            Vector3 position;
+            position.x = data.position[0];
+            position.y = data.position[1];
+            position.z = data.position[2];
+            player.transform.position = position;
+        }
+        
     }
 }

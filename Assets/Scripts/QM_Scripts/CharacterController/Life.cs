@@ -27,6 +27,7 @@ public class Life : MonoBehaviour
 
     private void Start()
     {
+        
         startingHP = healthPoints;
         basicHP = healthPoints;
         cc = GetComponent<CharacterController>();
@@ -93,8 +94,9 @@ public class Life : MonoBehaviour
         {
             healthPoints -= damages;
             anim.SetTrigger("Hitted");
-            isAttacked = true;
             TLFOffset = Time.time + timerLifeRecovery;
+            isAttacked = true;
+            
 
         }
 
@@ -136,12 +138,15 @@ public class Life : MonoBehaviour
 
         if (isAlive == false && onceDead == false)
         {
-            
 
             if (MindPower.currentHit == null && gameObject.tag == "Player")
                 CameraController.cam.GetComponent<CameraController>().Follow(deathPosition.transform);
             else if (MindPower.currentHit != null && gameObject.tag != "Player")
+            {
                 CameraController.cam.GetComponent<CameraController>().Follow(MindPower.currentHit.GetComponent<Life>().deathPosition.transform);
+                if (GetComponent<AudioListener>() == true) Destroy(GetComponent<AudioListener>());
+            }
+               
             
                
 

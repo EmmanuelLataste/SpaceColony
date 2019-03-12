@@ -15,13 +15,16 @@ public class PatrollingBehaviour : StateMachineBehaviour {
     public bool isReversed;
     EntityAI entityAI;
     Animator animLinkedEntity;
-
+    float timerToNextPoint;
+    float timerToNextPointOffset;
+    bool canToNextPoint;
 
     private void Awake() {
         //TEST OPTI
     }
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animator.GetComponent<EntityAI>().linkedEntity.GetComponent<CharacterController>().canChangeColor = true;
         animLinkedEntity = animator.GetComponent<EntityAI>().linkedEntity.GetComponent<Animator>();
         entity = animator.gameObject;
         isReversed = animator.gameObject.GetComponent<EntityAI>().isReversed;

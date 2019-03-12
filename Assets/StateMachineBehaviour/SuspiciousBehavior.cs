@@ -9,27 +9,19 @@ public class SuspiciousBehavior : StateMachineBehaviour {
     public NavMeshAgent entityAgent;
     Animator animLinkedEntity;
     FieldOfView fov;
+    Material crystalMat;
+    Color suspiciousColor;
+    float timerLerp;
+    [SerializeField] float timerLerpOffset = 1;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         animLinkedEntity = animator.GetComponent<EntityAI>().linkedEntity.GetComponent<Animator>();
         animLinkedEntity.Rebind();
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
         fov = animator.gameObject.GetComponent<FieldOfView>();
+        crystalMat = animator.gameObject.GetComponent<EntityAI>().crystalMat;
+        suspiciousColor = animator.gameObject.GetComponent<EntityAI>().suspiciousColor;
 
-        //animator.gameObject.GetComponent<FieldOfView>().visible = false;
-
-        //animator.SetBool("targetVisible", false);
-        //animator.SetBool("spot", false);
-
-        //if (animator.GetComponent<FieldOfView>().audible == true) {
-        //    animator.GetComponent<EntityAI>().Suspect();
-        //}
-        //else if (animator.GetComponent<FieldOfView>().visible == true) {
-        //    animator.SetBool("targetVisible", true);
-        //} 
-        //else if (animator.GetComponent<FieldOfView>().visible == false) {
-        //    animator.SetBool("targetVisible", false);
-        //}  
         if (animator.GetBool("event") == true && fov.dstToTarget > 3)
         {
             animator.gameObject.GetComponent<EntityAI>().Suspicious();
@@ -51,13 +43,16 @@ public class SuspiciousBehavior : StateMachineBehaviour {
 
         visibleTargets = animator.gameObject.GetComponent<FieldOfView>().visibleTargets;
         audibleTargets = animator.gameObject.GetComponent<FieldOfView>().audibleTargets;
-
+        animLinkedEntity.gameObject.GetComponent<CharacterController>().canChangeColor = false;
 
     }
 
 	
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+
+        crystalMat.SetVector("_EmissionColor", Vector4.Lerp(Color.white * 2.25f, suspiciousColor * 1.75f, timerLerp));
+        timerLerp += timerLerpOffset * Time.deltaTime;
         animator.gameObject.GetComponent<NavMeshAgent>().isStopped = true;
         if (visibleTargets.Count != 0 && animator.GetBool("event") == true )
         {

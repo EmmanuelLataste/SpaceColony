@@ -46,7 +46,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
         //entityAgent.destination = entity.transform.position;
         if (fov.visible == false )
         {
-            if (timer > Time.time && fov.dstToTarget > 1)
+            if (timer > Time.time && fov.dstToTarget > 2)
             {
                 animLinkedEntity.SetBool("Walk", true);
                 entityAgent.destination = lastKnownPos;
@@ -55,13 +55,25 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
 
             }
 
-            else if (timer <= Time.time || fov.dstToTarget <= 1)
+            else if (timer <= Time.time )
             {
                 animator.SetBool("targetVisible", false);
                 animator.SetBool("targetFalse", false);
                 target = null;
                 fov.audibleTargets.Clear();
               
+            }
+
+            else if (timer > Time.time && fov.dstToTarget <= 2 && fov.target.layer == LayerMask.NameToLayer("Entity"))
+            {
+                
+                    animLinkedEntity.SetBool("Walk", true);
+                    animLinkedEntity.SetBool("Run", false);
+                    animLinkedEntity.SetBool("Attack", true);
+                    //animator.transform.LookAt(fov.target.transform);
+                    entityAgent.destination = target.transform.position;
+                    entityAgent.isStopped = false;
+                
             }
 
         }
@@ -79,7 +91,7 @@ public class InvestigatingBehaviour : StateMachineBehaviour {
                 animator.SetBool("targetVisible", false);
             }
 
-            else if (fov.target != null && fov.visibleTargets.Count == 0 && fov.audibleTargets.Count == 0)
+            else if (fov.target != null  && fov.audible == false)
             {
                 
                

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TargetRotation : MonoBehaviour {
     public GameObject cam;
+    public GameObject camControl;
     private float currentRotation;
     private float rotation;
     private float vertical2;
@@ -32,6 +33,7 @@ public class TargetRotation : MonoBehaviour {
     private bool isAxisF2inUse;
     float timerF2;
     public float timerF2Offset;
+    float rotationY;
 
     private void Start()
     {
@@ -40,6 +42,10 @@ public class TargetRotation : MonoBehaviour {
         speedMouseY = cameraController.speedMouseY;
         smoothRotationSpeed = cameraController.smoothRotationSpeed;
         rotationSpeed = cameraController.rotationSpeed;
+        initialMouseY = 10;
+        initialMouseX = 180;
+        transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+
     }
     void Update () {
         vertical2 = Input.GetAxis("Vertical2");
@@ -47,8 +53,12 @@ public class TargetRotation : MonoBehaviour {
         //Rotation();
         //StartCoroutine(ReturnBehindPlayer());
         //Rotation2();
-        CameraMouse();
-        
+        if (MindPower.isMindManipulated == false)
+        transform.rotation = Quaternion.Euler(new Vector3(0, cam.transform.eulerAngles.y, cam.transform.eulerAngles.z));
+        else transform.rotation = Quaternion.Euler(new Vector3(0, camControl.transform.eulerAngles.y, camControl.transform.eulerAngles.z));
+
+        //CameraMouse();
+
     }
 
 
@@ -58,7 +68,7 @@ public class TargetRotation : MonoBehaviour {
         {
             if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
             {
-                initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
+              
 
                 if (Input.GetButton("Fire2") == false)
                 {
@@ -66,13 +76,16 @@ public class TargetRotation : MonoBehaviour {
 
                 }
 
-                if (Input.GetButtonUp("Fire2"))
+                else if (Input.GetButtonUp("Fire2"))
                 {
                     player.transform.eulerAngles = new Vector3(0, initialMouseX, 0);
 
                 }
-                if (Input.GetButton("Fire2") == true)
+
+           
+                else if (Input.GetButton("Fire2") == true)
                 {
+                    
                     if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
                     {
 
@@ -98,7 +111,7 @@ public class TargetRotation : MonoBehaviour {
                         initialMouseY -= speedMouseY * Input.GetAxis("Mouse Y");
 
                     }
-
+                    initialMouseX += speedMouseX * Input.GetAxis("Mouse X");
                     transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
 
                 }
@@ -106,69 +119,74 @@ public class TargetRotation : MonoBehaviour {
 
             }
         }
-      
-        // Manette
+
         
+            // Manette
+
             if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
             {
-           
+
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
-                initialHorizontal += speedMouseX * Input.GetAxis("Horizontal2");
+                transform.eulerAngles = new Vector3(0, camControl.transform.eulerAngles.y, 0);
+            initialHorizontal += speedMouseX * Input.GetAxis("Horizontal2");
                 if (isAxisF2inUse == true)
                 {
                     initialVertical = 0;
                     player.transform.eulerAngles = new Vector3(0, initialHorizontal, 0);
                     isAxisF2inUse = false;
                 }
-                
+
+            }
+
+
+            if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
+            {
+                if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false && Input.GetButton("Fire2") == false)
+                {
+
+                    if (isAxisF2inUse == false)
+                    {
+                        initialVertical = 0;
+                        timerF2 += Time.time + timerF2Offset;
+                        isAxisF2inUse = true;
+                    }
+
+                    if (Time.time >= timerF2)
+                    {
+                        if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                        {
+
+                            initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                        }
+
+
+                        else if (transform.rotation.eulerAngles.x >= 320 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+                        {
+                            initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                        }
+
+                        else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical") > 0)
+                        {
+                            initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                        }
+
+                        else if (transform.rotation.eulerAngles.x < 320 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical") < 0)
+                        {
+
+                            initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                        }
+
+                        initialHorizontal += speedMouseX * Input.GetAxis("Horizontal");
+                        transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
+                        timerF2 = 0;
+
+                    }
+
+                }
+
             }
         
-
-         if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
-        {
-            if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false && Input.GetButton("Fire2") == false)
-            {
-
-                if (isAxisF2inUse == false)
-                {
-                    timerF2 += Time.time + timerF2Offset;
-                    isAxisF2inUse = true;
-                }
-
-                if (Time.time >= timerF2)
-                {
-                    if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
-                    {
-
-                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                    }
-
-
-                    else if (transform.rotation.eulerAngles.x >= 320 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
-                    {
-                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                    }
-
-                    else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical") > 0)
-                    {
-                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                    }
-
-                    else if (transform.rotation.eulerAngles.x < 320 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical") < 0)
-                    {
-
-                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                    }
-
-                    initialHorizontal += speedMouseX * Input.GetAxis("Horizontal");
-                    transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
-                    timerF2 = 0;
-
-                }
-
-            }
-
-        }
+      
 
 
     }

@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine.AI;
 
 
+
 public class EntityAI : MonoBehaviour {
 
 
@@ -41,21 +42,33 @@ public class EntityAI : MonoBehaviour {
     [SerializeField] EntitySO eSO;
     [SerializeField] public GameObject linkedEntity;
 
+     public Material crystalMat;
+
+
+    [SerializeField] public Color suspiciousColor;
+    [SerializeField] public Color chasingColor;
+
     //See how to implement scrolling menu to choose the type of entity, check these instructions: https://docs.unity3d.com/ScriptReference/EditorGUILayout.Toggle.html
-    void OnInspectorGUI() {
-        //UI of the inspector for the checkbox for typePatrol
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Patrolling Type", GUILayout.Width(70));
-        typePatrol = EditorGUILayout.Toggle(typePatrol);
-        GUILayout.EndHorizontal();
-          
-    
-        //UI of the inspector for the checkbox for Reversion Path
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Reversion Path", GUILayout.Width(70));
-        isReversed = EditorGUILayout.Toggle(isReversed);
-        GUILayout.EndHorizontal();
-        
+    //void OnInspectorGUI()
+    //{
+    //    //UI of the inspector for the checkbox for typePatrol
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Patrolling Type", GUILayout.Width(70));
+    //    typePatrol = EditorGUILayout.Toggle(typePatrol);
+    //    GUILayout.EndHorizontal();
+
+
+    //    //UI of the inspector for the checkbox for Reversion Path
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Reversion Path", GUILayout.Width(70));
+    //    isReversed = EditorGUILayout.Toggle(isReversed);
+    //    GUILayout.EndHorizontal();
+
+    //}
+    private void Awake()
+    {
+        crystalMat = linkedEntity.GetComponent<CharacterController>().crystalMat;
+
     }
 
 
@@ -144,7 +157,7 @@ public class EntityAI : MonoBehaviour {
         inSuspect = true;
        entityAgent.isStopped = true;
         yield return new WaitForSeconds(SuspectTime);
-        Debug.Log("suspi2");
+
        
         entityAgent.isStopped = false;
         animator.SetBool("isInvestigating", investigate);
@@ -155,7 +168,8 @@ public class EntityAI : MonoBehaviour {
 
         yield return null;
     }
-
+    
+    
 
 }
  
