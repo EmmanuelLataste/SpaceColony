@@ -428,11 +428,14 @@ public class MindPower : MonoBehaviour {
             camControl.m_Priority = 8;
             
             if (controledcc != null)
+            {
+                controledcc.isControlChangeColor = false;
+                controledcc.canChangeColor = false;
+                Destroy(controledcc.gameObject.GetComponent<AudioListener>());
+                gameObject.AddComponent<AudioListener>();
+            }
                 
-            controledcc.isControlChangeColor = false;
-            controledcc.canChangeColor = false;
-            Destroy(controledcc.gameObject.GetComponent<AudioListener>());
-            gameObject.AddComponent<AudioListener>();
+
          
         }
         else

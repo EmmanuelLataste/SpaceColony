@@ -1938,7 +1938,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1303429334131882}
   m_LocalRotation: {x: -0, y: 0.9961947, z: -0.08715578, w: 0}
-  m_LocalPosition: {x: -78.33927, y: -184.36143, z: 118.33884}
+  m_LocalPosition: {x: -78.33992, y: -184.36143, z: 118.33884}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4466201672930830}
@@ -2192,7 +2192,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1622917196825826}
   m_LocalRotation: {x: 0, y: 0.9961947, z: -0.08715578, w: 0}
-  m_LocalPosition: {x: -78.33927, y: -184.36143, z: 118.33884}
+  m_LocalPosition: {x: -78.33992, y: -184.36143, z: 118.33884}
   m_LocalScale: {x: 1, y: 1.0786788, z: 1.0786791}
   m_Children:
   - {fileID: 4831456453322762}
@@ -3623,12 +3623,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   rangeManip: 15
+  distance: 0
   lineMM: {fileID: 1838041542778594}
   playerLayerAI: {fileID: 1820630643423172}
   camControl: {fileID: 114461174720855862}
   possessMask:
     serializedVersion: 2
     m_Bits: 2048
+  rangeFeedback: []
+  rangeFeedbackMemories: []
 --- !u!114 &114064673169799388
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4292,6 +4295,7 @@ MonoBehaviour:
   firePosition: {fileID: 4748815251033970}
   timerFire: 5
   radiusFire: 0
+  fireArray: []
   rotationAiming: 50
   speedRotationPlayer: 0.01
   smoothRotationPlayer: 0.1
@@ -4360,6 +4364,13 @@ MonoBehaviour:
   audioSources:
   - {fileID: 82754719612548082}
   am: {fileID: 0}
+  crystalMat: {fileID: 2100000, guid: 6c63457e5b93430409a6447d56579e0a, type: 2}
+  crystal: {fileID: 0}
+  inMMRange: 0
+  canChangeColor: 1
+  isControlChangeColor: 0
+  controlColor: {r: 0, g: 0.91298866, b: 1, a: 0.8745098}
+  controlColorIntensity: 0
 --- !u!114 &114950392148839728
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -43,7 +43,7 @@ public class Fruits : Goo {
     private void OnCollisionEnter(Collision collision)
     {
         
-        if (canExplose == true && collision.gameObject.layer != LayerMask.NameToLayer("Player") && collision.gameObject.layer != LayerMask.NameToLayer("Entity") && collision.gameObject.layer != LayerMask.NameToLayer("RagDoll"))
+        if (canExplose == true )
         {
            
             GooToGround();
