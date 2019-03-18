@@ -26,10 +26,15 @@ public class Cannister : Explosive {
     public override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
-        if (collision.gameObject.layer != LayerMask.NameToLayer("Ground") && isFlying == false)
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Ground") || collision.gameObject.layer != LayerMask.NameToLayer("Obstacles") )
         {
-            isFlying = true;
-            
+            if (isFlying == false)
+            {
+                Debug.Log(collision.collider.name);
+                isFlying = true;
+
+            }
+
         }
 
     }

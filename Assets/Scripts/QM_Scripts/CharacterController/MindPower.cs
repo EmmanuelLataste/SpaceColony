@@ -107,7 +107,7 @@ public class MindPower : MonoBehaviour {
             if (isMindManipulated == true)
             {
                 lineMM.SetActive(true);
-                lineRendererMM.SetPosition(0, transform.position + new Vector3(0, 1.5f, 0));
+                lineRendererMM.SetPosition(0, transform.position );
                 lineRendererMM.SetPosition(1, currentHit.transform.position + new Vector3(0, 1.5f, 0));
                 lineRendererMM.startWidth = 1 /distance * 2;
                 lineRendererMM.endWidth = 1 /distance * 2;
@@ -133,7 +133,7 @@ public class MindPower : MonoBehaviour {
 
         
 
-        else
+        if (isMindManipulated == false)
         {
             lineMM.SetActive(false);
 
@@ -410,20 +410,23 @@ public class MindPower : MonoBehaviour {
             fov.targetsInViewRadius = null;
             fov.visibleTargets.Clear();
 
+            
             pe.transformPosition.GetComponent<EntityAI>().enabled = playerControlled;
             pe.transformPosition.GetComponent<Animator>().enabled = playerControlled;
             controledcc.GetComponent<Animator>().SetBool("AI", playerControlled);
             controledcc.GetComponent<Animator>().SetBool("Run", false);
-            pe.transformPosition.GetComponent<Animator>().Rebind();
+
             controledcc.GetComponent<Rigidbody>().velocity = Vector3.zero;
             if (playerControlled == true)
             {
-
+                
                 if (pe.transformPosition.GetComponent<EntityAI>().waypoints == null)
                 {
-                    pe.transformPosition.GetComponent<NavMeshAgent>().SetDestination(transform.position);
+                    pe.transformPosition.GetComponent<EntityAI>().waypoints[0] = transform;
                 }
             }
+
+            else pe.transformPosition.GetComponent<Animator>().Rebind();
 
         }
 
@@ -439,6 +442,7 @@ public class MindPower : MonoBehaviour {
             
             if (controledcc != null)
             {
+
                 controledcc.isControlChangeColor = false;
                 controledcc.canChangeColor = false;
                 Destroy(controledcc.gameObject.GetComponent<AudioListener>());

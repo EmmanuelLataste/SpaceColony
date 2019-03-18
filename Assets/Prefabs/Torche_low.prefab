@@ -237,6 +237,7 @@ MonoBehaviour:
   firePosition: {fileID: 4260784332482458}
   timerFire: 30
   radiusFire: 0.3
+  fireArray: []
   transformObjectInHand: {fileID: 0}
   burnOthers: []
   radiusBurn: 1

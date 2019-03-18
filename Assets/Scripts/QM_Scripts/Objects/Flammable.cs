@@ -23,7 +23,7 @@ public class Flammable : MonoBehaviour
 
     public void OnFire()
     {
-        TurnFireOn();
+
         if (isBurning == true)
         {
             
@@ -133,13 +133,7 @@ public class Flammable : MonoBehaviour
         }
     }
 
-    void TurnFireOn()
-    {
-        if (Input.GetKeyDown(KeyCode.R) && gameObject.tag == "Wood")
-        {
-            isBurning = true;
-        }
-    }
+   
 
     private void OnDrawGizmos()
     {

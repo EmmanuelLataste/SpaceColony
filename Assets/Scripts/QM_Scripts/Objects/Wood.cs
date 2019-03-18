@@ -22,6 +22,7 @@ public class Wood : Flammable
     {
         //Ignite();
         //IgniteOthers();
+        TurnFireOn();
         OnFire();
         if (transform.parent == true && isPicked == false)
         {
@@ -61,6 +62,14 @@ public class Wood : Flammable
         }
 
 
+    }
+
+    void TurnFireOn()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && isPicked == true)
+        {
+            isBurning = true;
+        }
     }
 
     void PositionWhenPicked()

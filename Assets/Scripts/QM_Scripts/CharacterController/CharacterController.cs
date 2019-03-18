@@ -154,7 +154,7 @@ public class CharacterController : Flammable {
         beginSpeed = speed;
         if (gameObject.tag != "Player")
         beginAcceleration = GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().acceleration;
-       
+        anim.GetComponent<Animator>();
         mindPower = GetComponent<MindPower>();
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
@@ -224,7 +224,7 @@ public class CharacterController : Flammable {
 
     private void FixedUpdate()
     {
-        if (isControlled == true)
+        if (isControlled == true && groundIsChecked == true)
         {
             Movements();
             

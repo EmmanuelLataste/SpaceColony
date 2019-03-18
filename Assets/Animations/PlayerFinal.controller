@@ -1735,7 +1735,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Run Tree
-  m_Speed: 1.6
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101700507030257836}
@@ -2550,10 +2550,10 @@ AnimatorStateMachine:
     m_Position: {x: 540, y: -24, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102750371034271402}
-    m_Position: {x: 575, y: 41, z: 0}
+    m_Position: {x: 1044, y: -12, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102692840349333364}
-    m_Position: {x: 610, y: 106, z: 0}
+    m_Position: {x: 1248, y: 240, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
