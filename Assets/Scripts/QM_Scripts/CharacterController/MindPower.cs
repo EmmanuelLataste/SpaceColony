@@ -14,11 +14,33 @@ public class MindPower : MonoBehaviour {
     RaycastHit hit;
     public static Transform currentHit;
     public static bool isMindManipulated = false;
-
-    public float timerPossess = 2;
-    [Range(0, 5)]
-    public float forceOfShake;
+    public static float timerPossess = 2;
+    [SerializeField] float timerPosseIns;
+    public static float radiusContactControl = .5f;
+    [SerializeField] float radiusContactControlIns;
+    public static float rangeManip = 15;
+    [SerializeField] float rangeManipIns;
     float currentHitSpeed;
+    private bool isZoom = false;
+    CharacterController cc;
+    CharacterController controledcc;
+    [SerializeField] public Transform followPlayer;
+    [SerializeField] LayerMask ignoreCollider;
+    static Transform hitControlled;
+    Animator anim;
+    Collider[] contactControl;
+    Rippleeffect re;
+    public float distance;
+    [SerializeField] GameObject playerLayerAI;
+    [SerializeField] LayerMask possessMask;
+    Transform currentHitPositionTransform;
+    bool hitCanBeManipulated;
+    bool currentHitisAlive;
+    bool soFar;
+    bool isContactControl;
+    bool isAlive;
+    bool canMindM = true;
+    bool isF1InUse;
 
 
     [Header("Camera")]
@@ -26,41 +48,22 @@ public class MindPower : MonoBehaviour {
     public CinemachineVirtualCamera normalCam;
     public CinemachineVirtualCamera zoomCam;
     [SerializeField] TargetRotation targetRotation;
-
     GameObject normalCamGO;
     GameObject zoomCamGO;
-    private bool isZoom = false;
-    bool canMindM = true;
-    bool isPossessionParticles;
-    GameObject possParticles;
-    bool isF1InUse;
-    CharacterController cc;
-    CharacterController controledcc;
     CameraZoomController camZC;
     CameraController camC;
-    [SerializeField] public Transform followPlayer;
-    [SerializeField] float radiusContactControl;
-    [SerializeField] LayerMask ignoreCollider;
-    static Transform hitControlled;
-    Animator anim;
-    bool isAlive;
-    Collider[] contactControl;
-    bool isContactControl;
-    Rippleeffect re;
-    [SerializeField]public float rangeManip;
-    public float distance;
-    bool soFar;
+    [SerializeField] public CinemachineVirtualCamera camControl;
+
+    [Header("FeedBacks")]
+    [SerializeField] public Collider[] rangeFeedback;
+    GameObject possParticles;
+    public Collider[] rangeFeedbackMemories;
     [SerializeField] GameObject lineMM;
     LineRenderer lineRendererMM;
-    [SerializeField] GameObject playerLayerAI;
-    [SerializeField] public CinemachineVirtualCamera camControl;
-    bool currentHitisAlive;
-    [SerializeField] LayerMask possessMask;
-    [SerializeField] public Collider[] rangeFeedback;
-    public Collider[] rangeFeedbackMemories;
+    [Range(0, 5)]
+    public float forceOfShake;
+    bool isPossessionParticles;
     bool onceRangeFeedback;
-    Transform currentHitPositionTransform;
-
 
 
     private void Start()
@@ -87,6 +90,9 @@ public class MindPower : MonoBehaviour {
 
     void Update()
     {
+        rangeManipIns = rangeManip;
+        timerPosseIns = timerPossess;
+        radiusContactControlIns = radiusContactControl;
         
         isAiming2();
         Control();
@@ -95,6 +101,7 @@ public class MindPower : MonoBehaviour {
 
         if (currentHit != null)
         {
+            
             currentHitisAlive = currentHit.GetComponent<Life>().isAlive;
             camControl.m_Follow = currentHit.Find("PositionWhenPicked").transform;
             if (isMindManipulated == true)
@@ -129,12 +136,14 @@ public class MindPower : MonoBehaviour {
         else
         {
             lineMM.SetActive(false);
+
         }
 
 
         if (isMindManipulated == true)
         {
             anim.SetBool("Run", false);
+            hitCanBeManipulated = false;
         }
 
         else
@@ -298,7 +307,8 @@ public class MindPower : MonoBehaviour {
 
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Entity") && hit.collider.gameObject.CompareTag("Player") == false)
             {
-                if (isMindManipulated == false && isFire2Triggered() == true)
+                hitCanBeManipulated = hit.collider.GetComponent<CharacterController>().canBeManipulated;
+                if (isMindManipulated == false && isFire2Triggered() == true && hitCanBeManipulated == true)
 
                 {
                     if (isFire1Triggered() == true && soFar == false)

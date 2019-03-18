@@ -3115,12 +3115,10 @@ MonoBehaviour:
   entityAgent: {fileID: 195323306745086646}
   beginAISpeed: 0
   isReversed: 0
-  waypoints:
-  - {fileID: 4949389462635006}
-  - {fileID: 4760618664944914}
+  waypoints: []
   investigateTime: 2.5
   approachTime: 3
-  suspectTime: 0.6
+  suspectTime: 1.5
   typePatrol: 0
   isMoving: 1
   visibleTargets: []
@@ -3262,6 +3260,10 @@ MonoBehaviour:
   crystal: {fileID: 137371453792379002}
   inMMRange: 0
   canChangeColor: 1
+  isControlChangeColor: 0
+  controlColor: {r: 0, g: 0.9233861, b: 1, a: 0.7411765}
+  controlColorIntensity: 0
+  canBeManipulated: 1
 --- !u!135 &135015343621194798
 SphereCollider:
   m_ObjectHideFlags: 1

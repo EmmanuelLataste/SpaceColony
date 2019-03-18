@@ -334,6 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4290590586894382}
   - component: {fileID: 114285716241573050}
+  - component: {fileID: 114162186414853608}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -756,6 +757,31 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114162186414853608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1487208787896196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f024a225fa3f6c0488136c6b8469914d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levels: 000000
+  newTimerPosses:
+  - 2
+  - 1.5
+  - 0
+  newRangeManip:
+  - 15
+  - 40
+  - 0
+  newRadiusContactControl:
+  - 0.5
+  - 0.7
+  - 0
+  statusProg: 0
 --- !u!114 &114173556921670280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -902,7 +928,9 @@ MonoBehaviour:
   panelDeath: {fileID: 1809186521972926}
   controller: []
   normalCam: {fileID: 0}
+  cursorTexture: {fileID: 2800000, guid: b188be5a7d954cc45a7b70bcae3419da, type: 3}
   player: {fileID: 0}
+  playerController: {fileID: 0}
 --- !u!114 &114291824522391584
 MonoBehaviour:
   m_ObjectHideFlags: 1

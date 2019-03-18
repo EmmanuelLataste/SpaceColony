@@ -17,7 +17,7 @@ public class BBTurnBackTutorial : MonoBehaviour {
     {
         //texts.text = "Hold Right Click / LT";
         texts.text = sentences[0];
-        beginTimerPossess = mp.timerPossess;
+        beginTimerPossess = MindPower.timerPossess;
     }
 
     private void Update()
@@ -25,7 +25,7 @@ public class BBTurnBackTutorial : MonoBehaviour {
         TextChange();
         if (firstTextOK == true && MindPower.isMindManipulated == true)
         {
-            mp.timerPossess = beginTimerPossess;
+            MindPower.timerPossess = beginTimerPossess;
             Time.timeScale = 1;
             texts.enabled = false;
             Destroy(gameObject);
@@ -51,7 +51,7 @@ public class BBTurnBackTutorial : MonoBehaviour {
         Time.timeScale = .5f;
         texts.enabled = true;
         firstTextOK = true;
-        mp.timerPossess = 1.5f;
+        MindPower.timerPossess = 1.5f;
         yield return null;
     }
 

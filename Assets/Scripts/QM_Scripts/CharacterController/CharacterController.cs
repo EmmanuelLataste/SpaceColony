@@ -48,7 +48,7 @@ public class CharacterController : Flammable {
     public float throwHigh;
 
     [Header("Animations")]
-    public static Animator anim;
+    public Animator anim;
     AnimatorStateInfo animStateInfoCrouch;
     int crouchStateHash = Animator.StringToHash("Crouch Layer.Crouch");
     
@@ -130,6 +130,8 @@ public class CharacterController : Flammable {
     [SerializeField] Color controlColor;
     Color currentColor;
     [SerializeField] float controlColorIntensity;
+    public bool canBeManipulated;
+
     private void Awake()
     {
         if (gameObject.tag != "Player")
@@ -152,7 +154,7 @@ public class CharacterController : Flammable {
         beginSpeed = speed;
         if (gameObject.tag != "Player")
         beginAcceleration = GetComponent<PositionEnemies>().transformPosition.GetComponent<NavMeshAgent>().acceleration;
-        anim = GetComponent<Animator>();
+       
         mindPower = GetComponent<MindPower>();
         otherGameObject = null;
         player = GameObject.FindGameObjectWithTag("Player");
@@ -305,13 +307,14 @@ public class CharacterController : Flammable {
         {
             if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
             {
+                
                 if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
                 {
 
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotationCam.transform.rotation, smoothRotationPlayer);
                     //smoothRotationPlayer += speedRotationPlayer * Time.deltaTime;
                     isAimingRotating = false;
-
+                  
 
                 }
                 

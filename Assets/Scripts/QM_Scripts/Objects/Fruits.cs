@@ -8,7 +8,7 @@ public class Fruits : Goo {
     bool canExplose2;
     Rigidbody rb;
     bool isPicked;
-    [SerializeField] Transform transformObjectInHand;
+    [SerializeField] public Transform transformObjectInHand;
     [SerializeField] LayerMask[] maskGround;
     private void Start()
     {
