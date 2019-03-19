@@ -1,31 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-
-public class AttackBehaviour : StateMachineBehaviour {
-
-    public List<Transform> visibleTargets = new List<Transform>();
-    public NavMeshAgent entityAgent;
-
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        visibleTargets = animator.gameObject.GetComponent<FieldOfView>().visibleTargets;
-        entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
-
-        //entityAgent.isStopped = true;
-    }
-
-	
-	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
-        entityAgent.destination = visibleTargets[0].transform.position;
-    }
-
-	
-	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        //entityAgent.isStopped = false;
-
-    }
-
-	
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:5df9b99478fd99288780c2bf240a107675fac97d5a440073fd9d5f24a499f9b8
+size 949

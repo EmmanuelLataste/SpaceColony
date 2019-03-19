@@ -1,31 +1,3 @@
-﻿
-using UnityEngine;
-
-public class CombatManager : MonoBehaviour {
-
-    public float speed;
-	void Update ()
-    {
-        IA();
-	}
-
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == ("Player"))
-        {
-            other.gameObject.SetActive(false);
-        }
-
-        else if (other.gameObject.tag == ("Ennemy") && gameObject.GetComponent<EnnemiController>().enabled == true)
-        {
-            other.gameObject.SetActive(false);
-        }
-
-     
-    }
-
-    void IA()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, GameObject.Find("Player").transform.position, speed * Time.deltaTime);
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:bafcbf08226d8ffeba963a5bf6e072f57e1bdff1dbe63600f165049e8528b6d2
+size 703

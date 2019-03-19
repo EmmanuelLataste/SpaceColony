@@ -1,36 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
-
-public class NaviguationMenu : MonoBehaviour {
-
-    [SerializeField] EventSystem eventSystem;
-    [SerializeField] GameObject selectedObject;
-    [SerializeField] bool buttonSelected;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-        if (Input.GetAxisRaw("Vertical") != 0 && buttonSelected == false)
-        {
-            eventSystem.SetSelectedGameObject(selectedObject);
-            buttonSelected = true;
-        }
-	}
-
-    private void OnDisable()
-    {
-        buttonSelected = false;
-    }
-
-    public void SelectedObject(GameObject newSO)
-    {
-        eventSystem.SetSelectedGameObject(newSO);
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fbae36716c47df5a821665692d04864e8e8e46a679ae9ca6397b3acafc84e981
+size 839

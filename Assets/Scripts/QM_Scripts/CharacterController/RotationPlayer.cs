@@ -1,30 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class RotationPlayer : MonoBehaviour {
-    public GameObject targetCam;
-    private float smoothRotationPlayer;
-    [Range(0, 15)]
-    public float smoothRotationPlayerTimer;
-
-    void Update () {
-        Rotation();
-	}
-
-    void Rotation()
-    {
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetCam.transform.rotation, smoothRotationPlayer);
-            smoothRotationPlayer += smoothRotationPlayerTimer * Time.deltaTime;
-        }
-
-        else if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
-        {
-            smoothRotationPlayer = 0;
-        }
-           
-        
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:157ed484192eaf6737f8c699943090a0fb0b8c4b5b68bc051911c3b69e1e9693
+size 843

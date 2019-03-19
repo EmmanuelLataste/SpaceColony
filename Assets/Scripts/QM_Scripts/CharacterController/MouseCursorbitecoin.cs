@@ -1,19 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class MouseCursorbitecoin : MonoBehaviour {
-
-    Vector3 cursorPost;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        cursorPost = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        transform.position = cursorPost;
-	}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:cc9434655826a0f894c54393f9906c09d3ae5278e489a3385a7f5bcefae98093
+size 481

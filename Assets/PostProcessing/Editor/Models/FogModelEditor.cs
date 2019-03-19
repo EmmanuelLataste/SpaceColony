@@ -1,24 +1,3 @@
-using UnityEngine.PostProcessing;
-
-namespace UnityEditor.PostProcessing
-{
-    using Settings = FogModel.Settings;
-
-    [PostProcessingModelEditor(typeof(FogModel))]
-    public class FogModelEditor : PostProcessingModelEditor
-    {
-        SerializedProperty m_ExcludeSkybox;
-
-        public override void OnEnable()
-        {
-            m_ExcludeSkybox = FindSetting((Settings x) => x.excludeSkybox);
-        }
-
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.HelpBox("This effect adds fog compatibility to the deferred rendering path; enabling it with the forward rendering path won't have any effect. Actual fog settings should be set in the Lighting panel.", MessageType.Info);
-            EditorGUILayout.PropertyField(m_ExcludeSkybox);
-            EditorGUI.indentLevel--;
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:108f78e77989dbdc23f768a91c48fc66c12e236607c980dbbce9f51fe41a20fe
+size 857

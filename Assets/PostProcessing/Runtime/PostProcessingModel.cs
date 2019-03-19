@@ -1,27 +1,3 @@
-using System;
-
-namespace UnityEngine.PostProcessing
-{
-    [Serializable]
-    public abstract class PostProcessingModel
-    {
-        [SerializeField, GetSet("enabled")]
-        bool m_Enabled;
-        public bool enabled
-        {
-            get { return m_Enabled; }
-            set
-            {
-                m_Enabled = value;
-
-                if (value)
-                    OnValidate();
-            }
-        }
-
-        public abstract void Reset();
-
-        public virtual void OnValidate()
-        {}
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:1aa37b796c6297c4b1797ba173880eedea95eace3a46571bb5a2436813f1815b
+size 547

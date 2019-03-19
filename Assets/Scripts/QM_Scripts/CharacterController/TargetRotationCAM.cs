@@ -1,19 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TargetRotationCAM : MonoBehaviour {
-    private float rotation;
-    
-
-	void Update () {
-
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-        {
-            rotation = (Mathf.Atan2(-Input.GetAxis("Vertical"), Input.GetAxis("Horizontal")) * Mathf.Rad2Deg);
-
-            transform.localRotation = Quaternion.Euler(new Vector3(0, rotation + 90, 0));
-        }
-        
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:1d633c2559a2cfaa1cc3c8b2e91ea12a5b3287ded840980c6fe2bd4749f8a60d
+size 523
