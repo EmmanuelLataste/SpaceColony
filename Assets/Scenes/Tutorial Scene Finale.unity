@@ -1764,6 +1764,14 @@ Prefab:
       propertyPath: am
       value: 
       objectReference: {fileID: 1300870043}
+    - target: {fileID: 4526816758822798, guid: 6b3ef6d5cde91dd4fbb9fb49305502f8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -67.8714
+      objectReference: {fileID: 0}
+    - target: {fileID: 4480599334884028, guid: 6b3ef6d5cde91dd4fbb9fb49305502f8, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -67.8714
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b3ef6d5cde91dd4fbb9fb49305502f8, type: 2}
   m_IsPrefabAsset: 0
@@ -11720,7 +11728,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: ffb12ebbd87d36642b184071a47b14af, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 86a0cdcaa1b9dea4380c2204bfb115b3, type: 2}
 --- !u!4 &1167151430
 Transform:
   m_ObjectHideFlags: 0
