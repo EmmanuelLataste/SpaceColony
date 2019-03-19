@@ -1,3 +1,17 @@
+<<<<<<< HEAD
 version https://git-lfs.github.com/spec/v1
 oid sha256:f749f55d47f1302213cc220fb2e9b703ff61adfdf61b29424dd5a46587cd2218
 size 243
+=======
+fileFormatVersion: 2
+guid: 8186d99a0730d3e46997674b35662eea
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> Develop

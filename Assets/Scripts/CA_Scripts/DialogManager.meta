@@ -1,3 +1,14 @@
+<<<<<<< HEAD
 version https://git-lfs.github.com/spec/v1
 oid sha256:6b7db2a8e94e6df442ce9a26f5d05c1eb0d866361f9e334c3568a4447db43a20
 size 172
+=======
+fileFormatVersion: 2
+guid: 74da5dc3f565fdd4d881c8ac163f4949
+folderAsset: yes
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+>>>>>>> Develop
