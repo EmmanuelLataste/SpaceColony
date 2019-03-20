@@ -175,6 +175,7 @@ ModelImporter:
     13700008: hair_low
     13700010: Head_low
     13700012: hood_low
+    2186277476908879412: ImportLogs
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -261,7 +262,7 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.00508
+    previousCalculatedGlobalScale: 0.23
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
