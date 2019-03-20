@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     }
     public static CinemachineVirtualCamera cam;
     private CinemachineBasicMultiChannelPerlin camNoise;
+    CinemachineFramingTransposer camTranspo;
     public Camera camNonVirtual;
 
     private float horizontal2;
@@ -57,17 +58,41 @@ public class CameraController : MonoBehaviour
 
     Transform followMM;
 
-
+    [SerializeField] float smooth;
+    Vector3 dollyDir;
+    [SerializeField] float maxDist;
+    [SerializeField] float minDist;
+    [SerializeField] float distance;
+    [SerializeField] LayerMask camFrontMask;
     public LayerMask layerMask;
 
     public static bool isControllerConnected;
+    [SerializeField] float startingX;
+    [SerializeField] float startingY;
+    CharacterController playerCC;
+
+    private void Awake()
+    {
+        dollyDir = transform.localPosition.normalized;
+        distance = transform.localPosition.magnitude;
+
+
+    }
+
     private void Start()
     {
+
+        playerCC = player.GetComponent<CharacterController>();
         saveColliderHits = hits;
         cam = GetComponent<CinemachineVirtualCamera>();
         camNoise = cam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        camTranspo = cam.GetCinemachineComponent<CinemachineFramingTransposer>();
         transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
         followMM = player.transform;
+        initialMouseY = startingX;
+        initialMouseX = startingY;
+        transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
+
     }
 
     private void Update()
@@ -76,9 +101,11 @@ public class CameraController : MonoBehaviour
         vertical2 = Input.GetAxis("Vertical2");
         rotationX = transform.rotation.x;
         //RotationCam2();
+
         RotationCam();
         //StartCoroutine(ReturnBehindPlayer());
-        CameraRay2();
+        //CameraRay2();
+        //CameraFrontObjects();
         CameraMouse();
 
 
@@ -86,6 +113,7 @@ public class CameraController : MonoBehaviour
 
     void CameraMouse()
     {
+       
         if (isControllerConnected == false)
         {
             if (Input.GetAxis("Mouse Y") != 0 || Input.GetAxis("Mouse X") != 0)
@@ -120,6 +148,9 @@ public class CameraController : MonoBehaviour
                 transform.eulerAngles = new Vector3(initialMouseY, initialMouseX, 0);
             }
         }
+
+        else
+        {
             if (Input.GetAxis("Vertical2") != 0 || Input.GetAxis("Horizontal2") != 0)
             {
                 if (Input.GetAxis("Fire2") == 0 || MindPower.isMindManipulated == true)
@@ -154,43 +185,45 @@ public class CameraController : MonoBehaviour
 
                 }
             }
-        
-        
-     
-        else if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
-        {
-             if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false)
+
+
+
+            else if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
             {
-                if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                if (Input.GetAxis("Fire2") == 1 && MindPower.isMindManipulated == false)
                 {
+                    if (transform.rotation.eulerAngles.x <= 40 && transform.rotation.eulerAngles.x >= 0)
+                    {
 
-                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                    }
+
+
+                    else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
+                    {
+                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                    }
+
+                    else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical") > 0)
+                    {
+                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                    }
+
+                    else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical") < 0)
+                    {
+
+                        initialVertical -= speedMouseY * Input.GetAxis("Vertical");
+                    }
+
+                    initialHorizontal += speedMouseX * Input.GetAxis("Horizontal");
+                    transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
+
+
                 }
-
-
-                else if (transform.rotation.eulerAngles.x >= 359 && transform.rotation.eulerAngles.x < 360 || transform.rotation.eulerAngles.x < 0)
-                {
-                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                }
-
-                else if (transform.rotation.eulerAngles.x > 40 && transform.rotation.eulerAngles.x < 200 && Input.GetAxis("Vertical") > 0)
-                {
-                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                }
-
-                else if (transform.rotation.eulerAngles.x < 359 && transform.rotation.eulerAngles.x > 250 && Input.GetAxis("Vertical") < 0)
-                {
-
-                    initialVertical -= speedMouseY * Input.GetAxis("Vertical");
-                }
-
-                initialHorizontal += speedMouseX * Input.GetAxis("Horizontal");
-                transform.eulerAngles = new Vector3(initialVertical, initialHorizontal, 0);
-
 
             }
-
         }
+           
 
 
     }
@@ -323,6 +356,68 @@ public class CameraController : MonoBehaviour
         camNoise.m_FrequencyGain = 0;
         yield return null;
     }
+    [SerializeField] CinemachineVirtualCamera secondCamNormal;
+    [SerializeField] bool isActivatedCam;
+    bool isClampCam;
+    Vector3 posCamBeforeClamp;
+    [SerializeField] Collider[] frontCollider;
+    void CameraFrontObjects()
+    {
+
+
+        if (isActivatedCam == true)
+        {
+            //secondCamNormal.transform.position = transform.position;
+            secondCamNormal.m_Follow = cam.m_Follow;
+            Debug.DrawLine(transform.position, cam.m_Follow.transform.position);
+            Vector3 desiredPos = transform.TransformPoint(dollyDir * maxDist);
+
+            if (Physics.Linecast(secondCamNormal.transform.position, cam.m_Follow.transform.position, out hit, camFrontMask))
+            {
+                if (isClampCam == false)
+                {
+                    posCamBeforeClamp = transform.position;
+                    isClampCam = true;
+
+                }
+                Debug.Log(hit.collider.name);
+                distance = Mathf.Clamp(hit.distance, minDist, maxDist);
+
+            }
+
+            else
+            {
+                distance = maxDist;
+            }
+            //else if (Physics.Linecast(transform.position, posCamBeforeClamp, out hit, camFrontMask) && !Physics.Linecast(transform.position, cam.m_Follow.transform.position, out hit, camFrontMask))
+            //{
+            //    distance = maxDist;
+            //}
+            camTranspo.m_CameraDistance = Mathf.Lerp(camTranspo.m_CameraDistance, distance, Time.deltaTime * smooth);
+        }
+        
+    }
+
+
+    //void CameraFrontObjects()
+    //{
+    //    Debug.DrawLine(transform.position, player.transform.position);
+    //    Vector3 desiredPos = transform.TransformPoint(dollyDir * maxDist);
+
+    //    if(Physics.Linecast(transform.position, cam.m_Follow.transform.position, out hit, camFrontMask ))
+    //    {
+    //        Debug.Log(hit.collider.name);
+    //        distance = Mathf.Clamp(hit.distance, minDist, maxDist);
+
+    //    }
+
+    //    else
+    //    {
+    //        distance = Mathf.Lerp(camTranspo.m_CameraDistance, maxDist, Time.deltaTime * smooth) ;
+    //    }
+    //    camTranspo.m_CameraDistance = Mathf.Lerp(camTranspo.m_CameraDistance, distance, Time.deltaTime * smooth);
+    //}
+
     Collider currentHit;
     bool isSaveColliderHits;
    

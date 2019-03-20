@@ -82,6 +82,7 @@ ModelImporter:
     100152: mixamorig:Spine1
     100154: mixamorig:Spine2
     100156: //RootNode
+    100158: Armature
     400000: mixamorig:Head
     400002: mixamorig:HeadTop_End
     400004: mixamorig:HeadTop_End_end
@@ -161,8 +162,10 @@ ModelImporter:
     400152: mixamorig:Spine1
     400154: mixamorig:Spine2
     400156: //RootNode
+    400158: Armature
     7400000: controlIdle
     9500000: //RootNode
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -175,7 +178,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tTransform 'Armature' not found in HumanDescription.\n"
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -250,7 +254,7 @@ ModelImporter:
     tangentImportMode: 3
     normalCalculationMode: 4
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     serializedVersion: 2
     human:
@@ -673,11 +677,16 @@ ModelImporter:
     skeleton:
     - name: ControlIdle(Clone)
       parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature
+      parentName: ControlIdle(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0.000000081460335, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: ControlIdle(Clone)
+      parentName: Armature
       position: {x: 0.0009328872, y: 1.0574272, z: -0.00050633494}
       rotation: {x: -0.08730477, y: 0.06071751, z: -0.006616949, w: 0.9943076}
       scale: {x: 1, y: 0.9999999, z: 1}
@@ -1083,12 +1092,11 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: -0.021223107, y: -0.3538117, z: -0.02120936, w: 0.9348353}
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 6a82b55bef0861342aa6908040589e7a,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0

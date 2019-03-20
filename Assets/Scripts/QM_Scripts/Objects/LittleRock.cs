@@ -18,7 +18,7 @@ public class LittleRock : MonoBehaviour {
 
     void PositionWhenPicked()
     {
-        if (transform.parent == true && isPicked == false)
+        if (transform.parent != null && transform.parent.gameObject.tag == "Player" && isPicked == false)
         {
 
             transform.position = transformObjectInHand.position;
@@ -30,7 +30,7 @@ public class LittleRock : MonoBehaviour {
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            gameObject.GetComponent<ObjectSound>().FindReceivers();
+            //gameObject.GetComponent<ObjectSound>().FindReceivers();
         }
     }
 }

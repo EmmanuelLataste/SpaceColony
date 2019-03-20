@@ -13,55 +13,87 @@ public class PatrollingBehaviour : StateMachineBehaviour {
 
     public NavMeshAgent entityAgent;
     public bool isReversed;
-
+    EntityAI entityAI;
+    Animator animLinkedEntity;
+    float timerToNextPoint;
+    float timerToNextPointOffset;
+    bool canToNextPoint;
 
     private void Awake() {
         //TEST OPTI
     }
 
-
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animator.GetComponent<EntityAI>().linkedEntity.GetComponent<CharacterController>().canChangeColor = true;
+        animLinkedEntity = animator.GetComponent<EntityAI>().linkedEntity.GetComponent<Animator>();
         entity = animator.gameObject;
         isReversed = animator.gameObject.GetComponent<EntityAI>().isReversed;
         waypoints = animator.gameObject.GetComponent<EntityAI>().waypoints;
         entityAgent = animator.gameObject.GetComponent<NavMeshAgent>();
-
+        animator.gameObject.GetComponent<FieldOfView>().target = null;
         animator.GetComponent<FieldOfView>().audible = false;
-
+        entityAI = animator.gameObject.GetComponent<EntityAI>();
         animator.SetBool("event", false);
+        animator.SetBool("spot", false);
         animator.SetBool("targetAudible", false);
+        
+        animLinkedEntity.Rebind();
+        animLinkedEntity.SetBool("Walk", true);
+
+        animator.GetComponent<FieldOfView>().audibleTargets.Clear();
+
+        animator.GetComponent<FieldOfView>().visible = false;
+        animator.GetComponent<FieldOfView>().audible = false;
 
         //Without auto-barking the agent has continuous movment, the agent doesn't slow down when getting close to its destination point
         entityAgent.autoBraking = false;
-
+        
         ToNextWaypoint();
     }
 
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {     
-        
-        if (animator.GetComponent<FieldOfView>().visible == true) {
-            animator.SetBool("spot", true);
-            animator.SetBool("event", true);
-        }
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        animLinkedEntity.SetBool("Run", false);
+        if (entityAI.isMoving == true)
+        {
+            entityAgent.isStopped = false;
 
-        if (animator.GetComponent<FieldOfView>().audible == true) {
-            animator.SetBool("targetAudible", true);
-        } else {
-            animator.SetBool("targetAudible", false);
-        }
+            animLinkedEntity.SetBool("Walk", true);
+            if (animator.GetComponent<FieldOfView>().visible == true || animator.GetComponent<FieldOfView>().audible == true)
+            {
 
-        if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f  ) {
-            ToNextWaypoint();
+                animator.SetBool("spot", true);
+                animator.SetBool("event", true);
+            }
+
+            if (animator.GetComponent<FieldOfView>().audible == true)
+            {
+                animator.SetBool("targetAudible", true);
+            }
+            else
+            {
+                animator.SetBool("targetAudible", false);
+            }
+
+            if (!entityAgent.pathPending && entityAgent.remainingDistance < 0.5f)
+            {
+                ToNextWaypoint();
+
+            }
+
+
+            entityAgent.speed = entityAI.beginAISpeed;
         }
+    
         
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
+        animLinkedEntity.SetBool("Walk", false);
     }
 
     public void ToNextWaypoint() {
         //In case of no attribuated waypoint : return
+
         if (waypoints.Length == 0) {
             return;
         }

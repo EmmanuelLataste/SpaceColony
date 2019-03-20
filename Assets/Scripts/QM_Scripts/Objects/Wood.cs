@@ -5,26 +5,25 @@ using UnityEngine;
 public class Wood : Flammable
 {
     private bool isOtherBurning;
-    private GameObject particleFires;
+    //private GameObject particleFires;
 
-    public Transform firePosition;
+    //public Transform firePosition;
     bool isPicked;
-    bool isStillBurning;
+
 
 
     [SerializeField] Transform transformObjectInHand;
+     [SerializeField]Collider[] burnOthers;
+    [SerializeField] float radiusBurn;
+    [SerializeField] LayerMask maskBurn;
 
-
-    
 
     private void Update()
     {
-        Ignite();
-        if (isBurning == true)
-        {
-            gameObject.AddComponent<Ignitable>();
-            isBurning = false;
-        }
+        //Ignite();
+        //IgniteOthers();
+        TurnFireOn();
+        OnFire();
         if (transform.parent == true && isPicked == false)
         {
             PositionWhenPicked();
@@ -33,25 +32,25 @@ public class Wood : Flammable
         else if (transform.parent == false && isPicked == true)
         {
             isPicked = false;
-            gameObject.GetComponent<ObjectSound>().FindReceivers();            
+            //gameObject.GetComponent<ObjectSound>().FindReceivers();            
         }
 
 
     }
 
-    void Ignite()
-    {
-        if (transform.parent != null && isBurning == false)
-        {
-            if (Input.GetButtonDown("X") || Input.GetKeyDown(KeyCode.R) && GetComponent<Ignitable>() == false)
-            {
+    //void Ignite()
+    //{
+    //    if (transform.parent != null && isBurning == false)
+    //    {
+    //        if (Input.GetButtonDown("X") || Input.GetKeyDown(KeyCode.R) && GetComponent<Ignitable>() == false)
+    //        {
 
-                isBurning = true;
-                isStillBurning = true;
+    //            isBurning = true;
+    //            isStillBurning = true;
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     private IEnumerator OnCollisionStay(Collision other)
     {
@@ -63,6 +62,14 @@ public class Wood : Flammable
         }
 
 
+    }
+
+    void TurnFireOn()
+    {
+        if (Input.GetKeyDown(KeyCode.R) && isPicked == true)
+        {
+            isBurning = true;
+        }
     }
 
     void PositionWhenPicked()
@@ -77,24 +84,53 @@ public class Wood : Flammable
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false && isStillBurning == true )
-        {
-            if (other.GetComponent<CharacterController>().enabled == false || other.GetComponent<CharacterController>().otherGameObject != gameObject)
-            {
-                Debug.Log("TRU");
-                other.GetComponent<CharacterController>().isBurning = true;
-                other.gameObject.AddComponent<Ignitable>();
-            }
 
-        }
+    //void IgniteOthers()
+    //{
+    //    if (isStillBurning == true && transform.parent != null)
+    //    {
+    //        burnOthers = Physics.OverlapSphere(transform.position, radiusBurn, maskBurn);
 
-        if (other.gameObject.tag == "Cannister" && isStillBurning == true)
-        {
-            StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
-        }
-    }
+    //        foreach (Collider collid in burnOthers)
+    //        {
+    //            if (collid.GetComponent<Ignitable>() == false && collid.gameObject.tag != "Player" && collid.gameObject.layer == LayerMask.NameToLayer("Entity") )
+    //            {
+    //                Debug.Log("TRU");
+    //                collid.GetComponent<CharacterController>().isBurning = true;
+    //                collid.gameObject.AddComponent<Ignitable>();
+    //            }
+
+    //            else if (collid.gameObject.layer == LayerMask.NameToLayer("Explosive"))
+    //            {
+    //                StartCoroutine(collid.gameObject.GetComponent<Explosive>().Boom());
+    //            }
+
+
+
+    //        }
+    //    }
+    //}
+
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (transform.parent != null && other.gameObject.layer == LayerMask.NameToLayer("Entity") && other.GetComponent<Ignitable>() == false && isStillBurning == true )
+    //    {
+            
+    //            Debug.Log("TRU");
+    //            other.GetComponent<CharacterController>().isBurning = true;
+    //            other.gameObject.AddComponent<Ignitable>();
+            
+
+    //    }
+
+    //    if (other.gameObject.tag == "Cannister" && isStillBurning == true)
+    //    {
+    //        StartCoroutine(other.gameObject.GetComponent<Cannister>().Boom());
+    //    }
+    //}
+
+    
 }
 
     

@@ -20,7 +20,7 @@ public class MenuManager : MonoBehaviour {
 
     public void Play()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
         Debug.Log("Play");
     }
 

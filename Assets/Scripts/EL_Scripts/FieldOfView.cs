@@ -19,10 +19,10 @@ public class FieldOfView : MonoBehaviour {
     public LayerMask targetViewMask;
     public LayerMask targetSoundMask;
     public LayerMask obstacleMask;
+    public GameObject target;
 
-    [HideInInspector]
+    
     public List<Transform> visibleTargets = new List<Transform>();
-    [HideInInspector]
     public List<Transform> audibleTargets = new List<Transform>();
 
     public float dstToTarget = 0;
@@ -43,22 +43,81 @@ public class FieldOfView : MonoBehaviour {
 
     public NavMeshAgent nav;
     private float pathLength = 0f;
-      
 
+    public Collider[] targetsInViewRadius;
+    public Collider[] targetsInSoundRadius;
+    public float beginSpeed;
+    CharacterController cc;
+    NavMeshAgent entityAgent;
+    [SerializeField] GameObject characterControllerObject;
+    bool onceTarget;
+    Vector3 lookPos;
+    Quaternion rotation;
 
     void Start() {
         anim = GetComponent<Animator>();
-
+        cc = characterControllerObject.GetComponent<CharacterController>();
+        beginSpeed = cc.speed;
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
+        entityAgent = GetComponent<EntityAI>().entityAgent;
 
-        StartCoroutine("FindTargetsWithDelay", .2f);
+        //StartCoroutine("FindTargetsWithDelay", .2f);
     }
 
-
+    bool chaseReset = true;
     void Update() {
+
         DrawFieldOfView();
+
+        if (target != null && anim.GetBool("isInvestigating") == false)
+        {
+            lookPos = target.transform.position - transform.position;
+            lookPos.y = 0;
+            rotation = Quaternion.LookRotation(lookPos);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, .08f);
+
+        }
+
+        if (target != null )
+        {
+            dstToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+        }
+        //transform.LookAt(target.transform);
+
+        if (visibleTargets.Count != 0)
+        {
+
+            target = visibleTargets[0].gameObject;
+        }
+
+        else if (audibleTargets.Count != 0)
+        {
+            target = audibleTargets[0].gameObject;
+        }
+
+        targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
+        targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
+
+        if (targetsInViewRadius.Length != 0)
+        FindVisibleTargets();
+
+        if (targetsInSoundRadius.Length != 0)
+            FindAudibleTargets();
+        anim.SetFloat("targetDst", dstToTarget);
+        
+       if (onceTarget == false && target != null)
+        {
+            if (target.GetComponent<Life>() == true)
+            {
+                if (target.GetComponent<Life>().isAlive == false)
+                {
+                    target = null;
+                }
+            }
+        }
         //Debug.Log("audible : " + audible);
         //Debug.Log("pathLength : " + pathLength);
     }
@@ -73,57 +132,73 @@ public class FieldOfView : MonoBehaviour {
     }
 
 
-    void FindVisibleTargets() {
-        visibleTargets.Clear();
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetViewMask);
+    public void FindVisibleTargets() {
 
-        for (int i = 0; i < targetsInViewRadius.Length; i++) {
-            Transform target = targetsInViewRadius[i].transform;
+        //visibleTargets.Clear();
+        
+        //for (int i = 0; i < targetsInViewRadius.Length; i++) {
+            Transform target = targetsInViewRadius[0].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
 
-            if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-                
-                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2) {
+            if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+            {
+
+                if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+                {
+      
                     float dstToTarget = Vector3.Distance(transform.position, target.position);
                     anim.SetFloat("targetDst", dstToTarget);
 
-                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget < 10) {
-                        if (target.tag == "Player") {
+                    if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget < viewRadius)
+                {
+            
+                    if (target.tag == "Player" && !visibleTargets.Contains(target))
+                        {
                             visibleTargets.Insert(0, target);
-                        } /* else if (target.tag == "SoundSource") {
-                            //visibleTargets.RemoveAt(1);
-                            visibleTargets.Add(target);
-                        }
-                        */
+                        } 
                         visible = true;
                         anim.SetFloat("targetDst", Vector3.Distance(target.transform.position, transform.position));
 
-                    } else {                      
-                        visible = false;
                     }
-                } else {
+                    else
+                    {
+                        visible = false;
+                        visibleTargets.Clear();
+                    }
+                }
+                else
+                {
                     visible = false;
+                    visibleTargets.Clear();
                 }
             }
+
+        if (Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) || dstToTarget > viewRadius)
+        {
+
+            visible = false;
+            //visibleTargets.Clear();
         }
+
+        //}
 
     }
 
     void FindAudibleTargets() {
-        audibleTargets.Clear();
+        //audibleTargets.Clear();
   
-        Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
+        //Collider[] targetsInSoundRadius = Physics.OverlapSphere(transform.position, soundRadius, targetSoundMask);
 
-        for (int i = 0; i < targetsInSoundRadius.Length; i++) {
-            Transform target = targetsInSoundRadius[i].transform;
+        //for (int i = 0; i < targetsInSoundRadius.Length; i++) {
+            Transform target = targetsInSoundRadius[0].transform;
             Vector3 dirToTarget = (target.position - transform.position).normalized;
             
             CalculatePathLength(target);
 
             if (pathLength < maxSoundLength) {
 
-                Debug.Log("path");
-                if (target.tag == "SoundSource") {
+
+                if (target.tag == "SoundSource" && !visibleTargets.Contains(target)) {
                     Debug.Log("audible loop");
                     visibleTargets.Add(target);
                     audible = true;
@@ -135,16 +210,16 @@ public class FieldOfView : MonoBehaviour {
                     transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
                     */
                 } else {
-                    Debug.Log("false audible");
+
                     audible = false;
                 }
 
             } else {
-                Debug.Log("false audible");
+
                 audible = false;
             }
           
-        }
+        //}
     }
 
 
